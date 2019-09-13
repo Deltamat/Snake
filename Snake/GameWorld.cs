@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
 namespace Snake
@@ -13,6 +14,8 @@ namespace Snake
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private static ContentManager content;
+
+        public static List<GameObject> gameObjects = new List<GameObject>();
 
         public GameWorld()
         {
@@ -76,7 +79,10 @@ namespace Snake
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            
+            foreach (GameObject obj in gameObjects)
+            {
+                obj.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -90,7 +96,10 @@ namespace Snake
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-
+            foreach (GameObject obj in gameObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);
