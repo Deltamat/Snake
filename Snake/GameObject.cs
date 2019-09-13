@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    class GameObject
+    public class GameObject
     {
         GameObject()
         {
