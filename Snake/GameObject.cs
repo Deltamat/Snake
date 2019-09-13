@@ -8,5 +8,9 @@ namespace Snake
 {
     class GameObject
     {
+        GameObject()
+        {
+
+        }
     }
 }
