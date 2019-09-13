@@ -19,14 +19,15 @@ namespace Snake
         {
             this.position = position;
             sprite = content.Load<Texture2D>(spriteName);
+            GameWorld.gameObjects.Add(this);
         }
        
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
 
         }
 
-        public virtual void Draw()
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
 
         }

@@ -15,7 +15,7 @@ namespace Snake
         SpriteBatch spriteBatch;
         private static ContentManager content;
 
-        public List<GameObject> gameObjects = new List<GameObject>();
+        public static List<GameObject> gameObjects = new List<GameObject>();
 
         public GameWorld()
         {

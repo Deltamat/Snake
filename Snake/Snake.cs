@@ -13,12 +13,12 @@ namespace Snake
 
         }
 
-        public override Update()
+        public override Update(GameTime gameTime)
         {
 
         }
 
-        public override Draw()
+        public override Draw(SpriteBatch spriteBatch)
         {
 
         }
