@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +10,19 @@ namespace Snake
 {
     class Wall : GameObject
     {
-        public Wall()
+        public Wall(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
 
         }
 
-        public override Update()
+        public override void Update()
         {
-
+            base.Update();
         }
 
-        public override Draw()
+        public override void Draw()
         {
-
+            base.Draw();
         }
     }
 }
