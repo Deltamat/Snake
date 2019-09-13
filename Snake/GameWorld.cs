@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace Snake
 {
@@ -12,6 +13,7 @@ namespace Snake
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private static ContentManager content;
 
         public List<GameObject> gameObjects = new List<GameObject>();
 
@@ -19,6 +21,18 @@ namespace Snake
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            content = Content;
+        }
+
+        /// <summary>
+        /// Gets content
+        /// </summary>
+        public static ContentManager ContentManager
+        {
+            get
+            {
+                return content;
+            }
         }
 
         /// <summary>
