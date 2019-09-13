@@ -8,7 +8,17 @@ namespace Snake
 {
     class GameObject
     {
-        GameObject()
+        public GameObject()
+        {
+
+        }
+       
+        public virtual void Update()
+        {
+
+        }
+
+        public virtual void Draw()
         {
 
         }

@@ -8,7 +8,17 @@ namespace Snake
 {
     class Wall : GameObject
     {
-        Wall()
+        public Wall()
+        {
+
+        }
+
+        public override Update()
+        {
+
+        }
+
+        public override Draw()
         {
 
         }
