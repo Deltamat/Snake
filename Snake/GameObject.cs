@@ -13,13 +13,21 @@ namespace Snake
     public class GameObject
     {
         protected Texture2D sprite;
-        protected Vector2 position;
+        public Vector2 position;
+
+        public Rectangle CollisionBox
+        {
+            get
+            {
+                return new Rectangle((int)(position.X), (int)(position.Y), (int)(sprite.Width), (int)(sprite.Height));
+            }
+        }
 
         public GameObject(Vector2 position, string spriteName, ContentManager content)
         {
             this.position = position;
             sprite = content.Load<Texture2D>(spriteName);
-            GameWorld.gameObjects.Add(this);
+            
         }
        
         public virtual void Update(GameTime gameTime)
