@@ -14,8 +14,8 @@ namespace Snake
         protected static List<Snake> snakeParts = new List<Snake>();
         public Vector2 direction = new Vector2(1, 0);
         protected int placeInList;
-        protected Vector2 NewPosition = GameWorld.TileSet[4,3].position;
-        protected Vector2 oldPosition = GameWorld.TileSet[3, 3].position;
+        public Vector2 NewPosition = GameWorld.TileSet[4,3].position;
+        public Vector2 oldPosition = GameWorld.TileSet[3, 3].position;
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {

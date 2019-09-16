@@ -25,14 +25,24 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (placeInList == 1)
+            if(position == NewPosition)
             {
-                direction = snakeParts[0].direction;
+                oldPosition = NewPosition;
+                NewPosition += direction * 30;
+
+                if (placeInList == 1)
+                {
+                    direction = snakeParts[0].oldPosition - position;
+                    direction.Normalize();
+                }
+                else
+                {
+                    direction = snakeParts[placeInList - 1].oldPosition - position;
+                    direction.Normalize();
+                }
             }
-            else
-            {
-                direction = snakeParts[placeInList - 1].direction;
-            }
+
+
 
             position += direction;
 
