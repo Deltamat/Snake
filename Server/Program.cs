@@ -36,13 +36,17 @@ namespace Server
                 TcpClient newClient = server.AcceptTcpClient();
 
                 Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
+                t.IsBackground = true;
                 t.Start(newClient);
             }
         }
 
         static void HandleClient(object obj)
         {
+            while (true)
+            {
 
+            }
         }
     }
 }
