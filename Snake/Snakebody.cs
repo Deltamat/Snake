@@ -33,7 +33,7 @@ namespace Snake
             {
                 direction = snakeParts[placeInList - 1].direction;
             }
-            
+
             position += direction;
 
             base.Update(gameTime);

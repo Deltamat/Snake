@@ -13,7 +13,7 @@ namespace Snake
     class Snakehead : Snake
     {
         Vector2 savedDirection;
-
+        
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
@@ -26,16 +26,15 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (position == newTile.position)
+            if (position == NewPosition)
             {
                 if (savedDirection != Vector2.Zero)
                 {
                     direction = savedDirection;
                     savedDirection = Vector2.Zero;
                 }
-                oldTile = newTile;
-                newTile.position += direction * 30;
-
+                oldPosition = NewPosition;
+                NewPosition += direction * 30;
             }
 
             position += direction;
