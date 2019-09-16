@@ -17,6 +17,7 @@ namespace Snake
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            GameWorld.gameObjects.Add(this);
             snakeParts.Add(this);
             placeInList = snakeParts.Count - 1;
         }
@@ -28,7 +29,8 @@ namespace Snake
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, position, null, Color.White, 0f, Vector2.Zero, 0.1f, new SpriteEffects(), 1f);
+            //spriteBatch.Draw(sprite, position, null, Color.White, 0f, Vector2.Zero, 1f, new SpriteEffects(), 1f);
+            spriteBatch.Draw(sprite, CollisionBox, Color.White);
         }
     }
 }
