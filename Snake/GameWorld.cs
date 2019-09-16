@@ -1,23 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace Snake
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class GameWorld : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private static ContentManager content;
 
-        public Game1()
+        public GameObject[,] TileSet = new GameObject[64, 36];
+
+        public static List<GameObject> gameObjects = new List<GameObject>();
+
+        public GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            content = Content;
+        }
 
-
+        /// <summary>
+        /// Gets content
+        /// </summary>
+        public static ContentManager ContentManager
+        {
+            get
+            {
+                return content;
+            }
         }
 
         /// <summary>
@@ -28,7 +45,7 @@ namespace Snake
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            
 
             base.Initialize();
         }
@@ -42,7 +59,7 @@ namespace Snake
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            
         }
 
         /// <summary>
@@ -51,7 +68,7 @@ namespace Snake
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -64,7 +81,10 @@ namespace Snake
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            foreach (GameObject obj in gameObjects)
+            {
+                obj.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -76,9 +96,14 @@ namespace Snake
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            foreach (GameObject obj in gameObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
 
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
