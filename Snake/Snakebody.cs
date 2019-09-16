@@ -11,10 +11,11 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
-
+        
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
