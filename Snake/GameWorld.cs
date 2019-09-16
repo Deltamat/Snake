@@ -63,6 +63,7 @@ namespace Snake
             {
                 for (int k = 0; k < 36; k++)
                 {
+                    //Checks if "i" is dividable by 2.
                     if (i % 2 == 0  )
                     {
                     TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"GreenTile",content);
