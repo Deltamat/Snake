@@ -32,5 +32,14 @@ namespace Snake
         {
 
         }
+
+        public int TranslatePosition(int tilePosition)
+        {
+            int pos = 0;
+
+            pos = tilePosition * 30 + 15;
+
+            return pos;
+        }
     }
 }

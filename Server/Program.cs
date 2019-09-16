@@ -56,17 +56,28 @@ namespace Server
 
         static void HandleClient(object obj)
         {
+            // retrieve client from parameter passed to thread
+            TcpClient client = (TcpClient)obj;
+            // sets two streams
+            StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+            StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
+
+            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+
             Byte[] bytes = new Byte[256];
             String data;
             while (true)
             {
-                TcpClient client = server.AcceptTcpClient();
-                NetworkStream stream = client.GetStream();
-
-                int i;
-                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                // reads from stream
+                try
                 {
-                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    data = sReader.ReadLine();
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(endPoint.Port.ToString() + " " + localPoint.Port.ToString() + " disconnected");
+                    Thread.CurrentThread.Abort();
                 }
             }
         }
