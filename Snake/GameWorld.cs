@@ -15,7 +15,7 @@ namespace Snake
         SpriteBatch spriteBatch;
         private static ContentManager content;
 
-        public GameObject[,] TileSet = new GameObject[63, 35];
+        public static GameObject[,] TileSet = new GameObject[64, 36];
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
@@ -95,6 +95,10 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30*32,30*i),"WallTile",content));
 			}
 
+            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
+            Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
+            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
+
         }
 
         /// <summary>
@@ -106,9 +110,7 @@ namespace Snake
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Snakehead head = new Snakehead(new Vector2(GameObject.TranslatePosition(3), GameObject.TranslatePosition(3)), "Snake Head", content);
-            Snakebody body = new Snakebody(new Vector2(GameObject.TranslatePosition(2), GameObject.TranslatePosition(3)), "SnakeBody1", content);
-            Snakebody body2 = new Snakebody(new Vector2(GameObject.TranslatePosition(1), GameObject.TranslatePosition(3)), "SnakeBody1", content);
+            
 
         }
 
@@ -156,15 +158,15 @@ namespace Snake
                 }
             }
 
+            foreach (Wall wall in wallList)
+            {
+                wall.Draw(spriteBatch);
+            }
+
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
             }
-
-            foreach (Wall wall in wallList)
-	{
-                wall.Draw(spriteBatch);
-	}
 
             spriteBatch.End();
             base.Draw(gameTime);
