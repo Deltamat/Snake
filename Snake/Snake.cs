@@ -11,12 +11,14 @@ namespace Snake
 {
     public class Snake : GameObject
     {
-        List<Snake> snakeParts = new List<Snake>();
-        protected Vector2 direction = new Vector2(1, 0);
+        protected static List<Snake> snakeParts = new List<Snake>();
+        public Vector2 direction = new Vector2(1, 0);
+        protected int placeInList;
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             snakeParts.Add(this);
+            placeInList = snakeParts.Count - 1;
         }
 
         public override void Update(GameTime gameTime)
