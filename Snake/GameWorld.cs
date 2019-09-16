@@ -59,7 +59,10 @@ namespace Snake
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+            Snakehead head = new Snakehead(new Vector2(200), "Snake Head", content);
+            Snakebody body = new Snakebody(new Vector2(200), "SnakeBody1", content);
+            Snakebody body2 = new Snakebody(new Vector2(200), "SnakeBody1", content);
+
         }
 
         /// <summary>
