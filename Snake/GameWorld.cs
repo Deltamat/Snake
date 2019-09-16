@@ -59,6 +59,7 @@ namespace Snake
 
             base.Initialize();
 
+            // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
                 for (int k = 0; k < 36; k++)
@@ -79,6 +80,7 @@ namespace Snake
                 }
             }
 
+            // Creates walls at appropiate places.
             for (int i = 0; i < 64; i++)
 			{
                 wallList.Add(new Wall(new Vector2(30*i,0),"WallTile",content));
