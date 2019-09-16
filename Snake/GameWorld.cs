@@ -67,11 +67,11 @@ namespace Snake
                     {
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
                         k++;
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "DarkTile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                     }
                     else
                     {
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "DarkTile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                         k++;
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
                    
