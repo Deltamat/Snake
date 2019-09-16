@@ -65,15 +65,15 @@ namespace Snake
                 {
                     if (i % 2 == 0  )
                     {
-                    TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"GreenTile",content);
-                    k++;
-                    TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"DarkTile",content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
+                        k++;
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "DarkTile", content);
                     }
                     else
                     {
-                         TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"DarkTile",content);
-                    k++;
-                         TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"GreenTile",content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "DarkTile", content);
+                        k++;
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
                    
                     }
                 }
@@ -81,18 +81,18 @@ namespace Snake
 
             for (int i = 0; i < 64; i++)
 			{
-                wallList.Add(new Wall(new Vector2(30*i,0),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(30*i,30*35),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(30*i,30*17),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(30*i,30*18),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30 * i, 0), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "WallTile", content));
 			}
 
             for (int i = 0; i < 36; i++)
 			{
-                wallList.Add(new Wall(new Vector2(0,30*i),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(1890,30*i),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(30*31,30*i),"WallTile",content));
-                wallList.Add(new Wall(new Vector2(30*32,30*i),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(0, 30 * i), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(1890, 30 * i), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "WallTile", content));
 			}
 
         }
