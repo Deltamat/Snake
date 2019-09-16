@@ -17,6 +17,7 @@ namespace Snake
 
         public GameObject[,] TileSet = new GameObject[63, 35];
 
+        public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
 
         public GameWorld()
@@ -24,6 +25,15 @@ namespace Snake
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             content = Content;
+            //Sets the window size
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1020;
+
+
+            graphics.IsFullScreen = false;
+
+
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -48,6 +58,43 @@ namespace Snake
             
 
             base.Initialize();
+
+            for (int i = 0; i < 64; i++)
+            {
+                for (int k = 0; k < 36; k++)
+                {
+                    if (i % 2 == 0  )
+                    {
+                    TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"GreenTile",content);
+                    k++;
+                    TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"DarkTile",content);
+                    }
+                    else
+                    {
+                         TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"DarkTile",content);
+                    k++;
+                         TileSet[i, k] = new GameObject(new Vector2(30*i,30*k),"GreenTile",content);
+                   
+                    }
+                }
+            }
+
+            for (int i = 0; i < 64; i++)
+			{
+                wallList.Add(new Wall(new Vector2(30*i,0),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30*i,30*35),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30*i,30*17),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30*i,30*18),"WallTile",content));
+			}
+
+            for (int i = 0; i < 36; i++)
+			{
+                wallList.Add(new Wall(new Vector2(0,30*i),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(1890,30*i),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30*31,30*i),"WallTile",content));
+                wallList.Add(new Wall(new Vector2(30*32,30*i),"WallTile",content));
+			}
+
         }
 
         /// <summary>
@@ -101,10 +148,23 @@ namespace Snake
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
+            for (int i = 0; i < 64; i++)
+            {
+                for (int k = 0; k < 36; k++)
+                {
+                    TileSet[i, k].Draw(spriteBatch);
+                }
+            }
+
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
             }
+
+            foreach (Wall wall in wallList)
+	{
+                wall.Draw(spriteBatch);
+	}
 
             spriteBatch.End();
             base.Draw(gameTime);
