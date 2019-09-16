@@ -15,6 +15,7 @@ namespace Server
         private static int port = 42069;
         private static TcpListener server;
         private static bool isRunning;
+        private static TcpClient[] Players = new TcpClient[3];
 
         static void Main(string[] args)
         {
@@ -34,18 +35,39 @@ namespace Server
             while (isRunning)
             {
                 TcpClient newClient = server.AcceptTcpClient();
+                bool placed = false;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Players[i] != null && !placed)
+                    {
+                        Players[i] = newClient;
+                        placed = true;
+                    }
+                }
 
-                Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
-                t.IsBackground = true;
-                t.Start(newClient);
+                if (placed)
+                {
+                    Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
+                    t.IsBackground = true;
+                    t.Start(newClient);
+                }    
             }
         }
 
         static void HandleClient(object obj)
         {
+            Byte[] bytes = new Byte[256];
+            String data;
             while (true)
             {
+                TcpClient client = server.AcceptTcpClient();
+                NetworkStream stream = client.GetStream();
 
+                int i;
+                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                }
             }
         }
     }
