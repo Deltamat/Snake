@@ -164,9 +164,9 @@ namespace Snake
             }
 
             foreach (Wall wall in wallList)
-	{
+	        {
                 wall.Draw(spriteBatch);
-	}
+	        }
 
             spriteBatch.End();
             base.Draw(gameTime);
