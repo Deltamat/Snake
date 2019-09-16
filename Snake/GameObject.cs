@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +29,7 @@ namespace Snake
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(sprite, position, Color.White);
         }
     }
 }
