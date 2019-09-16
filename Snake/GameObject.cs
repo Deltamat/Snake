@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
@@ -30,6 +29,15 @@ namespace Snake
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(sprite, position, Color.White);
+        }
+
+        public int TranslatePosition(int tilePosition)
+        {
+            int pos = 0;
+
+            pos = tilePosition * 30 + 15;
+
+            return pos;
         }
     }
 }
