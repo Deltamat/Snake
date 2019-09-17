@@ -27,7 +27,6 @@ namespace Snake
         {
             this.position = position;
             sprite = content.Load<Texture2D>(spriteName);
-            
         }
        
         public virtual void Update(GameTime gameTime)
@@ -42,11 +41,20 @@ namespace Snake
 
         public static int TranslatePosition(int tilePosition)
         {
-            int pos = 0;
+            int returnPosition = 0;
 
-            pos = tilePosition * 30 + 15;
+            returnPosition = tilePosition * 30 + 15;
 
-            return pos;
+            return returnPosition;
+        }
+
+        public static Vector2 TranslatePosition(Vector2 vector)
+        {
+            Vector2 returnVector = Vector2.Zero;
+
+            returnVector = new Vector2(vector.X * 30 + 15, vector.Y * 30 + 15);
+
+            return returnVector;
         }
     }
 }
