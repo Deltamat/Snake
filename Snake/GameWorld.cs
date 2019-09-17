@@ -15,7 +15,11 @@ namespace Snake
         SpriteBatch spriteBatch;
         private static ContentManager content;
         private float delay;
+        private Texture2D collisionTexture;
+
         public static GameObject[,] TileSet = new GameObject[64, 36];
+
+        public static List<GameObject> toBeRemoved = new List<GameObject>();
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
@@ -57,8 +61,6 @@ namespace Snake
         /// </summary>
         protected override void Initialize()
         {
-            
-
             base.Initialize();
 
             // Generates the background tiles
@@ -104,7 +106,6 @@ namespace Snake
             Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
             Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
             Snakebody body3 = new Snakebody(TileSet[0, 3].position, "SnakeBody1", content);
-
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace Snake
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            collisionTexture = content.Load<Texture2D>("CollisionTexture");
             
 
         }
@@ -146,6 +147,12 @@ namespace Snake
             {
                 obj.Update(gameTime);
             }
+
+            foreach (GameObject objRemove in toBeRemoved)
+            {
+                gameObjects.Remove(objRemove);
+            }
+            toBeRemoved.Clear();
 
             base.Update(gameTime);
 
@@ -185,10 +192,46 @@ namespace Snake
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
-            }
+                DrawCollisionBox(obj);
+            }           
 
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Draw collision boxes around the GameObject 'go'
+        /// </summary>
+        /// <param name="go">A GameObject</param>
+        private void DrawCollisionBox(GameObject go)
+        {
+            Rectangle collisionBox = go.CollisionBox;
+            Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(collisionBox.X, collisionBox.Y, 1, collisionBox.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+        }
+
+        /// <summary>
+        /// Draw collision boxes for the Rectangle 'collisionBox'
+        /// </summary>
+        /// <param name="collisionBox">A rectangle</param>
+        public void DrawRectangle(Rectangle collisionBox)
+        {
+            Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(collisionBox.X, collisionBox.Y, 1, collisionBox.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
         }
     }
 }
