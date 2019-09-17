@@ -54,7 +54,7 @@ namespace Snake
             }
             
             #region head-movement
-            if (position == NewPosition)
+            if (position == newPosition)
             {
                 if (savedDirection != Vector2.Zero)
                 {
