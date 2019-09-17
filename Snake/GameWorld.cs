@@ -101,6 +101,7 @@ namespace Snake
             Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
             Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
             Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
+            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "SnakeBody1", content);
 
         }
 

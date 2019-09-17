@@ -11,10 +11,11 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
-
+        
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -24,15 +25,25 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (placeInList == 1)
+            if(position == NewPosition)
             {
-                direction = snakeParts[0].direction;
+                oldPosition = NewPosition;
+                NewPosition += direction * 30;
+
+                if (placeInList == 1)
+                {
+                    direction = snakeParts[0].oldPosition - position;
+                    direction.Normalize();
+                }
+                else
+                {
+                    direction = snakeParts[placeInList - 1].oldPosition - position;
+                    direction.Normalize();
+                }
             }
-            else
-            {
-                direction = snakeParts[placeInList - 1].direction;
-            }
-            
+
+
+
             position += direction;
 
             base.Update(gameTime);

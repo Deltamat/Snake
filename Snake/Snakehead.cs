@@ -26,15 +26,15 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (position == newTile.position)
+            if (position == NewPosition)
             {
                 if (savedDirection != Vector2.Zero)
                 {
                     direction = savedDirection;
                     savedDirection = Vector2.Zero;
                 }
-                oldTile = newTile;
-                newTile.position += direction * 30;
+                oldPosition = NewPosition;
+                NewPosition += direction * 30;
             }
 
             position += direction;
@@ -43,18 +43,20 @@ namespace Snake
             {
                 savedDirection = new Vector2(0, -1);
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 savedDirection = new Vector2(0, 1);
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            else if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 savedDirection = new Vector2(-1, 0);
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 savedDirection = new Vector2(1, 0);
             }
+           
+
             base.Update(gameTime);
         }
     }
