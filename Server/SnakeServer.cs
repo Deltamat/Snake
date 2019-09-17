@@ -10,7 +10,7 @@ using System.Net.Sockets;
 
 namespace Server
 {
-    class Server
+    class SnakeServer
     {
         private static int port = 42069;
         private static TcpListener server;
