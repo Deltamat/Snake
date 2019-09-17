@@ -25,10 +25,10 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if(position == NewPosition)
+            if(position == newPosition)
             {
-                oldPosition = NewPosition;
-                NewPosition += direction * 30;
+                oldPosition = newPosition;
+                newPosition += direction * 30;
 
                 if (placeInList == 1)
                 {

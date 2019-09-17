@@ -37,6 +37,13 @@
 /processorParam:TextureFormat=Color
 /build:DarkTile.png
 
+#begin Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font.spritefont
+
 #begin GreenTile.png
 /importer:TextureImporter
 /processor:TextureProcessor

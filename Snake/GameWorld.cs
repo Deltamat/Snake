@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace Snake
 {
@@ -16,6 +20,10 @@ namespace Snake
         private static ContentManager content;
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
+        public static Snakehead head;
+
+        string test;
+        SpriteFont font;
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
@@ -98,10 +106,14 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "WallTile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
+            head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
             Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
             Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
             Snakebody body3 = new Snakebody(TileSet[0, 3].position, "SnakeBody1", content);
+
+            Thread t = new Thread(RecieveUDP);
+            t.IsBackground = true;
+            t.Start();
 
         }
 
@@ -113,7 +125,7 @@ namespace Snake
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            font = content.Load<SpriteFont>("Font");
             
 
         }
@@ -141,6 +153,8 @@ namespace Snake
             {
                 obj.Update(gameTime);
             }
+
+            SendUDP();
 
             base.Update(gameTime);
         }
@@ -172,8 +186,38 @@ namespace Snake
                 obj.Draw(spriteBatch);
             }
 
+            if (test != null)
+            {
+                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public void SendUDP()
+        {
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
+
+            byte[] sendbuf = Encoding.ASCII.GetBytes(Snakehead.savedDirection.ToString());
+
+            IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
+
+            socket.SendTo(sendbuf, ep);
+        }
+        
+        public void RecieveUDP()
+        {
+            int listenPort = 11001;
+            UdpClient listener = new UdpClient(listenPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+            while (true)
+            {
+                byte[] bytes = listener.Receive(ref groupEP);
+                test = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+            }
         }
     }
 }

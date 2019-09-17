@@ -10,9 +10,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Snake
 {
-    class Snakehead : Snake
+    public class Snakehead : Snake
     {
-        Vector2 savedDirection;
+        public static Vector2 savedDirection;
         
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
@@ -26,15 +26,15 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (position == NewPosition)
+            if (position == newPosition)
             {
                 if (savedDirection != Vector2.Zero)
                 {
                     direction = savedDirection;
                     savedDirection = Vector2.Zero;
                 }
-                oldPosition = NewPosition;
-                NewPosition += direction * 30;
+                oldPosition = newPosition;
+                newPosition += direction * 30;
             }
 
             position += direction;

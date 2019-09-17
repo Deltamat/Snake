@@ -32,6 +32,11 @@ namespace Server
 
         static void LoopClients()
         {
+
+            Thread t2 = new Thread(RecieveAndTransmitUDPData);
+            t2.IsBackground = true;
+            t2.Start();
+
             while (isRunning)
             {
                 TcpClient newClient = server.AcceptTcpClient();
@@ -50,6 +55,8 @@ namespace Server
                     Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
                     t.IsBackground = true;
                     t.Start(newClient);
+
+
                 }    
             }
         }
@@ -79,6 +86,30 @@ namespace Server
                     Console.WriteLine(endPoint.Port.ToString() + " " + localPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
                 }
+            }
+        }
+
+        static void RecieveAndTransmitUDPData(object obj)
+        {
+            int listenPort = 42070;
+            UdpClient listener = new UdpClient(listenPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
+
+            IPAddress broadcast = IPAddress.Parse("127.0.0.1");
+
+            IPEndPoint ep = new IPEndPoint(broadcast, 11001);
+
+            while (true)
+            {
+                // recieve from klient
+                byte[] bytes = listener.Receive(ref groupEP);
+
+                // send to all players TBC
+                socket.SendTo(bytes, ep);
             }
         }
     }
