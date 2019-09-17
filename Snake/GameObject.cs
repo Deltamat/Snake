@@ -38,7 +38,11 @@ namespace Snake
         {
             spriteBatch.Draw(sprite, position, Color.White);
         }
-
+        /// <summary>
+        /// Returns the vector for the middle of x- or y- position if the sprites are 30 pixels.
+        /// </summary>
+        /// <param name="tilePosition"></param>
+        /// <returns></returns>
         public static int TranslatePosition(int tilePosition)
         {
             int returnPosition = 0;
@@ -48,6 +52,11 @@ namespace Snake
             return returnPosition;
         }
 
+        /// <summary>
+        /// returns the vecter for the center of a 30 pixel sprite.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
         public static Vector2 TranslatePosition(Vector2 vector)
         {
             Vector2 returnVector = Vector2.Zero;
