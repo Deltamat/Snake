@@ -11,8 +11,9 @@ namespace Snake
 {
     class Wall : GameObject
     {
-        public static int xJumpLength = 32 * 30;
-        public static int yJumpLength = 18 * 30;
+        public static int xJumpLength = 960;
+        public static int yJumpLength = 540;
+
         public Wall(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
 
@@ -29,7 +30,7 @@ namespace Snake
         }
 
         public static void SpawnEnemyWalls(int player, int xSquare, int ySquare)
-         {
+        {
             if (player == 1)
             {
                 GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "WallTile", GameWorld.ContentManager));
@@ -57,8 +58,6 @@ namespace Snake
                 GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
                 GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
             }
-
-
-         }
+        }
     }
 }

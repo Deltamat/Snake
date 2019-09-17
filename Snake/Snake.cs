@@ -17,6 +17,7 @@ namespace Snake
         public Vector2 newPosition = GameWorld.TileSet[4, 3].position;
         public Vector2 oldPosition = GameWorld.TileSet[3, 3].position;
         public float speed = 3;
+        public GameObject smallCollisionBox;
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {

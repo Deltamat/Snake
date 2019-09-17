@@ -106,6 +106,8 @@ namespace Snake
             Snakebody body = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
             Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
             Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+
+            gameObjects.Add(new Apple(new Vector2(10 * 30, 10 * 30), "Alpha_Apple", content));
         }
 
         /// <summary>
@@ -117,8 +119,6 @@ namespace Snake
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
-            
-
         }
 
         /// <summary>
@@ -157,14 +157,13 @@ namespace Snake
             base.Update(gameTime);
 
            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
-            {
+           {
                 //Wall.SpawnEnemyWalls(1,4,9);
                 Wall.SpawnEnemyWalls(2,40,4);
                 //Wall.SpawnEnemyWalls(3,9,2);
                 //Wall.SpawnEnemyWalls(4,2,14);
                 delay = 0;
-            }
-
+           }
         }
 
         /// <summary>

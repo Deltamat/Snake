@@ -13,7 +13,6 @@ namespace Snake
     class Snakehead : Snake
     {
         Vector2 savedDirection;
-        private GameObject smallCollisionBox;
         private bool Alive = true;
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
@@ -31,9 +30,10 @@ namespace Snake
         {
             if (!Alive)
             {
-                foreach (GameObject snakePart in snakeParts)
+                foreach (Snake snakePart in snakeParts)
                 {
                     GameWorld.toBeRemoved.Add(snakePart);
+                    GameWorld.toBeRemoved.Add(snakePart.smallCollisionBox);
                 }
             }
             
@@ -90,9 +90,14 @@ namespace Snake
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
             foreach (GameObject obj in GameWorld.gameObjects)
             {
-                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1] && obj.GetType() != typeof(Apple))
                 {
                     Alive = false;
+                }
+                else if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj.GetType() == typeof(Apple))
+                {
+                    GameWorld.toBeRemoved.Add(obj);
+                    //Increase tail length
                 }
             }
             foreach (Wall wall in GameWorld.wallList)
