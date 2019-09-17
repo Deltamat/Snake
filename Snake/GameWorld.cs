@@ -18,9 +18,13 @@ namespace Snake
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private static ContentManager content;
+        private float delay;
+        private Texture2D collisionTexture;
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static Snakehead head;
+
+        public static List<GameObject> toBeRemoved = new List<GameObject>();
 
         string test;
         SpriteFont font;
@@ -37,11 +41,13 @@ namespace Snake
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1020;
 
-
-            graphics.IsFullScreen = false;
-
+#if !DEBUG
+            graphics.IsFullScreen = true;
+#endif
 
             graphics.ApplyChanges();
+
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -63,8 +69,6 @@ namespace Snake
         /// </summary>
         protected override void Initialize()
         {
-            
-
             base.Initialize();
 
             // Generates the background tiles
@@ -75,7 +79,7 @@ namespace Snake
                     //Checks if "i" is dividable by 2.
                     if (i % 2 == 0  )
                     {
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
                         k++;
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                     }
@@ -83,7 +87,7 @@ namespace Snake
                     {
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                         k++;
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
                    
                     }
                 }
@@ -92,24 +96,24 @@ namespace Snake
             // Creates walls at appropiate places.
             for (int i = 0; i < 64; i++)
 			{
-                wallList.Add(new Wall(new Vector2(30 * i, 0), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
 			}
 
             for (int i = 0; i < 36; i++)
 			{
-                wallList.Add(new Wall(new Vector2(0, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(1890, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(1890, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
-            Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
-            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
-            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "SnakeBody1", content);
+            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake_Head", content);
+            Snakebody body = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
 
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
@@ -128,6 +132,9 @@ namespace Snake
             font = content.Load<SpriteFont>("Font");
             
 
+            collisionTexture = content.Load<Texture2D>("CollisionTexture");
+            
+
         }
 
         /// <summary>
@@ -138,7 +145,8 @@ namespace Snake
         {
             
         }
-
+        
+        
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -146,6 +154,8 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            delay += gameTime.ElapsedGameTime.Milliseconds;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -154,9 +164,25 @@ namespace Snake
                 obj.Update(gameTime);
             }
 
+            foreach (GameObject objRemove in toBeRemoved)
+            {
+                gameObjects.Remove(objRemove);
+            }
+            toBeRemoved.Clear();
+
             SendUDP();
 
             base.Update(gameTime);
+
+           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
+            {
+                //Wall.SpawnEnemyWalls(1,4,9);
+                Wall.SpawnEnemyWalls(2,40,4);
+                //Wall.SpawnEnemyWalls(3,9,2);
+                //Wall.SpawnEnemyWalls(4,2,14);
+                delay = 0;
+            }
+
         }
 
         /// <summary>
@@ -184,7 +210,8 @@ namespace Snake
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
-            }
+                DrawCollisionBox(obj);
+            }           
 
             if (test != null)
             {
@@ -193,6 +220,41 @@ namespace Snake
 
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Draw collision boxes around the GameObject 'go'
+        /// </summary>
+        /// <param name="go">A GameObject</param>
+        private void DrawCollisionBox(GameObject go)
+        {
+            Rectangle collisionBox = go.CollisionBox;
+            Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(collisionBox.X, collisionBox.Y, 1, collisionBox.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+        }
+
+        /// <summary>
+        /// Draw collision boxes for the Rectangle 'collisionBox'
+        /// </summary>
+        /// <param name="collisionBox">A rectangle</param>
+        public void DrawRectangle(Rectangle collisionBox)
+        {
+            Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(collisionBox.X, collisionBox.Y, 1, collisionBox.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         public void SendUDP()

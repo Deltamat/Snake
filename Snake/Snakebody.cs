@@ -11,11 +11,13 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
-        
+        private GameObject smallCollisionBox;
+
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
-            
+            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
+            GameWorld.gameObjects.Add(smallCollisionBox);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -26,10 +28,12 @@ namespace Snake
         public override void Update(GameTime gameTime)
         {
             if(position == newPosition)
+            #region body movement
+            //movement of the body-parts
+
+            if (position == newPosition)
             {
                 oldPosition = newPosition;
-                newPosition += direction * 30;
-
                 if (placeInList == 1)
                 {
                     direction = snakeParts[0].oldPosition - position;
@@ -40,11 +44,12 @@ namespace Snake
                     direction = snakeParts[placeInList - 1].oldPosition - position;
                     direction.Normalize();
                 }
+                newPosition += direction * 30;
             }
+            position += direction * speed;
+            #endregion
 
-
-
-            position += direction;
+            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
 
             base.Update(gameTime);
         }

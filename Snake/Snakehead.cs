@@ -13,10 +13,13 @@ namespace Snake
     public class Snakehead : Snake
     {
         public static Vector2 savedDirection;
-        
+        private GameObject smallCollisionBox;
+        private bool Alive = true;
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
+            GameWorld.gameObjects.Add(smallCollisionBox);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -26,6 +29,15 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
+            if (!Alive)
+            {
+                foreach (GameObject snakePart in snakeParts)
+                {
+                    GameWorld.toBeRemoved.Add(snakePart);
+                }
+            }
+            
+            #region head-movement
             if (position == newPosition)
             {
                 if (savedDirection != Vector2.Zero)
@@ -37,26 +49,60 @@ namespace Snake
                 newPosition += direction * 30;
             }
 
-            position += direction;
+            position += direction * speed;
+            #endregion
 
+            #region input-handling
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                savedDirection = new Vector2(0, -1);
+                if (direction != new Vector2(0, 1))
+                {
+                    savedDirection = new Vector2(0, -1);
+                }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                savedDirection = new Vector2(0, 1);
+                if (direction != new Vector2(0, -1))
+                {
+                    savedDirection = new Vector2(0, 1);
+                }
+                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                savedDirection = new Vector2(-1, 0);
+                if (direction != new Vector2(1, 0))
+                {
+                    savedDirection = new Vector2(-1, 0);
+                }
+                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                savedDirection = new Vector2(1, 0);
+                if (direction != new Vector2(-1, 0))
+                {
+                    savedDirection = new Vector2(1, 0);
+                }
+                
             }
-           
+            #endregion
 
+            #region collision
+            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
+            foreach (GameObject obj in GameWorld.gameObjects)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                {
+                    Alive = false;
+                }
+            }
+            foreach (Wall wall in GameWorld.wallList)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
+                {
+                    Alive = false;
+                }
+            }
+            #endregion
             base.Update(gameTime);
         }
     }

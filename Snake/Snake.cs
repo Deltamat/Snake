@@ -16,6 +16,7 @@ namespace Snake
         protected int placeInList;
         public Vector2 newPosition;
         public Vector2 oldPosition;
+        public float speed = 3;
 
 
 

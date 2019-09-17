@@ -27,7 +27,6 @@ namespace Snake
         {
             this.position = position;
             sprite = content.Load<Texture2D>(spriteName);
-            
         }
        
         public virtual void Update(GameTime gameTime)
@@ -39,14 +38,32 @@ namespace Snake
         {
             spriteBatch.Draw(sprite, position, Color.White);
         }
-
+        /// <summary>
+        /// Returns the vector for the middle of x- or y- position if the sprites are 30 pixels.
+        /// </summary>
+        /// <param name="tilePosition"></param>
+        /// <returns></returns>
         public static int TranslatePosition(int tilePosition)
         {
-            int pos = 0;
+            int returnPosition = 0;
 
-            pos = tilePosition * 30 + 15;
+            returnPosition = tilePosition * 30 + 15;
 
-            return pos;
+            return returnPosition;
+        }
+
+        /// <summary>
+        /// returns the vecter for the center of a 30 pixel sprite.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public static Vector2 TranslatePosition(Vector2 vector)
+        {
+            Vector2 returnVector = Vector2.Zero;
+
+            returnVector = new Vector2(vector.X * 30 + 15, vector.Y * 30 + 15);
+
+            return returnVector;
         }
     }
 }
