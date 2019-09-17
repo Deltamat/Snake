@@ -16,7 +16,7 @@ namespace Snake
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
-            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "SnakeCollision", content);
+            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.gameObjects.Add(smallCollisionBox);
         }
 
@@ -27,10 +27,9 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
+            if(position == newPosition)
             #region body movement
             //movement of the body-parts
-            if(position == newPosition)
 
             if (position == newPosition)
             {
@@ -47,8 +46,11 @@ namespace Snake
                 }
                 newPosition += direction * 30;
             }
-            position += direction;
+            position += direction * speed;
             #endregion
+
+            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
+
             base.Update(gameTime);
         }
     }

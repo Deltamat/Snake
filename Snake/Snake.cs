@@ -14,11 +14,26 @@ namespace Snake
         public static List<Snake> snakeParts = new List<Snake>();
         public Vector2 direction = new Vector2(1, 0);
         protected int placeInList;
-        public Vector2 newPosition = GameWorld.TileSet[4, 3].position;
-        public Vector2 oldPosition = GameWorld.TileSet[3, 3].position;
+        public Vector2 newPosition;
+        public Vector2 oldPosition;
+        public float speed = 3;
+
+
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            if (snakeParts.Count == 0)
+            {
+                newPosition = GameWorld.TileSet[4, 3].position;
+                oldPosition = GameWorld.TileSet[3, 3].position;
+            }
+            else
+            {
+                newPosition = GameWorld.TileSet[4, 3].position;
+                oldPosition = GameWorld.TileSet[3, 3].position;
+            }
+            
+
             GameWorld.gameObjects.Add(this);
             snakeParts.Add(this);
             placeInList = snakeParts.Count - 1;

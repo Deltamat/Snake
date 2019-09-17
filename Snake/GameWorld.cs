@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace Snake
 {
@@ -18,8 +22,12 @@ namespace Snake
         private Texture2D collisionTexture;
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
+        public static Snakehead head;
 
         public static List<GameObject> toBeRemoved = new List<GameObject>();
+
+        string test;
+        SpriteFont font;
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
@@ -71,7 +79,7 @@ namespace Snake
                     //Checks if "i" is dividable by 2.
                     if (i % 2 == 0  )
                     {
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
                         k++;
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                     }
@@ -79,7 +87,7 @@ namespace Snake
                     {
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                         k++;
-                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "light grass tile", content);
+                        TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
                    
                     }
                 }
@@ -88,24 +96,29 @@ namespace Snake
             // Creates walls at appropiate places.
             for (int i = 0; i < 64; i++)
 			{
-                wallList.Add(new Wall(new Vector2(30 * i, 0), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
 			}
 
             for (int i = 0; i < 36; i++)
 			{
-                wallList.Add(new Wall(new Vector2(0, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(1890, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "WallTile", content));
-                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "WallTile", content));
+                wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(1890, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake Head", content);
-            Snakebody body = new Snakebody(TileSet[2, 3].position, "SnakeBody1", content);
-            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "SnakeBody1", content);
-            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "SnakeBody1", content);
+            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake_Head", content);
+            Snakebody body = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+
+            Thread t = new Thread(RecieveUDP);
+            t.IsBackground = true;
+            t.Start();
+
         }
 
         /// <summary>
@@ -116,6 +129,9 @@ namespace Snake
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = content.Load<SpriteFont>("Font");
+            
+
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
             
 
@@ -153,6 +169,8 @@ namespace Snake
                 gameObjects.Remove(objRemove);
             }
             toBeRemoved.Clear();
+
+            SendUDP();
 
             base.Update(gameTime);
 
@@ -197,6 +215,11 @@ namespace Snake
                 DrawCollisionBox(obj);
             }           
 
+            if (test != null)
+            {
+                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -234,6 +257,31 @@ namespace Snake
             spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
             spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
             spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+        }
+
+        public void SendUDP()
+        {
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
+
+            byte[] sendbuf = Encoding.ASCII.GetBytes(Snakehead.savedDirection.ToString());
+
+            IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
+
+            socket.SendTo(sendbuf, ep);
+        }
+        
+        public void RecieveUDP()
+        {
+            int listenPort = 11001;
+            UdpClient listener = new UdpClient(listenPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+            while (true)
+            {
+                byte[] bytes = listener.Receive(ref groupEP);
+                test = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+            }
         }
     }
 }
