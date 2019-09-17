@@ -11,7 +11,7 @@ namespace Snake
 {
     public class Snake : GameObject
     {
-        protected static List<Snake> snakeParts = new List<Snake>();
+        public static List<Snake> snakeParts = new List<Snake>();
         public Vector2 direction = new Vector2(1, 0);
         protected int placeInList;
         public Vector2 newPosition = GameWorld.TileSet[4, 3].position;

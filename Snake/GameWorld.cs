@@ -159,9 +159,11 @@ namespace Snake
            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
             {
                 //Wall.SpawnEnemyWalls(1,4,9);
-                Wall.SpawnEnemyWalls(2,40,4);
+                //Wall.SpawnEnemyWalls(2,40,4);
                 //Wall.SpawnEnemyWalls(3,9,2);
                 //Wall.SpawnEnemyWalls(4,2,14);
+
+                new Snakebody((Snake.snakeParts[Snake.snakeParts.Count-1].position- new Vector2(30,0)),"SnakeBody1",content);
                 delay = 0;
             }
 
