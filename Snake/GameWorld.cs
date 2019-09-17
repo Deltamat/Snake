@@ -29,9 +29,9 @@ namespace Snake
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1020;
 
-
-            graphics.IsFullScreen = false;
-
+#if !DEBUG
+            graphics.IsFullScreen = true;
+#endif
 
             graphics.ApplyChanges();
         }

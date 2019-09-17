@@ -10,7 +10,7 @@ using System.Net.Sockets;
 
 namespace Server
 {
-    class Program
+    class Server
     {
         private static int port = 42069;
         private static TcpListener server;
@@ -50,7 +50,11 @@ namespace Server
                     Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
                     t.IsBackground = true;
                     t.Start(newClient);
-                }    
+                }
+                else
+                {
+                    newClient.Close();
+                }
             }
         }
 
