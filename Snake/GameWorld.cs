@@ -125,8 +125,6 @@ namespace Snake
             t.IsBackground = true;
             t.Start();
 
-
-            gameObjects.Add(new Apple(new Vector2(10 * 30, 10 * 30), "Alpha_Apple", content));
         }
 
         /// <summary>
@@ -175,6 +173,13 @@ namespace Snake
                 gameObjects.Remove(objRemove);
             }
             toBeRemoved.Clear();
+
+            foreach (Apple apple in Apple.ToBeRemovedApple)
+            {
+                Apple.AppleList.Remove(apple);
+            }
+
+            Apple.ToBeRemovedApple.Clear();
 
             SendUDP();
 

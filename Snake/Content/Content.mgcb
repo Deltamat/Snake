@@ -37,7 +37,7 @@
 /processorParam:TextureFormat=Color
 /build:CollisionTexture.png
 
-#begin Dark_Grass_Apple.png
+#begin Dark_Grass_tile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,7 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Dark_Grass_Apple.png
+/build:Dark_Grass_tile.png
 
 #begin Font.spritefont
 /importer:FontDescriptionImporter
@@ -55,6 +55,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
+
 #begin Light_Grass_Tile.png
 /importer:TextureImporter
 /processor:TextureProcessor

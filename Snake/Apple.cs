@@ -13,8 +13,10 @@ namespace Snake
     {
         private static bool emptySpace;
         private static List<Apple> appleList = new List<Apple>();
+        private static List<Apple> toBeRemovedApple = new List<Apple>();
 
         public static List<Apple> AppleList { get => appleList; set => appleList = value; }
+        internal static List<Apple> ToBeRemovedApple { get => toBeRemovedApple; set => toBeRemovedApple = value; }
 
         public Apple(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {

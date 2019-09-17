@@ -94,12 +94,18 @@ namespace Snake
                 {
                     Alive = false;
                 }
-                else if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj.GetType() == typeof(Apple))
+            }
+
+            foreach (Apple apple in Apple.AppleList)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(apple.CollisionBox))
                 {
-                    GameWorld.toBeRemoved.Add(obj);
+                    Apple.ToBeRemovedApple.Add(apple);
+                    Wall.SpawnEnemyWalls(GameWorld.Player,(int)(apple.position.X/30), (int)(apple.position.Y/30));
                     //Increase tail length
                 }
             }
+
             foreach (Wall wall in GameWorld.wallList)
             {
                 if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
