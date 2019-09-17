@@ -14,6 +14,7 @@ namespace Snake
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private static ContentManager content;
+        private float delay;
         private Texture2D collisionTexture;
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
@@ -37,6 +38,8 @@ namespace Snake
 #endif
 
             graphics.ApplyChanges();
+
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -126,7 +129,8 @@ namespace Snake
         {
             
         }
-
+        
+        
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -134,6 +138,8 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            delay += gameTime.ElapsedGameTime.Milliseconds;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -149,6 +155,16 @@ namespace Snake
             toBeRemoved.Clear();
 
             base.Update(gameTime);
+
+           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
+            {
+                //Wall.SpawnEnemyWalls(1,4,9);
+                Wall.SpawnEnemyWalls(2,40,4);
+                //Wall.SpawnEnemyWalls(3,9,2);
+                //Wall.SpawnEnemyWalls(4,2,14);
+                delay = 0;
+            }
+
         }
 
         /// <summary>
