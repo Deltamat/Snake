@@ -18,7 +18,7 @@ namespace Snake
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
-            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "SnakeCollision", content);
+            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.gameObjects.Add(smallCollisionBox);
         }
 
@@ -29,22 +29,6 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
-            foreach (GameObject obj in GameWorld.gameObjects)
-            {
-                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
-                {
-                    Alive = false;
-                }
-            }
-            foreach (Wall wall in GameWorld.wallList)
-            {
-                if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
-                {
-                    Alive = false;
-                }
-            }
-
             if (!Alive)
             {
                 foreach (GameObject snakePart in snakeParts)
@@ -65,7 +49,7 @@ namespace Snake
                 newPosition += direction * 30;
             }
 
-            position += direction;
+            position += direction * speed;
             #endregion
 
             #region input-handling
@@ -102,6 +86,23 @@ namespace Snake
             }
             #endregion
 
+            #region collision
+            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
+            foreach (GameObject obj in GameWorld.gameObjects)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                {
+                    Alive = false;
+                }
+            }
+            foreach (Wall wall in GameWorld.wallList)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
+                {
+                    Alive = false;
+                }
+            }
+            #endregion
             base.Update(gameTime);
         }
     }
