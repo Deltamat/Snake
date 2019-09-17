@@ -125,6 +125,8 @@ namespace Snake
             t.IsBackground = true;
             t.Start();
 
+
+            gameObjects.Add(new Apple(new Vector2(10 * 30, 10 * 30), "Alpha_Apple", content));
         }
 
         /// <summary>
@@ -139,8 +141,6 @@ namespace Snake
             
 
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
-            
-
         }
 
         /// <summary>
@@ -215,8 +215,7 @@ namespace Snake
 
                 Apple.SpawnApple();
                 delay = 0;
-            }
-
+           }
         }
 
         /// <summary>
