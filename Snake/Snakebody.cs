@@ -25,11 +25,11 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
+            #region body movement
+            //movement of the body-parts
             if(position == NewPosition)
             {
                 oldPosition = NewPosition;
-                NewPosition += direction * 30;
-
                 if (placeInList == 1)
                 {
                     direction = snakeParts[0].oldPosition - position;
@@ -40,12 +40,10 @@ namespace Snake
                     direction = snakeParts[placeInList - 1].oldPosition - position;
                     direction.Normalize();
                 }
+                NewPosition += direction * 30;
             }
-
-
-
             position += direction;
-
+            #endregion
             base.Update(gameTime);
         }
     }

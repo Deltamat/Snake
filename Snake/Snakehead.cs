@@ -26,6 +26,7 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
+            #region head-movement
             if (position == NewPosition)
             {
                 if (savedDirection != Vector2.Zero)
@@ -38,24 +39,41 @@ namespace Snake
             }
 
             position += direction;
+            #endregion
 
+            #region input-handling
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                savedDirection = new Vector2(0, -1);
+                if (direction != new Vector2(0, 1))
+                {
+                    savedDirection = new Vector2(0, -1);
+                }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                savedDirection = new Vector2(0, 1);
+                if (direction != new Vector2(0, -1))
+                {
+                    savedDirection = new Vector2(0, 1);
+                }
+                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                savedDirection = new Vector2(-1, 0);
+                if (direction != new Vector2(1, 0))
+                {
+                    savedDirection = new Vector2(-1, 0);
+                }
+                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                savedDirection = new Vector2(1, 0);
+                if (direction != new Vector2(-1, 0))
+                {
+                    savedDirection = new Vector2(1, 0);
+                }
+                
             }
-           
+            #endregion
 
             base.Update(gameTime);
         }
