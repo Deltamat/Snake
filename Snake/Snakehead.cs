@@ -10,9 +10,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Snake
 {
-    class Snakehead : Snake
+    public class Snakehead : Snake
     {
-        Vector2 savedDirection;
+        public static Vector2 savedDirection;
         private bool Alive = true;
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)

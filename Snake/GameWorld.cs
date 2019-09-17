@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace Snake
 {
@@ -18,8 +22,12 @@ namespace Snake
         private Texture2D collisionTexture;
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
+        public static Snakehead head;
 
         public static List<GameObject> toBeRemoved = new List<GameObject>();
+
+        string test;
+        SpriteFont font;
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
@@ -107,6 +115,11 @@ namespace Snake
             Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
             Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
 
+            Thread t = new Thread(RecieveUDP);
+            t.IsBackground = true;
+            t.Start();
+
+
             gameObjects.Add(new Apple(new Vector2(10 * 30, 10 * 30), "Alpha_Apple", content));
         }
 
@@ -118,6 +131,9 @@ namespace Snake
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = content.Load<SpriteFont>("Font");
+            
+
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
         }
 
@@ -154,14 +170,18 @@ namespace Snake
             }
             toBeRemoved.Clear();
 
+            SendUDP();
+
             base.Update(gameTime);
 
            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
            {
                 //Wall.SpawnEnemyWalls(1,4,9);
-                Wall.SpawnEnemyWalls(2,40,4);
+                //Wall.SpawnEnemyWalls(2,40,4);
                 //Wall.SpawnEnemyWalls(3,9,2);
                 //Wall.SpawnEnemyWalls(4,2,14);
+
+                new Snakebody((Snake.snakeParts[Snake.snakeParts.Count-1].position- new Vector2(30,0)),"SnakeBody1",content);
                 delay = 0;
            }
         }
@@ -193,6 +213,11 @@ namespace Snake
                 obj.Draw(spriteBatch);
                 DrawCollisionBox(obj);
             }           
+
+            if (test != null)
+            {
+                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);
@@ -231,6 +256,31 @@ namespace Snake
             spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
             spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
             spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+        }
+
+        public void SendUDP()
+        {
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
+
+            byte[] sendbuf = Encoding.ASCII.GetBytes(Snakehead.savedDirection.ToString());
+
+            IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
+
+            socket.SendTo(sendbuf, ep);
+        }
+        
+        public void RecieveUDP()
+        {
+            int listenPort = 11001;
+            UdpClient listener = new UdpClient(listenPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+            while (true)
+            {
+                byte[] bytes = listener.Receive(ref groupEP);
+                test = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+            }
         }
     }
 }

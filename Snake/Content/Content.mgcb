@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:Dark_Grass_tile.png
 
+#begin Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font.spritefont
 #begin Light_Grass_Tile.png
 /importer:TextureImporter
 /processor:TextureProcessor

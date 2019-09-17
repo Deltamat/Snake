@@ -33,30 +33,30 @@ namespace Snake
         {
             if (player == 1)
             {
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare + yJumpLength), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "WallTile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager));
             }
 
             if (player == 2)
             {
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare + yJumpLength), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "WallTile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager));
             }
 
             if (player == 3)
             {
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager));
             }
 
             if (player == 4)
             {
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
-                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "WallTile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager));
+                GameWorld.wallList.Add(new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager));
             }
         }
     }
