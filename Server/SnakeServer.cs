@@ -12,7 +12,7 @@ namespace Server
 {
     class SnakeServer
     {
-        private static int port = 42069;
+        private static readonly int port = 42069;
         private static TcpListener server;
         private static bool isRunning;
         private static TcpClient[] Players = new TcpClient[3];
@@ -47,8 +47,10 @@ namespace Server
 
                 if (placed)
                 {
-                    Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
-                    t.IsBackground = true;
+                    Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
+                    {
+                        IsBackground = true
+                    };
                     t.Start(newClient);
                 }
                 else

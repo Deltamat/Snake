@@ -13,10 +13,13 @@ namespace Snake
     class Snakehead : Snake
     {
         Vector2 savedDirection;
-        
+        private GameObject smallCollisionBox;
+        private bool Alive = true;
 
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
+            smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "SnakeCollision", content);
+            GameWorld.gameObjects.Add(smallCollisionBox);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -26,15 +29,39 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-            if (position == NewPosition)
+            smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
+            foreach (GameObject obj in GameWorld.gameObjects)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                {
+                    Alive = false;
+                }
+            }
+            foreach (Wall wall in GameWorld.wallList)
+            {
+                if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
+                {
+                    Alive = false;
+                }
+            }
+
+            if (!Alive)
+            {
+                foreach (GameObject snakePart in snakeParts)
+                {
+                    GameWorld.toBeRemoved.Add(snakePart);
+                }
+            }
+
+            if (position == newPosition)
             {
                 if (savedDirection != Vector2.Zero)
                 {
                     direction = savedDirection;
                     savedDirection = Vector2.Zero;
                 }
-                oldPosition = NewPosition;
-                NewPosition += direction * 30;
+                oldPosition = newPosition;
+                newPosition += direction * 30;
             }
 
             position += direction;
@@ -55,7 +82,7 @@ namespace Snake
             {
                 savedDirection = new Vector2(1, 0);
             }
-           
+            
 
             base.Update(gameTime);
         }
