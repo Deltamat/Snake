@@ -21,7 +21,7 @@ namespace Snake
         private static ContentManager content;
         private float delay;
         private Texture2D collisionTexture;
-        private static int player = 2;
+        private static int player = 1;
         private static Random rng = new Random();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];

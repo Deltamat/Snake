@@ -23,8 +23,8 @@ namespace Snake
             switch (GameWorld.Player)
             {
                 case 1:
-                    newPosition = GameWorld.TileSet[8, 3].position;
-                    oldPosition = GameWorld.TileSet[7, 3].position;
+                    newPosition = GameWorld.TileSet[9, 3].position;
+                    oldPosition = GameWorld.TileSet[8, 3].position;
                     break;
                 case 2:
                     newPosition = GameWorld.TileSet[40, 3].position;
@@ -111,7 +111,7 @@ namespace Snake
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
             foreach (GameObject obj in GameWorld.gameObjects)
             {
-                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1] && obj.GetType() != typeof(Apple))
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
                 {
                     Alive = false;
                 }
