@@ -14,9 +14,11 @@ namespace Snake
         private static bool emptySpace;
         private static List<Apple> appleList = new List<Apple>();
         private static List<Apple> toBeRemovedApple = new List<Apple>();
+        private static int appleSpawnCounter = 0;
 
         public static List<Apple> AppleList { get => appleList; set => appleList = value; }
         internal static List<Apple> ToBeRemovedApple { get => toBeRemovedApple; set => toBeRemovedApple = value; }
+        public static int AppleSpawnCounter { get => appleSpawnCounter; set => appleSpawnCounter = value; }
 
         public Apple(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
@@ -52,6 +54,11 @@ namespace Snake
                         {
                             emptySpace = false;
                         }
+                    }
+
+                    foreach (Snakebody part in Snake.snakeParts)
+                    {
+
                     }
                 }
 
