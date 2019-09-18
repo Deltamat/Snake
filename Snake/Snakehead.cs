@@ -112,9 +112,11 @@ namespace Snake
                 if (smallCollisionBox.CollisionBox.Intersects(apple.CollisionBox))
                 {
                     Apple.ToBeRemovedApple.Add(apple);
-                    Wall.SpawnEnemyWalls(GameWorld.Player,(int)(apple.position.X/30), (int)(apple.position.Y/30));
+                    Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30));
                     //Increase tail length
+                    Apple.AppleSpawnCounter++;
                 }
+
             }
 
             foreach (Wall wall in GameWorld.wallList)
@@ -124,6 +126,8 @@ namespace Snake
                     Alive = false;
                 }
             }
+
+            
             #endregion
             base.Update(gameTime);
         }
