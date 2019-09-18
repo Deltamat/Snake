@@ -223,7 +223,7 @@ namespace Snake
                 //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
                 new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
-           }
+            }
         }
 
         /// <summary>
@@ -252,8 +252,9 @@ namespace Snake
             {
                 obj.Draw(spriteBatch);
                 DrawCollisionBox(obj);
-            }           
+            }
 
+            spriteBatch.DrawString(font, Snake.snakeParts[1].position.ToString(), Vector2.Zero, Color.White);
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);

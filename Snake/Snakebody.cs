@@ -47,9 +47,9 @@ namespace Snake
             if (!readyToMove)
             {
             
-                if (Vector2.Distance(position, snakeParts[placeInList -1].position) > 30)
+                if (Vector2.Distance(position, snakeParts[placeInList - 1].position) > 30)
                 {
-                    //position = snakeParts[placeInList - 1].position - direction * 30;
+                    //position = snakeParts[placeInList - 1].position - direction * 33;
                     newPosition = snakeParts[placeInList - 1].oldPosition;
                     readyToMove = true;
                 }
