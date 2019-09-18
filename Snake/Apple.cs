@@ -55,11 +55,6 @@ namespace Snake
                             emptySpace = false;
                         }
                     }
-
-                    foreach (Snakebody part in Snake.snakeParts)
-                    {
-
-                    }
                 }
 
                 if (GameWorld.Player == 2)
