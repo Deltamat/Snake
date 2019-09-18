@@ -76,7 +76,6 @@ namespace Snake
         protected override void Initialize()
         {
             base.Initialize();
-
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
@@ -94,7 +93,6 @@ namespace Snake
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                         k++;
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
-                   
                     }
                 }
             }
@@ -143,7 +141,6 @@ namespace Snake
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = content.Load<SpriteFont>("Font");
             
-
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
         }
 
@@ -155,7 +152,6 @@ namespace Snake
         {
             
         }
-        
         
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -184,7 +180,6 @@ namespace Snake
             {
                 Apple.AppleList.Remove(apple);
             }
-
             Apple.ToBeRemovedApple.Clear();
 
             //Checks if there are any apples to create like a pseudo-list
@@ -235,7 +230,7 @@ namespace Snake
                 //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
                 new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
-           }
+            }
         }
 
         /// <summary>
@@ -244,7 +239,7 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Cyan);
             spriteBatch.Begin();
 
             for (int i = 0; i < 64; i++)

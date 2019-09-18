@@ -41,7 +41,6 @@ namespace Snake
 
         public override void Update(GameTime gameTime)
         {
-
             #region body movement
             //movement of the body-parts
             if (!readyToMove)
