@@ -295,12 +295,6 @@ namespace Snake
 #endif
             }
 
-            spriteBatch.DrawString(font, "Snek Boi Alpha 0.1", Vector2.Zero, Color.White);
-            if (test != null)
-            {
-                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
-            }
-
             foreach (Apple item in Apple.AppleList)
             {
                 item.Draw(spriteBatch);
