@@ -12,7 +12,7 @@ namespace Snake
     public class Snakebody : Snake
     {
         
-        private bool readyToMove = false;
+        
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
@@ -27,7 +27,7 @@ namespace Snake
             {
                 this.position = snakeParts[lastBodyPartInList].position/* - snakeParts[lastBodyPartInList].direction * 30*/;
             }
-            
+            readyToMove = false;
             direction = snakeParts[placeInList - 1].direction;
             newPosition = snakeParts[placeInList - 1].oldPosition;
             oldPosition = this.position;
@@ -45,18 +45,33 @@ namespace Snake
             //movement of the body-parts
             if (!readyToMove)
             {
-            
-                if (Vector2.Distance(position, snakeParts[placeInList -1].position) > 30)
+
+                if (Vector2.Distance(position, snakeParts[placeInList - 1].position) > 30)
                 {
-                    //position = snakeParts[placeInList - 1].position - direction * 30;
+                    //position = snakeParts[placeInList - 1].position - direction * 33;
                     newPosition = snakeParts[placeInList - 1].oldPosition;
                     readyToMove = true;
                 }
-                
+
             }
             if (position == newPosition && readyToMove)
             {
                 oldPosition = newPosition;
+                try
+                {
+                    if (snakeParts[placeInList + 1].readyToMove && Vector2.Distance(position, snakeParts[placeInList - 1].position) > 30)
+                    {
+                        snakeParts[placeInList + 1].position = position - direction * 30;
+                        //snakeParts[placeInList + 1].newPosition = oldPosition;
+                        //snakeParts[placeInList + 1].readyToMove = true;
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    //yeet
+                }
+
                 if (placeInList == 1)
                 {
                     direction = snakeParts[0].oldPosition - position;

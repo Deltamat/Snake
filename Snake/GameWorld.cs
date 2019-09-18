@@ -292,8 +292,9 @@ namespace Snake
             {
                 obj.Draw(spriteBatch);
                 DrawCollisionBox(obj);
-            }           
+            }
 
+            spriteBatch.DrawString(font, Snake.snakeParts[1].position.ToString(), Vector2.Zero, Color.White);
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
