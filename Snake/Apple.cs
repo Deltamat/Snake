@@ -56,7 +56,7 @@ namespace Snake
                         }
                     }
 
-                    foreach (Snakebody part in Snake.snakeParts)
+                    foreach (Snake part in Snake.snakeParts)
                     {
 
                     }

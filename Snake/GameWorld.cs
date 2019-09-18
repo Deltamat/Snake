@@ -28,6 +28,7 @@ namespace Snake
         public static Snakehead head;
 
         public static List<GameObject> toBeRemoved = new List<GameObject>();
+        public static List<GameObject> toBeAdded = new List<GameObject>();
 
         string test;
         SpriteFont font;
@@ -170,6 +171,12 @@ namespace Snake
                 obj.Update(gameTime);
             }
 
+            foreach (GameObject obj in toBeAdded)
+            {
+                gameObjects.Add(obj);
+            }
+            toBeAdded.Clear();
+
             foreach (GameObject objRemove in toBeRemoved)
             {
                 gameObjects.Remove(objRemove);
@@ -192,7 +199,7 @@ namespace Snake
 
                 Apple.AppleSpawnCounter = 0;
             }
-            SendUDP();
+            //SendUDP();
 
             base.Update(gameTime);
 
@@ -261,7 +268,7 @@ namespace Snake
                 DrawCollisionBox(obj);
             }
 
-            spriteBatch.DrawString(font, Snake.snakeParts[1].position.ToString(), Vector2.Zero, Color.White);
+            spriteBatch.DrawString(font, "Snek Boi Alpha 0.1", Vector2.Zero, Color.White);
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);

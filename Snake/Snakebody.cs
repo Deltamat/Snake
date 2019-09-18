@@ -17,7 +17,7 @@ namespace Snake
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
-            GameWorld.gameObjects.Add(smallCollisionBox);
+            GameWorld.toBeAdded.Add(smallCollisionBox);
             int lastBodyPartInList = snakeParts.Count - 2;
             if (lastBodyPartInList == 0)
             {
