@@ -129,6 +129,8 @@ namespace Snake
             t.IsBackground = true;
             t.Start();
 
+            Apple.SpawnApple();
+
         }
 
         /// <summary>
@@ -185,6 +187,16 @@ namespace Snake
 
             Apple.ToBeRemovedApple.Clear();
 
+            //Checks if there are any apples to create like a pseudo-list
+            if (Apple.AppleSpawnCounter != 0)
+            {
+                for (int i = 0; i < Apple.AppleSpawnCounter; i++)
+                {
+                    Apple.SpawnApple();
+                }
+
+                Apple.AppleSpawnCounter = 0;
+            }
             SendUDP();
 
             base.Update(gameTime);
