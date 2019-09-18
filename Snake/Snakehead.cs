@@ -111,13 +111,35 @@ namespace Snake
             {
                 if (smallCollisionBox.CollisionBox.Intersects(apple.CollisionBox))
                 {
+                    new Snakebody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager);
                     Apple.ToBeRemovedApple.Add(apple);
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30));
                     //Increase tail length
-                    Apple.AppleSpawnCounter++;
-                    new Snakebody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager);
-                }
+                    if (apple.position.X - Wall.xJumpLength > 0)
+                    {
+                        if (apple.position.Y - Wall.yJumpLength > 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer4++;
+                        }
 
+                        if (apple.position.Y - Wall.yJumpLength < 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer2++;
+                        }
+                    }
+                    else if (apple.position.X - Wall.xJumpLength < 0)
+                    {
+                        if (apple.position.Y - Wall.yJumpLength > 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer3++;
+                        }
+
+                        if (apple.position.Y - Wall.yJumpLength < 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer1++;
+                        }
+                    }
+                }
             }
 
             foreach (Wall wall in GameWorld.wallList)
