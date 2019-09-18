@@ -54,9 +54,18 @@ namespace Snake
 
                 if (player == 1)
                 {
-                    foreach (Wall item in GameWorld.wallList)
+                    foreach (Wall wall in GameWorld.wallList)
                     {
-                        if (item.position == new Vector2(xCoordinate * 30, yCoordinate * 30))
+                        if (wall.position == new Vector2(xCoordinate * 30, yCoordinate * 30))
+                        {
+                            emptySpace = false;
+                        }
+                    }
+
+                    Apple apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager);
+                    foreach (Snake snakePart in Snake.snakeParts)
+                    {
+                        if (snakePart.CollisionBox.Intersects(apple.CollisionBox))
                         {
                             emptySpace = false;
                         }
@@ -65,9 +74,9 @@ namespace Snake
 
                 if (player == 2)
                 {
-                    foreach (Wall item in GameWorld.wallList)
+                    foreach (Wall wall in GameWorld.wallList)
                     {
-                        if (item.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30))
+                        if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30))
                         {
                             emptySpace = false;
                         }
@@ -76,20 +85,20 @@ namespace Snake
 
                 if (player == 3)
                 {
-                    foreach (Wall item in GameWorld.wallList)
+                    foreach (Wall wall in GameWorld.wallList)
                     {
-                        if (item.position == new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength))
+                        if (wall.position == new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength))
                         {
                             emptySpace = false;
                         }
-                    }
+                    }   
                 }
 
                 if (player == 4)
                 {
-                    foreach (Wall item in GameWorld.wallList)
+                    foreach (Wall wall in GameWorld.wallList)
                     {
-                        if (item.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength))
+                        if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength))
                         {
                             emptySpace = false;
                         }

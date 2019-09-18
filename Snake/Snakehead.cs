@@ -111,7 +111,7 @@ namespace Snake
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
             foreach (GameObject obj in GameWorld.gameObjects)
             {
-                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1] && obj.GetType() != typeof(Apple))
+                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
                 {
                     Alive = false;
                 }
