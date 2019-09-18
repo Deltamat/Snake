@@ -20,6 +20,17 @@ namespace Snake
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.gameObjects.Add(smallCollisionBox);
+            int player = 1;
+            direction = new Vector2(1, 0);
+            switch (player)
+            {
+                case 1:
+                    //newPosition = GameWorld.TileSet[4, 3].position;
+                    //oldPosition = GameWorld.TileSet[3, 3].position;
+                    newPosition = GameWorld.TileSet[8, 3].position;
+                    oldPosition = GameWorld.TileSet[7, 3].position;
+                    break;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

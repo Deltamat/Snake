@@ -110,11 +110,15 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake_Head", content);
-            Snakebody body = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
-
+            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head", content);
+            Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
+            Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
+            Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
+            Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
+            Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
+            Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -174,14 +178,15 @@ namespace Snake
 
             base.Update(gameTime);
 
-           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
+           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
             {
                 //Wall.SpawnEnemyWalls(1,4,9);
                 //Wall.SpawnEnemyWalls(2,40,4);
                 //Wall.SpawnEnemyWalls(3,9,2);
                 //Wall.SpawnEnemyWalls(4,2,14);
-
-                new Snakebody((Snake.snakeParts[Snake.snakeParts.Count-1].position- new Vector2(30,0)),"SnakeBody1",content);
+                //int lastBodyPartInList = Snake.snakeParts.Count - 1;
+                //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
+                new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
             }
 

@@ -12,7 +12,7 @@ namespace Snake
     public class Snake : GameObject
     {
         public static List<Snake> snakeParts = new List<Snake>();
-        public Vector2 direction = new Vector2(1, 0);
+        public Vector2 direction;
         protected int placeInList;
         public Vector2 newPosition;
         public Vector2 oldPosition;
@@ -22,18 +22,6 @@ namespace Snake
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
-            if (snakeParts.Count == 0)
-            {
-                newPosition = GameWorld.TileSet[4, 3].position;
-                oldPosition = GameWorld.TileSet[3, 3].position;
-            }
-            else
-            {
-                newPosition = GameWorld.TileSet[4, 3].position;
-                oldPosition = GameWorld.TileSet[3, 3].position;
-            }
-            
-
             GameWorld.gameObjects.Add(this);
             snakeParts.Add(this);
             placeInList = snakeParts.Count - 1;
