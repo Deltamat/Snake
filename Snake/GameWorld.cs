@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -20,6 +21,8 @@ namespace Snake
         private static ContentManager content;
         private float delay;
         private Texture2D collisionTexture;
+        private static int player = 1;
+        private static Random rng = new Random();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static Snakehead head;
@@ -60,6 +63,9 @@ namespace Snake
                 return content;
             }
         }
+
+        public static int Player { get => player; set => player = value; }
+        public static Random Rng { get => rng; set => rng = value; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -109,11 +115,15 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[3, 3].position, "Snake_Head", content);
-            Snakebody body = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            Snakebody body2 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            Snakebody body3 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
-
+            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head", content);
+            Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
+            Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
+            Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
+            Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
+            Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
+            Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -164,18 +174,50 @@ namespace Snake
             }
             toBeRemoved.Clear();
 
+            foreach (Apple apple in Apple.ToBeRemovedApple)
+            {
+                Apple.AppleList.Remove(apple);
+            }
+
+            Apple.ToBeRemovedApple.Clear();
+
             SendUDP();
 
             base.Update(gameTime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
+            if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
             {
-                ////Wall.SpawnEnemyWalls(1, 4, 9);
-                ////Wall.SpawnEnemyWalls(2, 40, 4);
-                ////Wall.SpawnEnemyWalls(3, 9, 2);
-                ////Wall.SpawnEnemyWalls(4, 2, 14);
+                player = 1;
+                delay = 0;
+            }
 
-                new Snakebody((Snake.snakeParts[Snake.snakeParts.Count-1].position- new Vector2(30,0)),"SnakeBody1",content);
+            if (Keyboard.GetState().IsKeyDown(Keys.D2) && delay > 100)
+            {
+                player = 2;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D3) && delay > 100)
+            {
+                player = 3;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D4) && delay > 100)
+            {
+                player = 4;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
+            {
+                //Wall.SpawnEnemyWalls(1,4,9);
+                //Wall.SpawnEnemyWalls(2,40,4);
+                //Wall.SpawnEnemyWalls(3,9,2);
+                //Wall.SpawnEnemyWalls(4,2,14);
+                //int lastBodyPartInList = Snake.snakeParts.Count - 1;
+                //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
+                new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
             }
         }
@@ -211,6 +253,11 @@ namespace Snake
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
+            }
+
+            foreach (Apple item in Apple.AppleList)
+            {
+                item.Draw(spriteBatch);
             }
 
             spriteBatch.End();

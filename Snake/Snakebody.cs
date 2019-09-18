@@ -11,10 +11,27 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
+        
+        private bool readyToMove = false;
+
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.gameObjects.Add(smallCollisionBox);
+            int lastBodyPartInList = snakeParts.Count - 2;
+            if (lastBodyPartInList == 0)
+            {
+                this.position = snakeParts[lastBodyPartInList].position - snakeParts[lastBodyPartInList].direction * 30;
+            }
+            else
+            {
+                this.position = snakeParts[lastBodyPartInList].position/* - snakeParts[lastBodyPartInList].direction * 30*/;
+            }
+            
+            direction = snakeParts[placeInList - 1].direction;
+            newPosition = snakeParts[placeInList - 1].oldPosition;
+            oldPosition = this.position;
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -26,7 +43,18 @@ namespace Snake
         {
             #region body movement
             //movement of the body-parts
-            if (position == newPosition)
+            if (!readyToMove)
+            {
+            
+                if (Vector2.Distance(position, snakeParts[placeInList -1].position) > 30)
+                {
+                    //position = snakeParts[placeInList - 1].position - direction * 30;
+                    newPosition = snakeParts[placeInList - 1].oldPosition;
+                    readyToMove = true;
+                }
+                
+            }
+            if (position == newPosition && readyToMove)
             {
                 oldPosition = newPosition;
                 if (placeInList == 1)
@@ -41,7 +69,11 @@ namespace Snake
                 }
                 newPosition += direction * 30;
             }
-            position += direction * speed;
+            if (readyToMove)
+            {
+                position += direction * speed;
+            }
+            
             #endregion
 
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
