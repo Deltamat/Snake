@@ -14,11 +14,17 @@ namespace Snake
         private static bool emptySpace;
         private static List<Apple> appleList = new List<Apple>();
         private static List<Apple> toBeRemovedApple = new List<Apple>();
-        private static int appleSpawnCounter = 0;
+        private static int appleSpawnCounterPlayer1 = 0;
+        private static int appleSpawnCounterPlayer2 = 0;
+        private static int appleSpawnCounterPlayer3 = 0;
+        private static int appleSpawnCounterPlayer4 = 0;
 
         public static List<Apple> AppleList { get => appleList; set => appleList = value; }
         internal static List<Apple> ToBeRemovedApple { get => toBeRemovedApple; set => toBeRemovedApple = value; }
-        public static int AppleSpawnCounter { get => appleSpawnCounter; set => appleSpawnCounter = value; }
+        public static int AppleSpawnCounterPlayer1 { get => appleSpawnCounterPlayer1; set => appleSpawnCounterPlayer1 = value; }
+        public static int AppleSpawnCounterPlayer2 { get => appleSpawnCounterPlayer2; set => appleSpawnCounterPlayer2 = value; }
+        public static int AppleSpawnCounterPlayer3 { get => appleSpawnCounterPlayer3; set => appleSpawnCounterPlayer3 = value; }
+        public static int AppleSpawnCounterPlayer4 { get => appleSpawnCounterPlayer4; set => appleSpawnCounterPlayer4 = value; }
 
         public Apple(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
@@ -35,7 +41,7 @@ namespace Snake
             base.Draw(spriteBatch);
         }
 
-        public static void SpawnApple()
+        public static void SpawnApple(int player)
         {
             emptySpace = false;
 
@@ -46,7 +52,7 @@ namespace Snake
                 int xCoordinate = GameWorld.Rng.Next(1, 31);
                 int yCoordinate = GameWorld.Rng.Next(1, 19);
 
-                if (GameWorld.Player == 1)
+                if (player == 1)
                 {
                     foreach (Wall item in GameWorld.wallList)
                     {
@@ -56,13 +62,13 @@ namespace Snake
                         }
                     }
 
-                    foreach (Snakebody part in Snake.snakeParts)
-                    {
+                    //foreach (Snakebody part in Snake.snakeParts)
+                    //{
 
-                    }
+                    //}
                 }
 
-                if (GameWorld.Player == 2)
+                if (player == 2)
                 {
                     foreach (Wall item in GameWorld.wallList)
                     {
@@ -73,7 +79,7 @@ namespace Snake
                     }
                 }
 
-                if (GameWorld.Player == 3)
+                if (player == 3)
                 {
                     foreach (Wall item in GameWorld.wallList)
                     {
@@ -84,7 +90,7 @@ namespace Snake
                     }
                 }
 
-                if (GameWorld.Player == 4)
+                if (player == 4)
                 {
                     foreach (Wall item in GameWorld.wallList)
                     {
@@ -97,22 +103,22 @@ namespace Snake
 
                 if (emptySpace == true)
                 {
-                    if (GameWorld.Player == 1)
+                    if (player == 1)
                     {
                         AppleList.Add(new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager));
                     }
 
-                    if (GameWorld.Player == 2)
+                    if (player == 2)
                     {
                         AppleList.Add(new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30), "Apple", GameWorld.ContentManager));
                     }
 
-                    if (GameWorld.Player == 3)
+                    if (player == 3)
                     {
                         AppleList.Add(new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager));
                     }
 
-                    if (GameWorld.Player == 4)
+                    if (player == 4)
                     {
                         AppleList.Add(new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager));
                     }
