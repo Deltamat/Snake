@@ -17,6 +17,7 @@ namespace Snake
         public Vector2 newPosition;
         public Vector2 oldPosition;
         public float speed = 3;
+        public GameObject smallCollisionBox;
 
 
 

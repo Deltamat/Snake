@@ -38,6 +38,7 @@ namespace Snake
         {
             spriteBatch.Draw(sprite, position, Color.White);
         }
+
         /// <summary>
         /// Returns the vector for the middle of x- or y- position if the sprites are 30 pixels.
         /// </summary>

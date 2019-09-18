@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -20,6 +21,8 @@ namespace Snake
         private static ContentManager content;
         private float delay;
         private Texture2D collisionTexture;
+        private static int player = 1;
+        private static Random rng = new Random();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static Snakehead head;
@@ -60,6 +63,9 @@ namespace Snake
                 return content;
             }
         }
+
+        public static int Player { get => player; set => player = value; }
+        public static Random Rng { get => rng; set => rng = value; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -137,8 +143,6 @@ namespace Snake
             
 
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
-            
-
         }
 
         /// <summary>
@@ -174,11 +178,42 @@ namespace Snake
             }
             toBeRemoved.Clear();
 
+            foreach (Apple apple in Apple.ToBeRemovedApple)
+            {
+                Apple.AppleList.Remove(apple);
+            }
+
+            Apple.ToBeRemovedApple.Clear();
+
             SendUDP();
 
             base.Update(gameTime);
 
-           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
+            if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
+            {
+                player = 1;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D2) && delay > 100)
+            {
+                player = 2;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D3) && delay > 100)
+            {
+                player = 3;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D4) && delay > 100)
+            {
+                player = 4;
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
             {
                 //Wall.SpawnEnemyWalls(1,4,9);
                 //Wall.SpawnEnemyWalls(2,40,4);
@@ -188,8 +223,7 @@ namespace Snake
                 //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
                 new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
-            }
-
+           }
         }
 
         /// <summary>
@@ -223,6 +257,11 @@ namespace Snake
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
+            }
+
+            foreach (Apple item in Apple.AppleList)
+            {
+                item.Draw(spriteBatch);
             }
 
             spriteBatch.End();

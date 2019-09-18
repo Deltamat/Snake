@@ -11,7 +11,7 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
-        private GameObject smallCollisionBox;
+        
         private bool readyToMove = false;
 
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
