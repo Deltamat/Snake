@@ -18,9 +18,7 @@ namespace Snake
         public Vector2 oldPosition;
         public float speed = 3;
         public GameObject smallCollisionBox;
-
-
-
+        
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             if (snakeParts.Count == 0)
@@ -34,7 +32,6 @@ namespace Snake
                 oldPosition = GameWorld.TileSet[3, 3].position;
             }
             
-
             GameWorld.gameObjects.Add(this);
             snakeParts.Add(this);
             placeInList = snakeParts.Count - 1;

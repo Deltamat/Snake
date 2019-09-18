@@ -98,6 +98,7 @@ namespace Snake
                 {
                     GameWorld.toBeRemoved.Add(obj);
                     //Increase tail length
+                    //Spawn new apple
                 }
             }
             foreach (Wall wall in GameWorld.wallList)

@@ -40,7 +40,7 @@ namespace Snake
         }
 
         /// <summary>
-        /// Returns the vector for the middle of x- or y- position if the sprites are 30 pixels.
+        /// Returns the integer for the center of tilePosition, either x or y, from TileSet array
         /// </summary>
         /// <param name="tilePosition"></param>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace Snake
         }
 
         /// <summary>
-        /// returns the vecter for the center of a 30 pixel sprite.
+        /// Returns the vector for the center of tilePosition from TileSet array
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>

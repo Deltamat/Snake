@@ -88,7 +88,6 @@ namespace Snake
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Dark_Grass_Tile", content);
                         k++;
                         TileSet[i, k] = new GameObject(new Vector2(30 * i, 30 * k), "Light_Grass_Tile", content);
-                   
                     }
                 }
             }
@@ -118,9 +117,6 @@ namespace Snake
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
-
-
-            gameObjects.Add(new Apple(new Vector2(10 * 30, 10 * 30), "Alpha_Apple", content));
         }
 
         /// <summary>
@@ -133,7 +129,6 @@ namespace Snake
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = content.Load<SpriteFont>("Font");
             
-
             collisionTexture = content.Load<Texture2D>("CollisionTexture");
         }
 
@@ -145,7 +140,6 @@ namespace Snake
         {
             
         }
-        
         
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -174,16 +168,16 @@ namespace Snake
 
             base.Update(gameTime);
 
-           if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
-           {
-                //Wall.SpawnEnemyWalls(1,4,9);
-                //Wall.SpawnEnemyWalls(2,40,4);
-                //Wall.SpawnEnemyWalls(3,9,2);
-                //Wall.SpawnEnemyWalls(4,2,14);
+            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 100)
+            {
+                ////Wall.SpawnEnemyWalls(1, 4, 9);
+                ////Wall.SpawnEnemyWalls(2, 40, 4);
+                ////Wall.SpawnEnemyWalls(3, 9, 2);
+                ////Wall.SpawnEnemyWalls(4, 2, 14);
 
                 new Snakebody((Snake.snakeParts[Snake.snakeParts.Count-1].position- new Vector2(30,0)),"SnakeBody1",content);
                 delay = 0;
-           }
+            }
         }
 
         /// <summary>
@@ -192,7 +186,7 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Cyan);
             spriteBatch.Begin();
 
             for (int i = 0; i < 64; i++)
