@@ -76,7 +76,6 @@ namespace Snake
         protected override void Initialize()
         {
             base.Initialize();
-
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
@@ -127,6 +126,7 @@ namespace Snake
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
+            Apple.SpawnApple();
         }
 
         /// <summary>
@@ -178,7 +178,6 @@ namespace Snake
             {
                 Apple.AppleList.Remove(apple);
             }
-
             Apple.ToBeRemovedApple.Clear();
 
             SendUDP();
