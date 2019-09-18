@@ -82,7 +82,7 @@ namespace Snake
                         {
                             emptySpace = false;
                         }
-                    }
+                    }   
                 }
 
                 if (player == 4)

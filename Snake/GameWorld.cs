@@ -300,7 +300,7 @@ namespace Snake
                 DrawCollisionBox(obj);
             }
 
-            spriteBatch.DrawString(font, "Snek Boi Alpha 0.1", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
