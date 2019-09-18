@@ -35,7 +35,6 @@ namespace Snake
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(sprite, position, null, Color.White, 0f, Vector2.Zero, 1f, new SpriteEffects(), 1f);
             spriteBatch.Draw(sprite, CollisionBox, Color.White);
         }
     }

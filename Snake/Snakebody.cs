@@ -11,9 +11,6 @@ namespace Snake
 {
     public class Snakebody : Snake
     {
-        
-        
-
         public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
@@ -25,13 +22,12 @@ namespace Snake
             }
             else
             {
-                this.position = snakeParts[lastBodyPartInList].position/* - snakeParts[lastBodyPartInList].direction * 30*/;
+                this.position = snakeParts[lastBodyPartInList].position;
             }
             readyToMove = false;
             direction = snakeParts[placeInList - 1].direction;
             newPosition = snakeParts[placeInList - 1].oldPosition;
             oldPosition = this.position;
-            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -45,15 +41,13 @@ namespace Snake
             //movement of the body-parts
             if (!readyToMove)
             {
-
                 if (Vector2.Distance(position, snakeParts[placeInList - 1].position) > 30)
                 {
-                    //position = snakeParts[placeInList - 1].position - direction * 33;
                     newPosition = snakeParts[placeInList - 1].oldPosition;
                     readyToMove = true;
                 }
-
             }
+
             if (position == newPosition && readyToMove)
             {
                 oldPosition = newPosition;
@@ -62,13 +56,10 @@ namespace Snake
                     if (snakeParts[placeInList + 1].readyToMove && Vector2.Distance(position, snakeParts[placeInList - 1].position) > 30)
                     {
                         snakeParts[placeInList + 1].position = position - direction * 30;
-                        //snakeParts[placeInList + 1].newPosition = oldPosition;
-                        //snakeParts[placeInList + 1].readyToMove = true;
                     }
                 }
                 catch (Exception e)
                 {
-
                     //yeet
                 }
 
@@ -84,11 +75,11 @@ namespace Snake
                 }
                 newPosition += direction * 30;
             }
+
             if (readyToMove)
             {
                 position += direction * speed;
             }
-            
             #endregion
 
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
