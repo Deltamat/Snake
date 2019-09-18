@@ -112,7 +112,7 @@ namespace Server
                 // recieve from klient
                 byte[] bytes = listener.Receive(ref groupEP);
 
-                // send to all players TBC
+                // send to all players (ToBeContinued)
                 socket.SendTo(bytes, ep);
             }
         }
