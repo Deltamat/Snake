@@ -18,7 +18,7 @@ namespace Snake
         public Snakehead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
-            GameWorld.gameObjects.Add(smallCollisionBox);
+            GameWorld.toBeAdded.Add(smallCollisionBox);
             int player = 1;
             direction = new Vector2(1, 0);
             switch (player)
@@ -111,12 +111,35 @@ namespace Snake
             {
                 if (smallCollisionBox.CollisionBox.Intersects(apple.CollisionBox))
                 {
+                    new Snakebody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager);
                     Apple.ToBeRemovedApple.Add(apple);
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30));
                     //Increase tail length
-                    Apple.AppleSpawnCounter++;
-                }
+                    if (apple.position.X - Wall.xJumpLength > 0)
+                    {
+                        if (apple.position.Y - Wall.yJumpLength > 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer4++;
+                        }
 
+                        if (apple.position.Y - Wall.yJumpLength < 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer2++;
+                        }
+                    }
+                    else if (apple.position.X - Wall.xJumpLength < 0)
+                    {
+                        if (apple.position.Y - Wall.yJumpLength > 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer3++;
+                        }
+
+                        if (apple.position.Y - Wall.yJumpLength < 0)
+                        {
+                            Apple.AppleSpawnCounterPlayer1++;
+                        }
+                    }
+                }
             }
 
             foreach (Wall wall in GameWorld.wallList)
