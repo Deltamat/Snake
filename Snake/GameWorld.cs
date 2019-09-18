@@ -292,6 +292,7 @@ namespace Snake
                 obj.Draw(spriteBatch);
 #if DEBUG
                 DrawCollisionBox(obj);
+#endif
             }
 
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
