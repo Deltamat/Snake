@@ -19,17 +19,27 @@ namespace Snake
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.toBeAdded.Add(smallCollisionBox);
-            int player = 1;
             direction = new Vector2(1, 0);
-            switch (player)
+            switch (GameWorld.Player)
             {
                 case 1:
-                    //newPosition = GameWorld.TileSet[4, 3].position;
-                    //oldPosition = GameWorld.TileSet[3, 3].position;
                     newPosition = GameWorld.TileSet[8, 3].position;
                     oldPosition = GameWorld.TileSet[7, 3].position;
                     break;
+                case 2:
+                    newPosition = GameWorld.TileSet[40, 3].position;
+                    oldPosition = GameWorld.TileSet[39, 3].position;
+                    break;
+                case 3:
+                    newPosition = GameWorld.TileSet[8, 21].position;
+                    oldPosition = GameWorld.TileSet[7, 21].position;
+                    break;
+                case 4:
+                    newPosition = GameWorld.TileSet[40, 21].position;
+                    oldPosition = GameWorld.TileSet[39, 21].position;
+                    break;
             }
+            this.position = oldPosition;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -114,7 +124,9 @@ namespace Snake
                     new Snakebody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager);
                     Apple.ToBeRemovedApple.Add(apple);
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30));
+
                     //Increase tail length
+
                     if (apple.position.X - Wall.xJumpLength > 0)
                     {
                         if (apple.position.Y - Wall.yJumpLength > 0)
