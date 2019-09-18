@@ -65,7 +65,7 @@ namespace Snake
                     foreach (Snake part in Snake.snakeParts)
                     {
 
-                    //}
+                    }
                 }
 
                 if (player == 2)
