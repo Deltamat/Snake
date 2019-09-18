@@ -23,8 +23,8 @@ namespace Snake
             switch (GameWorld.Player)
             {
                 case 1:
-                    newPosition = GameWorld.TileSet[8, 3].position;
-                    oldPosition = GameWorld.TileSet[7, 3].position;
+                    newPosition = GameWorld.TileSet[9, 3].position;
+                    oldPosition = GameWorld.TileSet[8, 3].position;
                     break;
                 case 2:
                     newPosition = GameWorld.TileSet[40, 3].position;
