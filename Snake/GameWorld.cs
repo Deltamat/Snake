@@ -129,7 +129,6 @@ namespace Snake
             t.Start();
 
             Apple.SpawnApple(1);
-
         }
 
         /// <summary>
@@ -255,12 +254,6 @@ namespace Snake
 
             if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
             {
-                //Wall.SpawnEnemyWalls(1,4,9);
-                //Wall.SpawnEnemyWalls(2,40,4);
-                //Wall.SpawnEnemyWalls(3,9,2);
-                //Wall.SpawnEnemyWalls(4,2,14);
-                //int lastBodyPartInList = Snake.snakeParts.Count - 1;
-                //new Snakebody((Snake.snakeParts[lastBodyPartInList].position + Snake.snakeParts[lastBodyPartInList].direction * 30),"Snake_Body1",content);
                 new Snakebody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
             }
@@ -297,7 +290,9 @@ namespace Snake
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
+#if DEBUG
                 DrawCollisionBox(obj);
+#endif
             }
 
             spriteBatch.DrawString(font, "Snek Boi Alpha 0.1", Vector2.Zero, Color.White);
