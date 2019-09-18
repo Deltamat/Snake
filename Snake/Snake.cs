@@ -23,7 +23,7 @@ namespace Snake
 
         public Snake(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
-            GameWorld.gameObjects.Add(this);
+            GameWorld.toBeAdded.Add(this);
             snakeParts.Add(this);
             placeInList = snakeParts.Count - 1;
         }
