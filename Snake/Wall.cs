@@ -35,117 +35,114 @@ namespace Snake
             Wall player2Wall;
             Wall player3Wall;
             Wall player4Wall;
-
-            if (player == 1)
+            switch (player)
             {
-                player2Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
-                player3Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player4Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                foreach (Apple apple in Apple.AppleList)
-                {
-                    if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
+                case 1:
+                    player2Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
+                    player3Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player4Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer2++;
+                        if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer2++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer3++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer4++;
+                        }
                     }
-                    else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
+                    GameWorld.wallList.Add(player2Wall);
+                    GameWorld.wallList.Add(player3Wall);
+                    GameWorld.wallList.Add(player4Wall);
+                    break;
+                case 2:
+                    player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
+                    player3Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player4Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer3++;
+                        if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer1++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer3++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer4++;
+                        }
                     }
-                    else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
+                    GameWorld.wallList.Add(player1Wall);
+                    GameWorld.wallList.Add(player3Wall);
+                    GameWorld.wallList.Add(player4Wall);
+                    break;
+                case 3:
+                    player1Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player2Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player4Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer4++;
+                        if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer1++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer2++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer4++;
+                        }
                     }
-                }
-                GameWorld.wallList.Add(player2Wall);
-                GameWorld.wallList.Add(player3Wall);
-                GameWorld.wallList.Add(player4Wall);
-            }
-
-            if (player == 2)
-            {
-                player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
-                player3Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player4Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare + yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                foreach (Apple apple in Apple.AppleList)
-                {
-                    if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
+                    GameWorld.wallList.Add(player1Wall);
+                    GameWorld.wallList.Add(player2Wall);
+                    GameWorld.wallList.Add(player4Wall);
+                    break;
+                case 4:
+                    player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player2Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
+                    player3Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer1++;
+                        if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer1++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer2++;
+                        }
+                        else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
+                        {
+                            Apple.ToBeRemovedApple.Add(apple);
+                            Apple.AppleSpawnCounterPlayer3++;
+                        }
                     }
-                    else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer3++;
-                    }
-                    else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer4++;
-                    }
-                }
-                GameWorld.wallList.Add(player1Wall);
-                GameWorld.wallList.Add(player3Wall);
-                GameWorld.wallList.Add(player4Wall);
-            }
-
-            if (player == 3)
-            {
-                player1Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player2Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player4Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
-                foreach (Apple apple in Apple.AppleList)
-                {
-                    if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer1++;
-                    }
-                    else if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer2++;
-                    }
-                    else if (apple.CollisionBox.Intersects(player4Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer4++;
-                    }
-                }
-                GameWorld.wallList.Add(player1Wall);
-                GameWorld.wallList.Add(player2Wall);
-                GameWorld.wallList.Add(player4Wall);
-            }
-
-            if (player == 4)
-            {
-                player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player2Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
-                player3Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
-                foreach (Apple apple in Apple.AppleList)
-                {
-                    if (apple.CollisionBox.Intersects(player1Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer1++;
-                    }
-                    else if (apple.CollisionBox.Intersects(player2Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer2++;
-                    }
-                    else if (apple.CollisionBox.Intersects(player3Wall.CollisionBox))
-                    {
-                        Apple.ToBeRemovedApple.Add(apple);
-                        Apple.AppleSpawnCounterPlayer3++;
-                    }
-                }
-                GameWorld.wallList.Add(player1Wall);
-                GameWorld.wallList.Add(player2Wall);
-                GameWorld.wallList.Add(player3Wall);
+                    GameWorld.wallList.Add(player1Wall);
+                    GameWorld.wallList.Add(player2Wall);
+                    GameWorld.wallList.Add(player3Wall);
+                    break;
+                default:
+                    break;
             }
         }
     }
