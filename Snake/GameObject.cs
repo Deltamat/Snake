@@ -34,6 +34,11 @@ namespace Snake
 
         }
 
+        public virtual void UpdatePosition(Vector2 newPosition)
+        {
+            position = newPosition;
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(sprite, position, Color.White);

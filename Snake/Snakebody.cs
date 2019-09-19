@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Snake
 {
-    public class Snakebody : Snake
+    public class SnakeBody : Snake
     {
-        public Snakebody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
+        public SnakeBody(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
             smallCollisionBox = new GameObject(new Vector2(position.X + 10, position.Y + 10), "Snake_Collision", content);
             GameWorld.toBeAdded.Add(smallCollisionBox);
@@ -82,6 +82,7 @@ namespace Snake
             }
             #endregion
 
+            //Updates the positon of smallCollisionBox to be the same as this object shifted 10 pixels over and down
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
 
             base.Update(gameTime);

@@ -41,6 +41,10 @@ namespace Snake
             base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Spawns an apple at a random tile within the given player's playing field
+        /// </summary>
+        /// <param name="player"></param>
         public static void SpawnApple(int player)
         {
             emptySpace = false;
@@ -62,9 +66,10 @@ namespace Snake
                         }
                     }
 
-                    Apple apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager);
+                    Apple apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                     foreach (Snake snakePart in Snake.snakeParts)
                     {
+                        //Checks if the ghost apple intersects with any of the snake's bodyparts
                         if (snakePart.CollisionBox.Intersects(apple.CollisionBox))
                         {
                             emptySpace = false;

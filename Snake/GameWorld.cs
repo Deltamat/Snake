@@ -26,7 +26,7 @@ namespace Snake
         public static object ghostPartsLock = new object();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
-        public static Snakehead head;
+        public static SnakeHead head;
 
         public static List<GameObject> toBeRemoved = new List<GameObject>();
         public static List<GameObject> toBeAdded = new List<GameObject>();
@@ -45,6 +45,11 @@ namespace Snake
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
+
+        public static int player1Score;
+        public static int player2Score;
+        public static int player3Score;
+        public static int player4Score;
 
         public GameWorld()
         {
@@ -125,15 +130,15 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head", content);
-            Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
-            Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
-            Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
-            Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
-            Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
-            Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+            SnakeHead head = new SnakeHead(TileSet[8, 3].position, "Snake_Head_N", content);
+            SnakeBody body = new SnakeBody(TileSet[7, 3].position, "Snake_Body1", content);
+            SnakeBody body2 = new SnakeBody(TileSet[6, 3].position, "Snake_Body1", content);
+            //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
+            //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
+            //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
+            //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -188,9 +193,9 @@ namespace Snake
                 obj.Update(gameTime);
             }
 
-            foreach (GameObject obj in toBeAdded)
+            foreach (GameObject objAdd in toBeAdded)
             {
-                gameObjects.Add(obj);
+                gameObjects.Add(objAdd);
             }
             toBeAdded.Clear();
 
@@ -271,6 +276,8 @@ namespace Snake
 
             base.Update(gameTime);
 
+            #region temporary
+#if DEBUG
             if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
             {
                 player = 1;
@@ -297,7 +304,7 @@ namespace Snake
 
             if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
             {
-                new Snakebody(Vector2.Zero, "Snake_Body1", content);
+                new SnakeBody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
             }
 
@@ -306,6 +313,8 @@ namespace Snake
                 Apple.SpawnApple(Player);
                 delay = 0;
             }
+#endif
+            #endregion
         }
 
         /// <summary>
@@ -358,7 +367,15 @@ namespace Snake
 #endif
             }
 
+#if DEBUG
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
+#endif
+
+            spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+
 
             foreach (Apple item in Apple.AppleList)
             {
