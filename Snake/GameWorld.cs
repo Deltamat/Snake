@@ -23,6 +23,7 @@ namespace Snake
         private Texture2D collisionTexture;
         private static int player = 1;
         private static Random rng = new Random();
+        public static object ghostPartsLock = new object();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static Snakehead head;
@@ -30,7 +31,16 @@ namespace Snake
         public static List<GameObject> toBeRemoved = new List<GameObject>();
         public static List<GameObject> toBeAdded = new List<GameObject>();
 
-        string test;
+        public static List<GameObject> ghostPlayer1 = new List<GameObject>();
+        public static List<GameObject> ghostPlayer2 = new List<GameObject>();
+        public static List<GameObject> ghostPlayer3 = new List<GameObject>();
+        public static List<GameObject> ghostPlayer4 = new List<GameObject>();
+        public static List<GameObject> toBeAddedGhostPlayer1 = new List<GameObject>();
+        public static List<GameObject> toBeAddedGhostPlayer2 = new List<GameObject>();
+        public static List<GameObject> toBeAddedGhostPlayer3 = new List<GameObject>();
+        public static List<GameObject> toBeAddedGhostPlayer4 = new List<GameObject>();
+
+        string data;
         SpriteFont font;
 
         public static List<GameObject> wallList = new List<GameObject>();
@@ -128,6 +138,14 @@ namespace Snake
             t.IsBackground = true;
             t.Start();
 
+            ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+            ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+            ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+            ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+
+            //ghostPlayer2.Add(new GameObject(new Vector2(1030, 100), "Snake_Body1", ContentManager));
+            //ghostPlayer2.Add(new GameObject(new Vector2(1060, 100), "Snake_Body1", ContentManager));
+
             Apple.SpawnApple(1);
         }
 
@@ -188,6 +206,31 @@ namespace Snake
             }
             Apple.ToBeRemovedApple.Clear();
 
+            lock (ghostPartsLock)
+            {
+                foreach (GameObject obj in toBeAddedGhostPlayer1)
+                {
+                    ghostPlayer1.Add(obj);
+                }
+                toBeAddedGhostPlayer1.Clear();
+                foreach (GameObject obj in toBeAddedGhostPlayer2)
+                {
+                    ghostPlayer2.Add(obj);
+                }
+                toBeAddedGhostPlayer2.Clear();
+                foreach (GameObject obj in toBeAddedGhostPlayer3)
+                {
+                    ghostPlayer3.Add(obj);
+                }
+                toBeAddedGhostPlayer3.Clear();
+                foreach (GameObject obj in toBeAddedGhostPlayer4)
+                {
+                    ghostPlayer4.Add(obj);
+                }
+                toBeAddedGhostPlayer4.Clear();
+            }
+
+
             //Checks if there are any apples to create like a pseudo-list
             if (Apple.AppleSpawnCounterPlayer1 != 0)
             {
@@ -224,7 +267,7 @@ namespace Snake
                 }
                 Apple.AppleSpawnCounterPlayer4 = 0;
             }
-            //SendUDP();
+            SendUDP();
 
             base.Update(gameTime);
 
@@ -286,6 +329,26 @@ namespace Snake
             {
                 wall.Draw(spriteBatch);
             }
+            lock (ghostPartsLock)
+            {
+                foreach (GameObject obj in ghostPlayer1)
+                {
+                    obj.Draw(spriteBatch);
+                }
+                foreach (GameObject obj in ghostPlayer2)
+                {
+                    obj.Draw(spriteBatch);
+                }
+                foreach (GameObject obj in ghostPlayer3)
+                {
+                    obj.Draw(spriteBatch);
+                }
+                foreach (GameObject obj in ghostPlayer4)
+                {
+                    obj.Draw(spriteBatch);
+                }
+            }
+            
 
             foreach (GameObject obj in gameObjects)
             {
@@ -296,10 +359,6 @@ namespace Snake
             }
 
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
-            if (test != null)
-            {
-                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
-            }
 
             foreach (Apple item in Apple.AppleList)
             {
@@ -350,8 +409,14 @@ namespace Snake
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
-
-            byte[] sendbuf = Encoding.ASCII.GetBytes(Snakehead.savedDirection.ToString());
+            string datastring = $"{Player + 1}:";
+            foreach (Snake obj in Snake.snakeParts)
+            {
+                obj.position += new Vector2(960, 0);
+                datastring += obj.position.X.ToString() + ":" + obj.position.Y.ToString() + ":";
+                obj.position -= new Vector2(960, 0);
+            }
+            byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
             IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
 
@@ -366,8 +431,51 @@ namespace Snake
             while (true)
             {
                 byte[] bytes = listener.Receive(ref groupEP);
-                test = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                string[] stringArray = data.Split(':');
+                string player = stringArray[0];
+                switch (player)
+                {
+                    case "1":
+                        UpdateGhostPlayers(ghostPlayer1, stringArray);
+                        break;
+                    case "2":
+                        UpdateGhostPlayers(ghostPlayer2, stringArray);
+                        break;
+                    case "3":
+                        UpdateGhostPlayers(ghostPlayer3, stringArray);
+                        break;
+                    case "4":
+                        UpdateGhostPlayers(ghostPlayer4, stringArray);
+                        break;
+                }
             }
         }
+
+        private void UpdateGhostPlayers(List<GameObject> list, string[] array)
+        {
+            int counter = 1;
+            try
+            {
+                lock (ghostPartsLock)
+                {
+                    while ((array.Length + 1) * 2 > list.Count)
+                    {
+                        list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
+                    }
+                }
+                foreach (GameObject obj in list)
+                {
+                    obj.position = new Vector2(Convert.ToInt32(array[counter]), Convert.ToInt32(array[counter + 1]));
+                    counter += 2;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+
     }
 }
