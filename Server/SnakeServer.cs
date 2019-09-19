@@ -12,10 +12,10 @@ namespace Server
 {
     class SnakeServer
     {
-        private static readonly int port = 42069;
+        private static readonly int port = 42000;
         private static TcpListener server;
         private static bool isRunning;
-        private static TcpClient[] Players = new TcpClient[3];
+        private static List<TcpClient> Players = new List<TcpClient>(4);
 
         static void Main(string[] args)
         {
@@ -40,18 +40,9 @@ namespace Server
             while (isRunning)
             {
                 TcpClient newClient = server.AcceptTcpClient();
-                bool placed = false;
-                for (int i = 0; i < 3; i++)
+                if (Players.Count < 4)
                 {
-                    if (Players[i] != null && !placed)
-                    {
-                        Players[i] = newClient;
-                        placed = true;
-                    }
-                }
-
-                if (placed)
-                {
+                    Players.Add(newClient);
                     Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
                     {
                         IsBackground = true
@@ -68,6 +59,7 @@ namespace Server
         static void HandleClient(object obj)
         {
             // retrieve client from parameter passed to thread
+            int playerNumber = Players.Count();
             TcpClient client = (TcpClient)obj;
             // sets two streams
             StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
@@ -75,6 +67,9 @@ namespace Server
 
             IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
             IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+
+            sWriter.WriteLine(playerNumber);
+            sWriter.Flush();
 
             Byte[] bytes = new Byte[256];
             String data;
@@ -87,6 +82,7 @@ namespace Server
                 }
                 catch (Exception)
                 {
+                    Players.Remove(client);
                     Console.WriteLine(endPoint.Port.ToString() + " " + localPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
                 }
@@ -95,7 +91,7 @@ namespace Server
 
         static void RecieveAndTransmitUDPData(object obj)
         {
-            int listenPort = 42070;
+            int listenPort = 43000;
             UdpClient listener = new UdpClient(listenPort);
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
 
@@ -105,7 +101,7 @@ namespace Server
 
             IPAddress broadcast = IPAddress.Parse("127.0.0.1");
 
-            IPEndPoint ep = new IPEndPoint(broadcast, 11001);
+            IPEndPoint ep = new IPEndPoint(broadcast, listenPort);
 
             while (true)
             {

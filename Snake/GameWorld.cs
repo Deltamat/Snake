@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace Snake
 {
@@ -21,9 +22,11 @@ namespace Snake
         private static ContentManager content;
         private float delay;
         private Texture2D collisionTexture;
-        private static int player = 1;
+        private static int player = 0;
         private static Random rng = new Random();
         public static object ghostPartsLock = new object();
+        public int serverPort = 42000;
+        private string gameState = "Running";
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static SnakeHead head;
@@ -82,6 +85,7 @@ namespace Snake
 
         public static int Player { get => player; set => player = value; }
         public static Random Rng { get => rng; set => rng = value; }
+        public string GameState { get => gameState; set => gameState = value; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -92,6 +96,13 @@ namespace Snake
         protected override void Initialize()
         {
             base.Initialize();
+
+            Thread TCPThread = new Thread(TCPListener);
+            TCPThread.IsBackground = true;
+            TCPThread.Start();
+
+            Thread.Sleep(500);
+
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
@@ -139,6 +150,7 @@ namespace Snake
             //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
             //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
             //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -147,9 +159,6 @@ namespace Snake
             ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
             ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
             ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-
-            //ghostPlayer2.Add(new GameObject(new Vector2(1030, 100), "Snake_Body1", ContentManager));
-            //ghostPlayer2.Add(new GameObject(new Vector2(1060, 100), "Snake_Body1", ContentManager));
 
             Apple.SpawnApple(1);
         }
@@ -187,92 +196,99 @@ namespace Snake
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            foreach (GameObject obj in gameObjects)
+            switch (GameState)
             {
-                obj.Update(gameTime);
-            }
+                case "Paused":
+                    break;
+                case "Running":
+                    foreach (GameObject obj in gameObjects)
+                    {
+                        obj.Update(gameTime);
+                    }
 
-            foreach (GameObject objAdd in toBeAdded)
-            {
-                gameObjects.Add(objAdd);
-            }
-            toBeAdded.Clear();
+                    foreach (GameObject objAdd in toBeAdded)
+                    {
+                        gameObjects.Add(objAdd);
+                    }
+                    toBeAdded.Clear();
 
-            foreach (GameObject objRemove in toBeRemoved)
-            {
-                gameObjects.Remove(objRemove);
-            }
-            toBeRemoved.Clear();
+                    foreach (GameObject objRemove in toBeRemoved)
+                    {
+                        gameObjects.Remove(objRemove);
+                    }
+                    toBeRemoved.Clear();
 
-            foreach (Apple apple in Apple.ToBeRemovedApple)
-            {
-                Apple.AppleList.Remove(apple);
-            }
-            Apple.ToBeRemovedApple.Clear();
+                    foreach (Apple apple in Apple.ToBeRemovedApple)
+                    {
+                        Apple.AppleList.Remove(apple);
+                    }
+                    Apple.ToBeRemovedApple.Clear();
 
-            lock (ghostPartsLock)
-            {
-                foreach (GameObject obj in toBeAddedGhostPlayer1)
-                {
-                    ghostPlayer1.Add(obj);
-                }
-                toBeAddedGhostPlayer1.Clear();
-                foreach (GameObject obj in toBeAddedGhostPlayer2)
-                {
-                    ghostPlayer2.Add(obj);
-                }
-                toBeAddedGhostPlayer2.Clear();
-                foreach (GameObject obj in toBeAddedGhostPlayer3)
-                {
-                    ghostPlayer3.Add(obj);
-                }
-                toBeAddedGhostPlayer3.Clear();
-                foreach (GameObject obj in toBeAddedGhostPlayer4)
-                {
-                    ghostPlayer4.Add(obj);
-                }
-                toBeAddedGhostPlayer4.Clear();
-            }
+                    lock (ghostPartsLock)
+                    {
+                        foreach (GameObject obj in toBeAddedGhostPlayer1)
+                        {
+                            ghostPlayer1.Add(obj);
+                        }
+                        toBeAddedGhostPlayer1.Clear();
+                        foreach (GameObject obj in toBeAddedGhostPlayer2)
+                        {
+                            ghostPlayer2.Add(obj);
+                        }
+                        toBeAddedGhostPlayer2.Clear();
+                        foreach (GameObject obj in toBeAddedGhostPlayer3)
+                        {
+                            ghostPlayer3.Add(obj);
+                        }
+                        toBeAddedGhostPlayer3.Clear();
+                        foreach (GameObject obj in toBeAddedGhostPlayer4)
+                        {
+                            ghostPlayer4.Add(obj);
+                        }
+                        toBeAddedGhostPlayer4.Clear();
+                    }
 
 
-            //Checks if there are any apples to create like a pseudo-list
-            if (Apple.AppleSpawnCounterPlayer1 != 0)
-            {
-                for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
-                {
-                    Apple.SpawnApple(1);
-                }
-                Apple.AppleSpawnCounterPlayer1 = 0;
-            }
+                    //Checks if there are any apples to create like a pseudo-list
+                    if (Apple.AppleSpawnCounterPlayer1 != 0)
+                    {
+                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
+                        {
+                            Apple.SpawnApple(1);
+                        }
+                        Apple.AppleSpawnCounterPlayer1 = 0;
+                    }
 
-            if (Apple.AppleSpawnCounterPlayer2 != 0)
-            {
-                for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
-                {
-                    Apple.SpawnApple(2);
-                }
-                Apple.AppleSpawnCounterPlayer2 = 0;
-            }
+                    if (Apple.AppleSpawnCounterPlayer2 != 0)
+                    {
+                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
+                        {
+                            Apple.SpawnApple(2);
+                        }
+                        Apple.AppleSpawnCounterPlayer2 = 0;
+                    }
 
-            if (Apple.AppleSpawnCounterPlayer3 != 0)
-            {
-                for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
-                {
-                    Apple.SpawnApple(3);
-                }
-                Apple.AppleSpawnCounterPlayer3 = 0;
-            }
+                    if (Apple.AppleSpawnCounterPlayer3 != 0)
+                    {
+                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
+                        {
+                            Apple.SpawnApple(3);
+                        }
+                        Apple.AppleSpawnCounterPlayer3 = 0;
+                    }
 
-            if (Apple.AppleSpawnCounterPlayer4 != 0)
-            {
-                for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
-                {
-                    Apple.SpawnApple(4);
-                }
-                Apple.AppleSpawnCounterPlayer4 = 0;
+                    if (Apple.AppleSpawnCounterPlayer4 != 0)
+                    {
+                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
+                        {
+                            Apple.SpawnApple(4);
+                        }
+                        Apple.AppleSpawnCounterPlayer4 = 0;
+                    }
+                    SendUDP();
+                    break;
             }
-            SendUDP();
+            
 
             base.Update(gameTime);
 
@@ -311,6 +327,12 @@ namespace Snake
             if (Keyboard.GetState().IsKeyDown(Keys.Q) && delay > 50)
             {
                 Apple.SpawnApple(Player);
+                delay = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 50)
+            {
+                GameState = "Running";
                 delay = 0;
             }
 #endif
@@ -435,14 +457,14 @@ namespace Snake
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
-            IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
+            IPEndPoint ep = new IPEndPoint(serverIPAddress, 43000);
 
             socket.SendTo(sendbuf, ep);
         }
         
         public void RecieveUDP()
         {
-            int listenPort = 11001;
+            int listenPort = 43001;
             UdpClient listener = new UdpClient(listenPort);
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
             while (true)
@@ -491,6 +513,25 @@ namespace Snake
             {
 
             }
+        }
+
+        private void TCPListener()
+        {
+            TcpClient client = new TcpClient();
+            client.Connect(IPAddress.Parse("127.0.0.1"), serverPort);
+            // sets two streams
+            StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+            StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
+
+            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+
+            Player = Convert.ToInt32(sReader.ReadLine());
+            //while (true)
+            //{
+                
+            //}
+
         }
 
 
