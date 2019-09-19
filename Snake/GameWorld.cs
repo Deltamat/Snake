@@ -25,7 +25,7 @@ namespace Snake
         private static Random rng = new Random();
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
-        public static Snakehead head;
+        public static SnakeHead head;
 
         public static List<GameObject> toBeRemoved = new List<GameObject>();
         public static List<GameObject> toBeAdded = new List<GameObject>();
@@ -115,9 +115,9 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head_N", content);
-            Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
-            Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
+            SnakeHead head = new SnakeHead(TileSet[8, 3].position, "Snake_Head_N", content);
+            SnakeBody body = new SnakeBody(TileSet[7, 3].position, "Snake_Body1", content);
+            SnakeBody body2 = new SnakeBody(TileSet[6, 3].position, "Snake_Body1", content);
             //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
             //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
             //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
@@ -256,7 +256,7 @@ namespace Snake
 
             if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
             {
-                new Snakebody(Vector2.Zero, "Snake_Body1", content);
+                new SnakeBody(Vector2.Zero, "Snake_Body1", content);
                 delay = 0;
             }
 
@@ -356,7 +356,7 @@ namespace Snake
 
             IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
 
-            byte[] sendbuf = Encoding.ASCII.GetBytes(Snakehead.savedDirection.ToString());
+            byte[] sendbuf = Encoding.ASCII.GetBytes(SnakeHead.savedDirection.ToString());
 
             IPEndPoint ep = new IPEndPoint(serverIPAddress, 42070);
 

@@ -47,8 +47,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Snake.cs" />
-    <Compile Include="Snakebody.cs" />
-    <Compile Include="Snakehead.cs" />
+    <Compile Include="SnakeBody.cs" />
+    <Compile Include="SnakeHead.cs" />
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>

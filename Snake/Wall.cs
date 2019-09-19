@@ -29,6 +29,12 @@ namespace Snake
             base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Spawns walls for the enemies of the given player, at the location translated from the provided coordinates
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="xSquare"></param>
+        /// <param name="ySquare"></param>
         public static void SpawnEnemyWalls(int player, int xSquare, int ySquare)
         {
             Wall player1Wall;
@@ -36,6 +42,7 @@ namespace Snake
             Wall player3Wall;
             Wall player4Wall;
 
+            //Spawns walls for a given player and if an apple is already in that square, removes it, and spawns a new one
             if (player == 1)
             {
                 player2Wall = new Wall(new Vector2(30 * xSquare + xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
