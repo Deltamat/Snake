@@ -142,6 +142,7 @@ namespace Snake
                 {
                     new SnakeBody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager); //Adds a new bodypart
 
+                    //Score
                     if (GameWorld.Player == 1)
                     {
                         GameWorld.player1Score = snakeParts.Count - 3;

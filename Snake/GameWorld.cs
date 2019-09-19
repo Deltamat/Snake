@@ -120,20 +120,15 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            SnakeHead head = new SnakeHead(TileSet[8, 3].position, "Snake_Head_N", content);
-            SnakeBody body = new SnakeBody(TileSet[7, 3].position, "Snake_Body1", content);
-            SnakeBody body2 = new SnakeBody(TileSet[6, 3].position, "Snake_Body1", content);
-            //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
-            //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
-            //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
-            //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+            SnakeHead head = new SnakeHead(Vector2.Zero, "Snake_Head_N", content);
+            SnakeBody body = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+            SnakeBody body2 = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
 
-            Apple.SpawnApple(1);
+            Apple.SpawnApple(player);
         }
 
         /// <summary>
@@ -187,6 +182,7 @@ namespace Snake
             }
             toBeRemoved.Clear();
 
+            #region apples
             foreach (Apple apple in Apple.ToBeRemovedApple)
             {
                 Apple.AppleList.Remove(apple);
@@ -229,6 +225,8 @@ namespace Snake
                 }
                 Apple.AppleSpawnCounterPlayer4 = 0;
             }
+            #endregion
+
             //SendUDP();
 
             base.Update(gameTime);
@@ -270,6 +268,12 @@ namespace Snake
                 Apple.SpawnApple(Player);
                 delay = 0;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && delay > 500)
+            {
+                ResetGame();
+                delay = 0;
+            }
 #endif
             #endregion
         }
@@ -308,15 +312,11 @@ namespace Snake
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
 #endif
 
+            //Score
             spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
-
-            if (test != null)
-            {
-                spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
-            }
 
             foreach (Apple item in Apple.AppleList)
             {
@@ -385,6 +385,55 @@ namespace Snake
                 byte[] bytes = listener.Receive(ref groupEP);
                 test = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
             }
+        }
+
+        /// <summary>
+        /// Resets relevant values to base
+        /// </summary>
+        public void ResetGame()
+        {
+            #region walls
+            wallList.Clear();
+            for (int i = 0; i < 64; i++)
+            {
+                wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
+            }
+
+            for (int i = 0; i < 36; i++)
+            {
+                wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(1890, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "Wall_Tile", content));
+                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
+            }
+            #endregion
+            #region apples
+            Apple.AppleList.Clear();
+            for (int i = 1; i <= 4; i++)
+            {
+                Apple.SpawnApple(i);
+            }
+            #endregion
+            #region snake
+            foreach (Snake snakePart in Snake.snakeParts)
+            {
+                gameObjects.Remove(snakePart.smallCollisionBox);
+                gameObjects.Remove(snakePart);
+            }
+            Snake.snakeParts.Clear();
+            SnakeHead head = new SnakeHead(Vector2.Zero, "Snake_Head_N", content);
+            SnakeBody body = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+            SnakeBody body2 = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+            #endregion
+            #region score
+            player1Score = 0;
+            player2Score = 0;
+            player3Score = 0;
+            player4Score = 0;
+            #endregion
         }
     }
 }
