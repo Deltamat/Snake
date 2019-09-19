@@ -52,15 +52,15 @@ namespace Snake
             }
             else if (direction == new Vector2(1, 0))
             {
-                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_E");
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_Ea");
             }
             else if (direction == new Vector2(0, 1))
             {
-                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_S");
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_Sa");
             }
             else if (direction == new Vector2(-1, 0))
             {
-                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_W");
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_Wa");
             }
             base.Draw(spriteBatch);
         }
