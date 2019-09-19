@@ -11,8 +11,8 @@ namespace Snake
 {
     class Wall : GameObject
     {
-        public static int xJumpLength = 960;
-        public static int yJumpLength = 540;
+        public const int xJumpLength = 960;
+        public const int yJumpLength = 540;
 
         public Wall(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {

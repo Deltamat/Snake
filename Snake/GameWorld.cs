@@ -115,7 +115,7 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head", content);
+            Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head_N", content);
             Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
             Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
             //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
@@ -170,9 +170,9 @@ namespace Snake
                 obj.Update(gameTime);
             }
 
-            foreach (GameObject obj in toBeAdded)
+            foreach (GameObject objAdd in toBeAdded)
             {
-                gameObjects.Add(obj);
+                gameObjects.Add(objAdd);
             }
             toBeAdded.Clear();
 
@@ -228,6 +228,8 @@ namespace Snake
 
             base.Update(gameTime);
 
+            #region temporary
+#if DEBUG
             if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
             {
                 player = 1;
@@ -263,6 +265,8 @@ namespace Snake
                 Apple.SpawnApple(Player);
                 delay = 0;
             }
+#endif
+            #endregion
         }
 
         /// <summary>

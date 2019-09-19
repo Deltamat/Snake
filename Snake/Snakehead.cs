@@ -44,6 +44,24 @@ namespace Snake
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //Alternate versions for E, S and W is available
+            //Change respectively to Ea, Sa and Wa
+            if (direction == new Vector2(0, -1))
+            {
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_N");
+            }
+            else if (direction == new Vector2(1, 0))
+            {
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_E");
+            }
+            else if (direction == new Vector2(0, 1))
+            {
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_S");
+            }
+            else if (direction == new Vector2(-1, 0))
+            {
+                sprite = GameWorld.ContentManager.Load<Texture2D>("Snake_Head_W");
+            }
             base.Draw(spriteBatch);
         }
 
