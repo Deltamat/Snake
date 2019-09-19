@@ -36,6 +36,11 @@ namespace Snake
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
 
+        public static int player1Score;
+        public static int player2Score;
+        public static int player3Score;
+        public static int player4Score;
+
         public GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -298,9 +303,16 @@ namespace Snake
                 DrawCollisionBox(obj);
 #endif
             }
+
 #if DEBUG
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
 #endif
+
+            spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+
             if (test != null)
             {
                 spriteBatch.DrawString(font, test, new Vector2(0), Color.Red);
