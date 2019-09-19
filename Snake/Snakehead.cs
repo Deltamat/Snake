@@ -87,7 +87,6 @@ namespace Snake
                 {
                     savedDirection = new Vector2(0, 1);
                 }
-                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
@@ -95,7 +94,6 @@ namespace Snake
                 {
                     savedDirection = new Vector2(-1, 0);
                 }
-                
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
@@ -103,7 +101,6 @@ namespace Snake
                 {
                     savedDirection = new Vector2(1, 0);
                 }
-                
             }
             #endregion
 
@@ -124,8 +121,6 @@ namespace Snake
                     new Snakebody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager);
                     Apple.ToBeRemovedApple.Add(apple);
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30));
-
-                    //Increase tail length
 
                     if (apple.position.X - Wall.xJumpLength > 0)
                     {
@@ -161,8 +156,6 @@ namespace Snake
                     Alive = false;
                 }
             }
-
-            
             #endregion
             base.Update(gameTime);
         }

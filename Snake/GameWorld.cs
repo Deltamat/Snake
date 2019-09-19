@@ -118,12 +118,12 @@ namespace Snake
             Snakehead head = new Snakehead(TileSet[8, 3].position, "Snake_Head", content);
             Snakebody body = new Snakebody(TileSet[7, 3].position, "Snake_Body1", content);
             Snakebody body2 = new Snakebody(TileSet[6, 3].position, "Snake_Body1", content);
-            Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
-            Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
-            Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
-            Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
+            //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
+            //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
+            //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
+            //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -292,6 +292,7 @@ namespace Snake
                 obj.Draw(spriteBatch);
 #if DEBUG
                 DrawCollisionBox(obj);
+#endif
             }
 
             spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
