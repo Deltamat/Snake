@@ -498,7 +498,7 @@ namespace Snake
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            IPAddress serverIPAddress = IPAddress.Parse("127.0.0.1");
+            IPAddress serverIPAddress = IPAddress.Parse("10.131.67.14");
             string datastring = $"{Player + 1}:";
             foreach (Snake obj in Snake.snakeParts)
             {
@@ -634,8 +634,14 @@ namespace Snake
         /// </summary>
         public void ResetGame()
         {
+            ghostPlayer1.Clear();
+            ghostPlayer2.Clear();
+            ghostPlayer3.Clear();
+            ghostPlayer4.Clear();
+
             #region walls
             wallList.Clear();
+
             for (int i = 0; i < 64; i++)
             {
                 wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
