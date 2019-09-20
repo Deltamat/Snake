@@ -106,8 +106,8 @@ namespace Server
                     }
                     foreach (var writer in streamWriters)
                     {
-                        sWriter.WriteLine(data);
-                        sWriter.Flush();
+                        writer.WriteLine(data);
+                        writer.Flush();
                     }
                     
 
@@ -115,11 +115,11 @@ namespace Server
                     {
                         foreach (var writer in streamWriters)
                         {
-                            sWriter.WriteLine("2:RESET");
-                            sWriter.Flush();
+                            writer.WriteLine("2:RESET");
+                            writer.Flush();
                             deadPlayers.Clear();
-                            Console.WriteLine("All players dead. Reset the game");
                         }
+                        Console.WriteLine("All players dead. Reset the game");
                     }
                 }
                 catch (Exception)
@@ -147,27 +147,27 @@ namespace Server
 
             //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
 
-            //IPAddress broadcast = IPAddress.Parse("127.0.0.1");
+            IPAddress broadcast = IPAddress.Parse("10.131.67.14");
 
-            //IPEndPoint ep = new IPEndPoint(broadcast, listenPort);
+            IPEndPoint ep = new IPEndPoint(broadcast, 43001);
 
             while (true)
             {
                 // recieve from klient
                 byte[] bytes = listener.Receive(ref groupEP);
 
-                // send to all players unfinished
-                lock (playersLock)
-                {
-                    foreach (var ip in iPs)
-                    {
-                        IPEndPoint ep = new IPEndPoint(ip, 43001);
-                        socket.SendTo(bytes, ep);
-                    }
-                }
-               
-                
+                socket.SendTo(bytes, ep);
 
+                // send to all players unfinished
+                //lock (playersLock)
+                //{
+                //    foreach (var ip in iPs)
+                //    {
+                //        //PEndPoint ep = new IPEndPoint(ip, 43001);
+                        
+                //    }
+                    
+                //}
             }
         }
     }

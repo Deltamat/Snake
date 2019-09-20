@@ -523,12 +523,12 @@ namespace Snake
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             IPAddress serverIPAddress = IPAddress.Parse("10.131.67.14");
-            string datastring = $"{Player}:";
+            string datastring = $"{Player + 1}:";
             foreach (Snake obj in Snake.snakeParts)
             {
-                //obj.position += new Vector2(960, 0);
+                obj.position += new Vector2(960, 0);
                 datastring += obj.position.X.ToString() + ":" + obj.position.Y.ToString() + ":";
-                //obj.position -= new Vector2(960, 0);
+                obj.position -= new Vector2(960, 0);
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
@@ -548,10 +548,10 @@ namespace Snake
                 data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
                 string[] stringArray = data.Split(':');
                 string player = stringArray[0];
-                if (player == Player.ToString())
-                {
-                    return;
-                }
+                //if (player == Player.ToString())
+                //{
+                //    return;
+                //}
                 switch (player)
                 {
                     case "1":
