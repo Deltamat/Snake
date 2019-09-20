@@ -34,6 +34,11 @@ namespace Snake
         public static List<GameObject> toBeRemoved = new List<GameObject>();
         public static List<GameObject> toBeAdded = new List<GameObject>();
 
+        public static bool player1Dead = false;
+        public static bool player2Dead = false;
+        public static bool player3Dead = false;
+        public static bool player4Dead = false;
+
         public static List<GameObject> ghostPlayer1 = new List<GameObject>();
         public static List<GameObject> ghostPlayer2 = new List<GameObject>();
         public static List<GameObject> ghostPlayer3 = new List<GameObject>();
@@ -229,12 +234,12 @@ namespace Snake
                     }
                     toBeRemoved.Clear();
 
-            #region apples
-            foreach (Apple apple in Apple.ToBeRemovedApple)
-            {
-                Apple.AppleList.Remove(apple);
-            }
-            Apple.ToBeRemovedApple.Clear();
+                    #region apples
+                    foreach (Apple apple in Apple.ToBeRemovedApple)
+                    {
+                        Apple.AppleList.Remove(apple);
+                    }
+                    Apple.ToBeRemovedApple.Clear();
 
                     foreach (var wall in wallsToBeAdded)
                     {
@@ -303,10 +308,15 @@ namespace Snake
                         }
                         Apple.AppleSpawnCounterPlayer4 = 0;
                     }
+
+                    #endregion
+
                     SendUDP();
+
                     break;
             }
-            #endregion
+
+            
 
             base.Update(gameTime);
 
@@ -422,6 +432,23 @@ namespace Snake
             spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+
+            if (player1Dead)
+            {
+                spriteBatch.DrawString(font, "Player 1 Dead", new Vector2(0, 0), Color.White);
+            }
+            if (player2Dead)
+            {
+                spriteBatch.DrawString(font, "Player 2 Dead", new Vector2(100, 0), Color.White);
+            }
+            if (player3Dead)
+            {
+                spriteBatch.DrawString(font, "Player 3 Dead", new Vector2(200, 0), Color.White);
+            }
+            if (player4Dead)
+            {
+                spriteBatch.DrawString(font, "Player 4 Dead", new Vector2(300, 0), Color.White);
+            }
 
             foreach (Apple item in Apple.AppleList)
             {
@@ -542,7 +569,7 @@ namespace Snake
         private void TCPListener()
         {
             TcpClient client = new TcpClient();
-            client.Connect(IPAddress.Parse("127.0.0.1"), serverPort);
+            client.Connect(IPAddress.Parse("10.131.67.14"), serverPort);
             // sets two streams
             sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
             StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
@@ -557,8 +584,33 @@ namespace Snake
             {
                 data = sReader.ReadLine();
                 string[] stringArray = data.Split(':');
-                
-                Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[0]), Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]));
+                switch (stringArray[0])
+                {
+                    case "0":
+                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[0]), Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]));
+                        break;
+                    case "1":
+                        switch (Convert.ToInt32(stringArray[1]))
+                        {
+                            case 1:
+                                player1Dead = true;
+                                break;
+                            case 2:
+                                player2Dead = true;
+                                break;
+                            case 3:
+                                player3Dead = true;
+                                break;
+                            case 4:
+                                player4Dead = true;
+                                    break;
+                        }
+                        break;
+                    case "2":
+                        ResetGame();
+                        break;
+                }
+
             }
 
         }
@@ -570,7 +622,7 @@ namespace Snake
             sWriter.Flush();
         }
 
-        public void SendTCPPlayerDead()
+        public static void SendTCPPlayerDead()
         {
             string data = "1" + ":" + $"{Player}";
             sWriter.WriteLine(data);
@@ -624,6 +676,10 @@ namespace Snake
             player2Score = 0;
             player3Score = 0;
             player4Score = 0;
+            player1Dead = false;
+            player2Dead = false;
+            player3Dead = false;
+            player4Dead = false;
             #endregion
         }
     }

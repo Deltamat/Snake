@@ -15,8 +15,12 @@ namespace Server
         private static readonly int port = 42000;
         private static TcpListener server;
         private static bool isRunning;
-        private static List<TcpClient> Players = new List<TcpClient>(4);
-        private static List<int> deadPlayers = new List<int>(4);
+        private static List<TcpClient> Players = new List<TcpClient>();
+        private static List<int> deadPlayers = new List<int>();
+        private static List<StreamWriter> streamWriters = new List<StreamWriter>();
+        private static List<IPAddress> iPs = new List<IPAddress>();
+
+        public static object playersLock = new object();
 
 
         static void Main(string[] args)
@@ -65,10 +69,15 @@ namespace Server
             TcpClient client = (TcpClient)obj;
             // sets two streams
             StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+            streamWriters.Add(sWriter);
             StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
 
             IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
             IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+
+            iPs.Add(endPoint.Address);
+            //IPEndPoint ep = new IPEndPoint(local, listenPort);
+
 
             sWriter.WriteLine(playerNumber);
             sWriter.Flush();
@@ -90,20 +99,36 @@ namespace Server
                             deadPlayers.Add(Convert.ToInt32(array[1]));
                             // hvis kun en spiller tilbage send score til REST og send besked til klienter om reset
                             // ved reset Clear() listen.
-                            if (deadPlayers.Count == Players.Count - 1)
-                            {
-                                sWriter.WriteLine("RESET");
-                            }
                             break;
                     }
-                    sWriter.WriteLine(data);
-                    sWriter.Flush();
+                    foreach (var writer in streamWriters)
+                    {
+                        sWriter.WriteLine(data);
+                        sWriter.Flush();
+                    }
+                    
+
+                    if (deadPlayers.Count == Players.Count)
+                    {
+                        foreach (var writer in streamWriters)
+                        {
+                            sWriter.WriteLine("2:RESET");
+                            sWriter.Flush();
+                            deadPlayers.Clear();
+                        }
+                    }
                 }
                 catch (Exception)
                 {
-                    Players.Remove(client);
+                    lock (playersLock)
+                    {
+                        iPs.Remove(localPoint.Address);
+                        streamWriters.Remove(sWriter);
+                        Players.Remove(client);
+                    }
                     Console.WriteLine(endPoint.Port.ToString() + " " + localPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
+
                 }
             }
         }
@@ -118,9 +143,9 @@ namespace Server
 
             //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
 
-            IPAddress broadcast = IPAddress.Parse("127.0.0.1");
+            //IPAddress broadcast = IPAddress.Parse("127.0.0.1");
 
-            IPEndPoint ep = new IPEndPoint(broadcast, listenPort);
+            //IPEndPoint ep = new IPEndPoint(broadcast, listenPort);
 
             while (true)
             {
@@ -128,7 +153,16 @@ namespace Server
                 byte[] bytes = listener.Receive(ref groupEP);
 
                 // send to all players unfinished
-                socket.SendTo(bytes, ep);
+                lock (playersLock)
+                {
+                    foreach (var ip in iPs)
+                    {
+                        IPEndPoint ep = new IPEndPoint(ip, 43001);
+                        socket.SendTo(bytes, ep);
+                    }
+                }
+               
+                
 
             }
         }

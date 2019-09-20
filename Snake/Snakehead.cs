@@ -132,6 +132,7 @@ namespace Snake
                 if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
                 {
                     Alive = false;
+                    GameWorld.SendTCPPlayerDead();
                 }
             }
 
@@ -197,6 +198,7 @@ namespace Snake
                 if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
                 {
                     Alive = false;
+                    GameWorld.SendTCPPlayerDead();
                 }
             }
             #endregion
