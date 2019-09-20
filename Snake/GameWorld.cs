@@ -45,8 +45,11 @@ namespace Snake
 
         string data;
         SpriteFont font;
+        bool testBool = false;
+        static StreamWriter sWriter;
 
         public static List<GameObject> wallList = new List<GameObject>();
+        public static List<GameObject> wallsToBeAdded = new List<GameObject>();
         public static List<GameObject> gameObjects = new List<GameObject>();
 
         public static int player1Score;
@@ -141,9 +144,13 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            SnakeHead head = new SnakeHead(Vector2.Zero, "Snake_Head_N", content);
-            SnakeBody body = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
-            SnakeBody body2 = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+            
+            //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
+            //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
+            //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
+            //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
+            //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
+            //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
 
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
@@ -190,11 +197,21 @@ namespace Snake
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
             switch (GameState)
             {
                 case "Paused":
                     break;
                 case "Running":
+                    // temp
+                    if (!testBool)
+                    {
+                        SnakeHead head = new SnakeHead(TileSet[8, 3].position, "Snake_Head_N", content);
+                        SnakeBody body = new SnakeBody(TileSet[7, 3].position, "Snake_Body1", content);
+                        SnakeBody body2 = new SnakeBody(TileSet[6, 3].position, "Snake_Body1", content);
+                        testBool = true;
+                    }
+
                     foreach (GameObject obj in gameObjects)
                     {
                         obj.Update(gameTime);
@@ -218,6 +235,12 @@ namespace Snake
                 Apple.AppleList.Remove(apple);
             }
             Apple.ToBeRemovedApple.Clear();
+
+                    foreach (var wall in wallsToBeAdded)
+                    {
+                        wallList.Add(wall);
+                    }
+                    wallsToBeAdded.Clear();
 
                     lock (ghostPartsLock)
                     {
@@ -391,7 +414,7 @@ namespace Snake
             }
 
 #if DEBUG
-            spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
+            //spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
 #endif
 
             //Score
@@ -521,17 +544,37 @@ namespace Snake
             TcpClient client = new TcpClient();
             client.Connect(IPAddress.Parse("127.0.0.1"), serverPort);
             // sets two streams
-            StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+            sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
             StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
 
             IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
             IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
 
             Player = Convert.ToInt32(sReader.ReadLine());
-            //while (true)
-            //{
+            string data;
+
+            while (true)
+            {
+                data = sReader.ReadLine();
+                string[] stringArray = data.Split(':');
                 
-            //}
+                Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[0]), Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]));
+            }
+
+        }
+
+        public static void SendTCPApple(Vector2 position)
+        {
+            string data = "0" + ":" + $"{Player}" + ":" + $"{position.X / 30}" + ":" + $"{position.Y / 30}";
+            sWriter.WriteLine(data);
+            sWriter.Flush();
+        }
+
+        public void SendTCPPlayerDead()
+        {
+            string data = "1" + ":" + $"{Player}";
+            sWriter.WriteLine(data);
+            sWriter.Flush();
         }
 
         /// <summary>
@@ -548,6 +591,7 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
                 wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
             }
+
 
             for (int i = 0; i < 36; i++)
             {

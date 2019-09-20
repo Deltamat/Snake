@@ -67,9 +67,9 @@ namespace Snake
                             Apple.AppleSpawnCounterPlayer4++;
                         }
                     }
-                    GameWorld.wallList.Add(player2Wall);
-                    GameWorld.wallList.Add(player3Wall);
-                    GameWorld.wallList.Add(player4Wall);
+                    GameWorld.wallsToBeAdded.Add(player2Wall);
+                    GameWorld.wallsToBeAdded.Add(player3Wall);
+                    GameWorld.wallsToBeAdded.Add(player4Wall);
                     break;
                 case 2:
                     player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare), "Wall_Tile", GameWorld.ContentManager);
@@ -93,9 +93,9 @@ namespace Snake
                             Apple.AppleSpawnCounterPlayer4++;
                         }
                     }
-                    GameWorld.wallList.Add(player1Wall);
-                    GameWorld.wallList.Add(player3Wall);
-                    GameWorld.wallList.Add(player4Wall);
+                    GameWorld.wallsToBeAdded.Add(player1Wall);
+                    GameWorld.wallsToBeAdded.Add(player3Wall);
+                    GameWorld.wallsToBeAdded.Add(player4Wall);
                     break;
                 case 3:
                     player1Wall = new Wall(new Vector2(30 * xSquare, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
@@ -119,9 +119,9 @@ namespace Snake
                             Apple.AppleSpawnCounterPlayer4++;
                         }
                     }
-                    GameWorld.wallList.Add(player1Wall);
-                    GameWorld.wallList.Add(player2Wall);
-                    GameWorld.wallList.Add(player4Wall);
+                    GameWorld.wallsToBeAdded.Add(player1Wall);
+                    GameWorld.wallsToBeAdded.Add(player2Wall);
+                    GameWorld.wallsToBeAdded.Add(player4Wall);
                     break;
                 case 4:
                     player1Wall = new Wall(new Vector2(30 * xSquare - xJumpLength, 30 * ySquare - yJumpLength), "Wall_Tile", GameWorld.ContentManager);
@@ -145,9 +145,9 @@ namespace Snake
                             Apple.AppleSpawnCounterPlayer3++;
                         }
                     }
-                    GameWorld.wallList.Add(player1Wall);
-                    GameWorld.wallList.Add(player2Wall);
-                    GameWorld.wallList.Add(player3Wall);
+                    GameWorld.wallsToBeAdded.Add(player1Wall);
+                    GameWorld.wallsToBeAdded.Add(player2Wall);
+                    GameWorld.wallsToBeAdded.Add(player3Wall);
                     break;
                 default:
                     break;

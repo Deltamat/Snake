@@ -159,7 +159,7 @@ namespace Snake
                     {
                         GameWorld.player4Score = snakeParts.Count - 3;
                     }
-                    
+                    GameWorld.SendTCPApple(apple.position);
                     Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
 
