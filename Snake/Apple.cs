@@ -57,8 +57,7 @@ namespace Snake
                 int yCoordinate = GameWorld.Rng.Next(1, 19);
 
                 Apple apple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
-
-                //Might not work, couldn't test it
+                
                 if (player == 1)
                 {
                     apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
@@ -76,6 +75,38 @@ namespace Snake
                     apple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                 }
                 
+                int surroundingWallTiles = 0;
+
+                foreach (Wall wall in GameWorld.wallList)
+                {
+                    //Checks if the surrounding tiles around where the apple would be placed are walls
+                    if (wall.position == new Vector2(apple.position.X - 30, apple.position.Y))
+                    {
+                        surroundingWallTiles++;
+                    }
+
+                    if (wall.position == new Vector2(apple.position.X, apple.position.Y + 30))
+                    {
+                        surroundingWallTiles++;
+                    }
+
+                    if (wall.position == new Vector2(apple.position.X + 30, apple.position.Y))
+                    {
+                        surroundingWallTiles++;
+                    }
+
+                    if (wall.position == new Vector2(apple.position.X, apple.position.Y - 30))
+                    {
+                        surroundingWallTiles++;
+                    }
+                }
+
+                //If there are 3 or more walls around the apple, the placement is invalid
+                if (surroundingWallTiles >= 3)
+                {
+                    emptySpace = false;
+                }
+
                 foreach (Snake snakePart in Snake.snakeParts)
                 {
                     //Checks if the ghost apple intersects with any of the snake's bodyparts
