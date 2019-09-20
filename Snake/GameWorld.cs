@@ -570,6 +570,13 @@ namespace Snake
             sWriter.Flush();
         }
 
+        public void SendTCPPlayerDead()
+        {
+            string data = "1" + ":" + $"{Player}";
+            sWriter.WriteLine(data);
+            sWriter.Flush();
+        }
+
         /// <summary>
         /// Resets relevant values to base
         /// </summary>
@@ -584,12 +591,7 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
                 wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
             }
-        public void SendTCPPlayerDead()
-        {
-            string data = "1" + ":" + $"{Player}";
-            sWriter.WriteLine(data);
-            sWriter.Flush();
-        }
+
 
             for (int i = 0; i < 36; i++)
             {
