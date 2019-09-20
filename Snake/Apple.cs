@@ -56,22 +56,40 @@ namespace Snake
                 int xCoordinate = GameWorld.Rng.Next(1, 31);
                 int yCoordinate = GameWorld.Rng.Next(1, 19);
 
+                Apple apple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
+
+                //Might not work, couldn't test it
+                if (player == 1)
+                {
+                    apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                }
+                else if (player == 2)
+                {
+                    apple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                }
+                else if (player == 3)
+                {
+                    apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                }
+                else if (player == 4)
+                {
+                    apple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                }
+                
+                foreach (Snake snakePart in Snake.snakeParts)
+                {
+                    //Checks if the ghost apple intersects with any of the snake's bodyparts
+                    if (snakePart.CollisionBox.Intersects(apple.CollisionBox))
+                    {
+                        emptySpace = false;
+                    }
+                }
+
                 if (player == 1)
                 {
                     foreach (Wall wall in GameWorld.wallList)
                     {
                         if (wall.position == new Vector2(xCoordinate * 30, yCoordinate * 30))
-                        {
-                            emptySpace = false;
-                        }
-                    }
-
-
-                    Apple apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
-                    foreach (Snake snakePart in Snake.snakeParts)
-                    {
-                        //Checks if the ghost apple intersects with any of the snake's bodyparts
-                        if (snakePart.CollisionBox.Intersects(apple.CollisionBox))
                         {
                             emptySpace = false;
                         }
