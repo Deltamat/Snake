@@ -66,6 +66,7 @@ namespace Snake
                         }
                     }
 
+
                     Apple apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                     foreach (Snake snakePart in Snake.snakeParts)
                     {

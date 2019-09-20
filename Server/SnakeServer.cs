@@ -16,6 +16,8 @@ namespace Server
         private static TcpListener server;
         private static bool isRunning;
         private static List<TcpClient> Players = new List<TcpClient>(4);
+        private static List<int> deadPlayers = new List<int>(4);
+
 
         static void Main(string[] args)
         {
@@ -79,6 +81,23 @@ namespace Server
                 try
                 {
                     data = sReader.ReadLine();
+                    string[] array = data.Split(':');
+                    switch (array[0])
+                    {
+                        case "0":
+                            break;
+                        case "1":
+                            deadPlayers.Add(Convert.ToInt32(array[1]));
+                            // hvis kun en spiller tilbage send score til REST og send besked til klienter om reset
+                            // ved reset Clear() listen.
+                            if (deadPlayers.Count == Players.Count - 1)
+                            {
+                                sWriter.WriteLine("RESET");
+                            }
+                            break;
+                    }
+                    sWriter.WriteLine(data);
+                    sWriter.Flush();
                 }
                 catch (Exception)
                 {
@@ -108,8 +127,9 @@ namespace Server
                 // recieve from klient
                 byte[] bytes = listener.Receive(ref groupEP);
 
-                // send to all players (ToBeContinued)
+                // send to all players unfinished
                 socket.SendTo(bytes, ep);
+
             }
         }
     }
