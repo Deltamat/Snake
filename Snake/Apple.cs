@@ -56,46 +56,46 @@ namespace Snake
                 int xCoordinate = GameWorld.Rng.Next(1, 31);
                 int yCoordinate = GameWorld.Rng.Next(1, 19);
 
-                Apple apple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
+                Apple ghostApple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
                 
                 if (player == 1)
                 {
-                    apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                    ghostApple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                 }
                 else if (player == 2)
                 {
-                    apple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                    ghostApple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                 }
                 else if (player == 3)
                 {
-                    apple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                    ghostApple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                 }
                 else if (player == 4)
                 {
-                    apple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
+                    ghostApple = new Apple(new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
                 }
-                
+
                 int surroundingWallTiles = 0;
 
                 foreach (Wall wall in GameWorld.wallList)
                 {
                     //Checks if the surrounding tiles around where the apple would be placed are walls
-                    if (wall.position == new Vector2(apple.position.X - 30, apple.position.Y))
+                    if (wall.position == new Vector2(ghostApple.position.X - 30, ghostApple.position.Y))
                     {
                         surroundingWallTiles++;
                     }
 
-                    if (wall.position == new Vector2(apple.position.X, apple.position.Y + 30))
+                    if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y + 30))
                     {
                         surroundingWallTiles++;
                     }
 
-                    if (wall.position == new Vector2(apple.position.X + 30, apple.position.Y))
+                    if (wall.position == new Vector2(ghostApple.position.X + 30, ghostApple.position.Y))
                     {
                         surroundingWallTiles++;
                     }
 
-                    if (wall.position == new Vector2(apple.position.X, apple.position.Y - 30))
+                    if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y - 30))
                     {
                         surroundingWallTiles++;
                     }
@@ -110,7 +110,7 @@ namespace Snake
                 foreach (Snake snakePart in Snake.snakeParts)
                 {
                     //Checks if the ghost apple intersects with any of the snake's bodyparts
-                    if (snakePart.CollisionBox.Intersects(apple.CollisionBox))
+                    if (snakePart.CollisionBox.Intersects(ghostApple.CollisionBox))
                     {
                         emptySpace = false;
                     }

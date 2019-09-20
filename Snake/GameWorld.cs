@@ -429,9 +429,9 @@ namespace Snake
 
             //Score
             spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 540), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player2Score)).X * 0.5f, 0), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player3Score)).X * 0.5f, 540), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player4Score)).X * 0.5f, 540), Color.WhiteSmoke);
 
             if (player1Dead)
             {
