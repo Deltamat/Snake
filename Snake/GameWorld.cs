@@ -48,7 +48,8 @@ namespace Snake
         public static List<GameObject> toBeAddedGhostPlayer3 = new List<GameObject>();
         public static List<GameObject> toBeAddedGhostPlayer4 = new List<GameObject>();
 
-        public bool reset = false;
+        public static bool reset = false;
+        public static bool sentDead = false;
 
         string data;
         SpriteFont font;
@@ -375,13 +376,21 @@ namespace Snake
                 ResetGame();
                 delay = 0;
             }
+
+
+
+#endif
+            #endregion
+            if (SnakeHead.Alive == false && sentDead == false)
+            {
+                SendTCPPlayerDead();
+            }
+
             if (reset == true)
             {
                 ResetGame();
                 reset = false;
             }
-#endif
-            #endregion
         }
 
         /// <summary>
@@ -647,6 +656,7 @@ namespace Snake
             string data = "1" + ":" + $"{Player}";
             sWriter.WriteLine(data);
             sWriter.Flush();
+            sentDead = true;
         }
 
         /// <summary>
@@ -656,6 +666,8 @@ namespace Snake
         {
             lock (ghostPartsLock)
             {
+                SnakeHead.Alive = true;
+                sentDead = false;
                 ghostPlayer1.Clear();
                 ghostPlayer2.Clear();
                 ghostPlayer3.Clear();

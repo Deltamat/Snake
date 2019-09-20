@@ -66,6 +66,7 @@ namespace Server
         {
             // retrieve client from parameter passed to thread
             int playerNumber = Players.Count();
+            Console.WriteLine($"Player {playerNumber} connected");
             TcpClient client = (TcpClient)obj;
             // sets two streams
             StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
@@ -94,9 +95,11 @@ namespace Server
                     switch (array[0])
                     {
                         case "0":
+                            Console.WriteLine($"Player {array[1]} ate an apple. YUMMY");
                             break;
                         case "1":
                             deadPlayers.Add(Convert.ToInt32(array[1]));
+                            Console.WriteLine($"Player {array[1]} died. How SAD");
                             // hvis kun en spiller tilbage send score til REST og send besked til klienter om reset
                             // ved reset Clear() listen.
                             break;
@@ -115,6 +118,7 @@ namespace Server
                             sWriter.WriteLine("2:RESET");
                             sWriter.Flush();
                             deadPlayers.Clear();
+                            Console.WriteLine("All players dead. Reset the game");
                         }
                     }
                 }
