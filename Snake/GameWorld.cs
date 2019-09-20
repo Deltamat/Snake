@@ -404,7 +404,7 @@ namespace Snake
             {
                 item.Draw(spriteBatch);
             }
-
+                
             spriteBatch.End();
             base.Draw(gameTime);
         }
