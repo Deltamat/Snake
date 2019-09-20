@@ -77,29 +77,33 @@ namespace Snake
 
                 int surroundingWallTiles = 0;
 
-                foreach (Wall wall in GameWorld.wallList)
+                lock (GameWorld.ghostPartsLock)
                 {
-                    //Checks if the surrounding tiles around where the apple would be placed are walls
-                    if (wall.position == new Vector2(ghostApple.position.X - 30, ghostApple.position.Y))
+                    foreach (Wall wall in GameWorld.wallList)
                     {
-                        surroundingWallTiles++;
-                    }
+                        //Checks if the surrounding tiles around where the apple would be placed are walls
+                        if (wall.position == new Vector2(ghostApple.position.X - 30, ghostApple.position.Y))
+                        {
+                            surroundingWallTiles++;
+                        }
 
-                    if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y + 30))
-                    {
-                        surroundingWallTiles++;
-                    }
+                        if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y + 30))
+                        {
+                            surroundingWallTiles++;
+                        }
 
-                    if (wall.position == new Vector2(ghostApple.position.X + 30, ghostApple.position.Y))
-                    {
-                        surroundingWallTiles++;
-                    }
+                        if (wall.position == new Vector2(ghostApple.position.X + 30, ghostApple.position.Y))
+                        {
+                            surroundingWallTiles++;
+                        }
 
-                    if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y - 30))
-                    {
-                        surroundingWallTiles++;
+                        if (wall.position == new Vector2(ghostApple.position.X, ghostApple.position.Y - 30))
+                        {
+                            surroundingWallTiles++;
+                        }
                     }
                 }
+                
 
                 //If there are 3 or more walls around the apple, the placement is invalid
                 if (surroundingWallTiles >= 3)
@@ -127,35 +131,38 @@ namespace Snake
                     }
                 }
 
-                if (player == 2)
+                lock (GameWorld.ghostPartsLock)
                 {
-                    foreach (Wall wall in GameWorld.wallList)
+                    if (player == 2)
                     {
-                        if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30))
+                        foreach (Wall wall in GameWorld.wallList)
                         {
-                            emptySpace = false;
+                            if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30))
+                            {
+                                emptySpace = false;
+                            }
                         }
                     }
-                }
 
-                if (player == 3)
-                {
-                    foreach (Wall wall in GameWorld.wallList)
+                    if (player == 3)
                     {
-                        if (wall.position == new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength))
+                        foreach (Wall wall in GameWorld.wallList)
                         {
-                            emptySpace = false;
+                            if (wall.position == new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength))
+                            {
+                                emptySpace = false;
+                            }
                         }
-                    }   
-                }
+                    }
 
-                if (player == 4)
-                {
-                    foreach (Wall wall in GameWorld.wallList)
+                    if (player == 4)
                     {
-                        if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength))
+                        foreach (Wall wall in GameWorld.wallList)
                         {
-                            emptySpace = false;
+                            if (wall.position == new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength))
+                            {
+                                emptySpace = false;
+                            }
                         }
                     }
                 }

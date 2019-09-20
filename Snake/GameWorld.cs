@@ -48,6 +48,8 @@ namespace Snake
         public static List<GameObject> toBeAddedGhostPlayer3 = new List<GameObject>();
         public static List<GameObject> toBeAddedGhostPlayer4 = new List<GameObject>();
 
+        public bool reset = false;
+
         string data;
         SpriteFont font;
         bool testBool = false;
@@ -72,7 +74,7 @@ namespace Snake
             graphics.PreferredBackBufferHeight = 1020;
 
 #if !DEBUG
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
 #endif
 
             graphics.ApplyChanges();
@@ -241,10 +243,14 @@ namespace Snake
                     }
                     Apple.ToBeRemovedApple.Clear();
 
-                    foreach (var wall in wallsToBeAdded)
+                    lock (ghostPartsLock)
                     {
-                        wallList.Add(wall);
+                        foreach (var wall in wallsToBeAdded)
+                        {
+                            wallList.Add(wall);
+                        }
                     }
+                    
                     wallsToBeAdded.Clear();
 
                     lock (ghostPartsLock)
@@ -369,6 +375,11 @@ namespace Snake
                 ResetGame();
                 delay = 0;
             }
+            if (reset == true)
+            {
+                ResetGame();
+                reset = false;
+            }
 #endif
             #endregion
         }
@@ -389,11 +400,15 @@ namespace Snake
                     TileSet[i, k].Draw(spriteBatch);
                 }
             }
-
-            foreach (Wall wall in wallList)
+            lock (ghostPartsLock)
             {
-                wall.Draw(spriteBatch);
+                foreach (Wall wall in wallList)
+                {
+                    wall.Draw(spriteBatch);
+                }
             }
+           
+
             lock (ghostPartsLock)
             {
                 foreach (GameObject obj in ghostPlayer1)
@@ -524,6 +539,10 @@ namespace Snake
                 data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
                 string[] stringArray = data.Split(':');
                 string player = stringArray[0];
+                if (player == Player.ToString())
+                {
+                    return;
+                }
                 switch (player)
                 {
                     case "1":
@@ -553,12 +572,13 @@ namespace Snake
                     {
                         list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
                     }
+                    foreach (GameObject obj in list)
+                    {
+                        obj.position = new Vector2(Convert.ToInt32(array[counter]), Convert.ToInt32(array[counter + 1]));
+                        counter += 2;
+                    }
                 }
-                foreach (GameObject obj in list)
-                {
-                    obj.position = new Vector2(Convert.ToInt32(array[counter]), Convert.ToInt32(array[counter + 1]));
-                    counter += 2;
-                }
+                
             }
             catch
             {
@@ -607,7 +627,7 @@ namespace Snake
                         }
                         break;
                     case "2":
-                        ResetGame();
+                        reset = true;
                         break;
                 }
 
@@ -634,59 +654,68 @@ namespace Snake
         /// </summary>
         public void ResetGame()
         {
-            ghostPlayer1.Clear();
-            ghostPlayer2.Clear();
-            ghostPlayer3.Clear();
-            ghostPlayer4.Clear();
-
-            #region walls
-            wallList.Clear();
-
-            for (int i = 0; i < 64; i++)
+            lock (ghostPartsLock)
             {
-                wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
+                ghostPlayer1.Clear();
+                ghostPlayer2.Clear();
+                ghostPlayer3.Clear();
+                ghostPlayer4.Clear();
+                ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+
+                #region walls
+                wallList.Clear();
+
+                for (int i = 0; i < 64; i++)
+                {
+                    wallList.Add(new Wall(new Vector2(30 * i, 0), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(30 * i, 30 * 35), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
+                }
+
+
+                for (int i = 0; i < 36; i++)
+                {
+                    wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(1890, 30 * i), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "Wall_Tile", content));
+                    wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
+                }
+                #endregion
+                #region apples
+                Apple.AppleList.Clear();
+                for (int i = 1; i <= 4; i++)
+                {
+                    Apple.SpawnApple(i);
+                }
+                #endregion
+                #region snake
+                foreach (Snake snakePart in Snake.snakeParts)
+                {
+                    gameObjects.Remove(snakePart.smallCollisionBox);
+                    gameObjects.Remove(snakePart);
+                }
+                Snake.snakeParts.Clear();
+                SnakeHead head = new SnakeHead(Vector2.Zero, "Snake_Head_N", content);
+                SnakeBody body = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+                SnakeBody body2 = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+                #endregion
+                #region score
+                player1Score = 0;
+                player2Score = 0;
+                player3Score = 0;
+                player4Score = 0;
+                player1Dead = false;
+                player2Dead = false;
+                player3Dead = false;
+                player4Dead = false;
+                #endregion
             }
 
 
-            for (int i = 0; i < 36; i++)
-            {
-                wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(1890, 30 * i), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(30 * 31, 30 * i), "Wall_Tile", content));
-                wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
-            }
-            #endregion
-            #region apples
-            Apple.AppleList.Clear();
-            for (int i = 1; i <= 4; i++)
-            {
-                Apple.SpawnApple(i);
-            }
-            #endregion
-            #region snake
-            foreach (Snake snakePart in Snake.snakeParts)
-            {
-                gameObjects.Remove(snakePart.smallCollisionBox);
-                gameObjects.Remove(snakePart);
-            }
-            Snake.snakeParts.Clear();
-            SnakeHead head = new SnakeHead(Vector2.Zero, "Snake_Head_N", content);
-            SnakeBody body = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
-            SnakeBody body2 = new SnakeBody(Vector2.Zero, "Snake_Body1", content);
-            #endregion
-            #region score
-            player1Score = 0;
-            player2Score = 0;
-            player3Score = 0;
-            player4Score = 0;
-            player1Dead = false;
-            player2Dead = false;
-            player3Dead = false;
-            player4Dead = false;
-            #endregion
         }
     }
 }

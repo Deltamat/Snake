@@ -128,12 +128,20 @@ namespace Snake
             smallCollisionBox.position = new Vector2(position.X + 10, position.Y + 10);
             foreach (GameObject obj in GameWorld.gameObjects)
             {
-                //Checks collision between smallCollisionBox and every other object, that's not an apple or a wall, in the game. Excludes itself, its own smallCollisionBox and the first SnakeBody part
-                if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                try
                 {
-                    Alive = false;
-                    GameWorld.SendTCPPlayerDead();
+                    //Checks collision between smallCollisionBox and every other object, that's not an apple or a wall, in the game. Excludes itself, its own smallCollisionBox and the first SnakeBody part
+                    if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
+                    {
+                        Alive = false;
+                        GameWorld.SendTCPPlayerDead();
+                    }
                 }
+                catch (Exception)
+                {
+
+                }
+                
             }
 
             foreach (Apple apple in Apple.AppleList)
@@ -160,7 +168,7 @@ namespace Snake
                     {
                         GameWorld.player4Score = snakeParts.Count - 3;
                     }
-                    GameWorld.SendTCPApple(apple.position);
+                    GameWorld.SendTCPApple(apple.position); // send the eaten apple to the server
                     Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
 
@@ -192,15 +200,19 @@ namespace Snake
                 }
             }
 
-            foreach (Wall wall in GameWorld.wallList)
+            lock (GameWorld.ghostPartsLock)
             {
-                //Checks collision between smallCollisionBox and all walls
-                if (smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
+                foreach (Wall wall in GameWorld.wallList)
                 {
-                    Alive = false;
-                    GameWorld.SendTCPPlayerDead();
+                    //Checks collision between smallCollisionBox and all walls
+                    if (wall != null && smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
+                    {
+                        Alive = false;
+                        GameWorld.SendTCPPlayerDead();
+                    }
                 }
             }
+            
             #endregion
             base.Update(gameTime);
         }
