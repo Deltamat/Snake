@@ -615,7 +615,7 @@ namespace Snake
                 switch (stringArray[0])
                 {
                     case "0":
-                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[0]), Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]));
+                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]), Convert.ToInt32(stringArray[3]));
                         break;
                     case "1":
                         switch (Convert.ToInt32(stringArray[1]))
