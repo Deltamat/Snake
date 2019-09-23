@@ -322,12 +322,14 @@ namespace Snake
             if (Keyboard.GetState().IsKeyDown(Keys.F11) && delay > 100)
             {
                 graphics.IsFullScreen = true;
+                graphics.HardwareModeSwitch = false;
                 graphics.ApplyChanges();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.F12) && delay > 100)
             {
                 graphics.IsFullScreen = false;
+                graphics.HardwareModeSwitch = false;
                 graphics.ApplyChanges();
             }
 #if DEBUG
