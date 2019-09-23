@@ -172,10 +172,27 @@ namespace Snake
                     // test
                     Apple.oldApplePos = apple.position;
                     Apple.ChangeApplePosition(GameWorld.Player);
+                    switch (GameWorld.Player)
+                    {
+                        case 1:
+                            GameWorld.SendTCPApple(Apple.oldApplePos, GameWorld.apple1.position);
+                            break;
+                        case 2:
+                            GameWorld.SendTCPApple(Apple.oldApplePos, GameWorld.apple2.position);
+                            break;
+                        case 3:
+                            GameWorld.SendTCPApple(Apple.oldApplePos, GameWorld.apple3.position);
+                            break;
+                        case 4:
+                            GameWorld.SendTCPApple(Apple.oldApplePos, GameWorld.apple4.position);
+                            break;
+                    }
+
+                    
 
                     //GameWorld.SendTCPApple(apple.position); // send the eaten apple to the server
                     //Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
-                    Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
+                    //Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
 
                     //Checks where the apple were located and request a new apple to be spawned in that quarter
                     //if (apple.position.X - Wall.xJumpLength > 0)

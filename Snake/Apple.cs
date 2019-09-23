@@ -321,25 +321,25 @@ namespace Snake
                     if (player == 1)
                     {
                         GameWorld.apple1.position = new Vector2(xCoordinate * 30, yCoordinate * 30);
-                        GameWorld.SendTCPApple(oldApplePos, GameWorld.apple1.position);
+                        //GameWorld.SendTCPApple(oldApplePos, GameWorld.apple1.position);
                     }
 
                     if (player == 2)
                     {
                         GameWorld.apple2.position = new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30);
-                        GameWorld.SendTCPApple(oldApplePos, GameWorld.apple2.position);
+                        //GameWorld.SendTCPApple(oldApplePos, GameWorld.apple2.position);
                     }
 
                     if (player == 3)
                     {
                         GameWorld.apple3.position = new Vector2(xCoordinate * 30, yCoordinate * 30 + Wall.yJumpLength);
-                        GameWorld.SendTCPApple(oldApplePos, GameWorld.apple3.position);
+                        //GameWorld.SendTCPApple(oldApplePos, GameWorld.apple3.position);
                     }
 
                     if (player == 4)
                     {
                         GameWorld.apple4.position = new Vector2(xCoordinate * 30 + Wall.xJumpLength, yCoordinate * 30 + Wall.yJumpLength);
-                        GameWorld.SendTCPApple(oldApplePos, GameWorld.apple4.position);
+                        //GameWorld.SendTCPApple(oldApplePos, GameWorld.apple4.position);
                     }
                 }
             }
