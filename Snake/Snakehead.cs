@@ -13,7 +13,7 @@ namespace Snake
     public class SnakeHead : Snake
     {
         public static Vector2 savedDirection;
-        private bool Alive = true;
+        public static bool Alive = true;
 
         public SnakeHead(Vector2 position, string spriteName, ContentManager content) : base(position, spriteName, content)
         {
@@ -134,7 +134,7 @@ namespace Snake
                     if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
                     {
                         Alive = false;
-                        GameWorld.SendTCPPlayerDead();
+                        //GameWorld.SendTCPPlayerDead();
                     }
                 }
                 catch (Exception)
@@ -208,7 +208,7 @@ namespace Snake
                     if (wall != null && smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
                     {
                         Alive = false;
-                        GameWorld.SendTCPPlayerDead();
+                        //GameWorld.SendTCPPlayerDead();
                     }
                 }
             }
