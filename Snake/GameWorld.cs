@@ -522,13 +522,13 @@ namespace Snake
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            IPAddress serverIPAddress = IPAddress.Parse("10.131.67.14");
-            string datastring = $"{Player + 1}:";
+            IPAddress serverIPAddress = IPAddress.Parse("10.131.69.125");
+            string datastring = $"{Player}:";
             foreach (Snake obj in Snake.snakeParts)
             {
-                obj.position += new Vector2(960, 0);
+                //obj.position += new Vector2(960, 0);
                 datastring += obj.position.X.ToString() + ":" + obj.position.Y.ToString() + ":";
-                obj.position -= new Vector2(960, 0);
+                //obj.position -= new Vector2(960, 0);
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
@@ -598,7 +598,7 @@ namespace Snake
         private void TCPListener()
         {
             TcpClient client = new TcpClient();
-            client.Connect(IPAddress.Parse("10.131.67.14"), serverPort);
+            client.Connect(IPAddress.Parse("10.131.69.125"), serverPort);
             // sets two streams
             sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
             StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);

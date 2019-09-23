@@ -147,7 +147,7 @@ namespace Server
 
             //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
 
-            IPAddress broadcast = IPAddress.Parse("10.131.67.14");
+            IPAddress broadcast = IPAddress.Parse("10.131.69.125");
 
             IPEndPoint ep = new IPEndPoint(broadcast, 43001);
 
