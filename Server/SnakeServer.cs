@@ -15,7 +15,7 @@ namespace Server
         private static readonly int port = 42000;
         private static TcpListener server;
         private static bool isRunning;
-        private static List<TcpClient> Players = new List<TcpClient>();
+        private static TcpClient[] Players = new TcpClient[4];
         private static List<int> deadPlayers = new List<int>();
         private static List<StreamWriter> streamWriters = new List<StreamWriter>();
         private static List<IPAddress> iPs = new List<IPAddress>();
@@ -46,18 +46,21 @@ namespace Server
             while (isRunning)
             {
                 TcpClient newClient = server.AcceptTcpClient();
-                if (Players.Count < 4)
+                for (int i = 0; i < Players.Count(); i++)
                 {
-                    Players.Add(newClient);
-                    Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
+                    if (Players[i] == null)
                     {
-                        IsBackground = true
-                    };
-                    t.Start(newClient);
-                }
-                else
-                {
-                    newClient.Close();
+                        Players[i] = newClient;
+                        Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
+                        {
+                            IsBackground = true
+                        };
+                        t.Start(newClient);
+                    }
+                    else
+                    {
+                        newClient.Close();
+                    }
                 }
             }
         }
@@ -111,7 +114,7 @@ namespace Server
                     }
                     
 
-                    if (deadPlayers.Count == Players.Count)
+                    if (deadPlayers.Count == Players.Count())
                     {
                         foreach (var writer in streamWriters)
                         {
@@ -128,11 +131,10 @@ namespace Server
                     {
                         iPs.Remove(endPoint.Address);
                         streamWriters.Remove(sWriter);
-                        Players.Remove(client);
+                        Players[Array.IndexOf(Players, client)] = null;
                     }
                     Console.WriteLine(endPoint.Address.ToString() + " " + endPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
-
                 }
             }
         }

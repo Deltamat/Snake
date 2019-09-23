@@ -665,14 +665,6 @@ namespace Snake
             {
                 SnakeHead.Alive = true;
                 sentDead = false;
-                ghostPlayer1.Clear();
-                ghostPlayer2.Clear();
-                ghostPlayer3.Clear();
-                ghostPlayer4.Clear();
-                ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-                ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-                ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-                ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
 
                 #region walls
                 wallList.Clear();
@@ -721,6 +713,15 @@ namespace Snake
                 player3Dead = false;
                 player4Dead = false;
                 #endregion
+
+                ghostPlayer1.Clear();
+                ghostPlayer2.Clear();
+                ghostPlayer3.Clear();
+                ghostPlayer4.Clear();
+                ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+                ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
             }
         }
     }
