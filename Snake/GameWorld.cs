@@ -328,7 +328,20 @@ namespace Snake
             base.Update(gameTime);
 
             #region temporary
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F11) && delay > 100)
+            {
+                graphics.IsFullScreen = true;
+                graphics.ApplyChanges();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F12) && delay > 100)
+            {
+                graphics.IsFullScreen = false;
+                graphics.ApplyChanges();
+            }
 #if DEBUG
+
             if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
             {
                 player = 1;
