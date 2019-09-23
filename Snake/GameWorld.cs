@@ -152,14 +152,6 @@ namespace Snake
                 wallList.Add(new Wall(new Vector2(30 * 32, 30 * i), "Wall_Tile", content));
 			}
 
-            
-            //Snakebody body3 = new Snakebody(TileSet[5, 3].position, "Snake_Body1", content);
-            //Snakebody body6 = new Snakebody(TileSet[4, 3].position, "Snake_Body1", content);
-            //Snakebody body4 = new Snakebody(TileSet[3, 3].position, "Snake_Body1", content);
-            //Snakebody body5 = new Snakebody(TileSet[2, 3].position, "Snake_Body1", content);
-            //Snakebody body8 = new Snakebody(TileSet[1, 3].position, "Snake_Body1", content);
-            //Snakebody body7 = new Snakebody(TileSet[0, 3].position, "Snake_Body1", content);
-
             Thread t = new Thread(RecieveUDP);
             t.IsBackground = true;
             t.Start();
@@ -210,7 +202,7 @@ namespace Snake
             {
                 case "Paused":
                     break;
-                case "Running":
+                case "Running": //in the 90s!
                     // temp
                     if (!testBool)
                     {
@@ -322,13 +314,24 @@ namespace Snake
 
                     break;
             }
-
             
-
             base.Update(gameTime);
 
             #region temporary
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F11) && delay > 100)
+            {
+                graphics.IsFullScreen = true;
+                graphics.ApplyChanges();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F12) && delay > 100)
+            {
+                graphics.IsFullScreen = false;
+                graphics.ApplyChanges();
+            }
 #if DEBUG
+
             if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
             {
                 player = 1;
@@ -409,6 +412,7 @@ namespace Snake
                     TileSet[i, k].Draw(spriteBatch);
                 }
             }
+
             lock (ghostPartsLock)
             {
                 foreach (Wall wall in wallList)
@@ -417,7 +421,6 @@ namespace Snake
                 }
             }
            
-
             lock (ghostPartsLock)
             {
                 foreach (GameObject obj in ghostPlayer1)
@@ -438,7 +441,6 @@ namespace Snake
                 }
             }
             
-
             foreach (GameObject obj in gameObjects)
             {
                 obj.Draw(spriteBatch);
@@ -459,19 +461,19 @@ namespace Snake
 
             if (player1Dead)
             {
-                spriteBatch.DrawString(font, "Player 1 Dead", new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(470, 260), Color.Red);
             }
             if (player2Dead)
             {
-                spriteBatch.DrawString(font, "Player 2 Dead", new Vector2(100, 0), Color.White);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(1430, 260), Color.Red);
             }
             if (player3Dead)
             {
-                spriteBatch.DrawString(font, "Player 3 Dead", new Vector2(200, 0), Color.White);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(470, 800), Color.Red);
             }
             if (player4Dead)
             {
-                spriteBatch.DrawString(font, "Player 4 Dead", new Vector2(300, 0), Color.White);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(1430, 800), Color.Red);
             }
 
             foreach (Apple item in Apple.AppleList)
@@ -639,9 +641,7 @@ namespace Snake
                         reset = true;
                         break;
                 }
-
             }
-
         }
 
         public static void SendTCPApple(Vector2 position)
