@@ -45,11 +45,13 @@ namespace Server
 
             while (isRunning)
             {
+                bool placed = false;
                 TcpClient newClient = server.AcceptTcpClient();
                 for (int i = 0; i < Players.Count(); i++)
                 {
                     if (Players[i] == null)
                     {
+                        placed = true;
                         Players[i] = newClient;
                         Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
                         {
@@ -57,10 +59,11 @@ namespace Server
                         };
                         t.Start(newClient);
                     }
-                    else
-                    {
-                        newClient.Close();
-                    }
+                }
+
+                if (!placed)
+                {
+                    newClient.Close();
                 }
             }
         }
