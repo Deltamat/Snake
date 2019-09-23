@@ -548,10 +548,10 @@ namespace Snake
                 data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
                 string[] stringArray = data.Split(':');
                 string player = stringArray[0];
-                //if (player == Player.ToString())
-                //{
-                //    return;
-                //}
+                if (player == Player.ToString())
+                {
+                    player = "0";
+                }
                 switch (player)
                 {
                     case "1":
