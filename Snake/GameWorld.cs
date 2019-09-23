@@ -38,6 +38,10 @@ namespace Snake
         public static bool player2Dead = false;
         public static bool player3Dead = false;
         public static bool player4Dead = false;
+        public static Apple apple1;
+        public static Apple apple2;
+        public static Apple apple3;
+        public static Apple apple4;
 
         public static List<GameObject> ghostPlayer1 = new List<GameObject>();
         public static List<GameObject> ghostPlayer2 = new List<GameObject>();
@@ -160,8 +164,18 @@ namespace Snake
             ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
             ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
             ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
+            apple1 = new Apple(new Vector2(300), "Apple", Content);
+            apple2 = new Apple(new Vector2(1500, 300), "Apple", Content);
+            apple3 = new Apple(new Vector2(300, 900), "Apple", Content);
+            apple4 = new Apple(new Vector2(1500, 900), "Apple", Content);
+            Apple.AppleList.Add(apple1);
+            Apple.AppleList.Add(apple2);
+            Apple.AppleList.Add(apple3);
+            Apple.AppleList.Add(apple4);
 
-            Apple.SpawnApple(player);
+
+
+            //Apple.SpawnApple(player);
         }
 
         /// <summary>
@@ -582,6 +596,7 @@ namespace Snake
                     while ((array.Length + 1) * 2 > list.Count)
                     {
                         list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
+
                     }
                     foreach (GameObject obj in list)
                     {
@@ -617,7 +632,22 @@ namespace Snake
                 switch (stringArray[0])
                 {
                     case "0":
-                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[0]), Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]));
+                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
+                        switch (Convert.ToInt32(stringArray[1]))
+                        {
+                            case 1:
+                                apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                break;
+                            case 2:
+                                apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                break;
+                            case 3:
+                                apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                break;
+                            case 4:
+                                apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                break;
+                        }
                         break;
                     case "1":
                         switch (Convert.ToInt32(stringArray[1]))
@@ -643,9 +673,9 @@ namespace Snake
             }
         }
 
-        public static void SendTCPApple(Vector2 position)
+        public static void SendTCPApple(Vector2 oldApplePosition, Vector2 newApplePosition)
         {
-            string data = "0" + ":" + $"{Player}" + ":" + $"{position.X / 30}" + ":" + $"{position.Y / 30}";
+            string data = "0" + ":" + $"{Player}" + ":" + $"{oldApplePosition.X}" + ":" + $"{oldApplePosition.Y}" + ":" + $"{newApplePosition.X}" + ":" + $"{newApplePosition.Y}";
             sWriter.WriteLine(data);
             sWriter.Flush();
         }
@@ -696,11 +726,15 @@ namespace Snake
                 }
                 #endregion
                 #region apples
-                Apple.AppleList.Clear();
-                for (int i = 1; i <= 4; i++)
-                {
-                    Apple.SpawnApple(i);
-                }
+                //Apple.AppleList.Clear();
+                //for (int i = 1; i <= 4; i++)
+                //{
+                //    Apple.SpawnApple(i);
+                //}
+                apple1.position = new Vector2(300);
+                apple2.position = new Vector2(1500, 300);
+                apple3.position = new Vector2(300, 900);
+                apple4.position = new Vector2(1500, 900);
                 #endregion
                 #region snake
                 foreach (Snake snakePart in Snake.snakeParts)
