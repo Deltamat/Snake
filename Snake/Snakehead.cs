@@ -168,35 +168,40 @@ namespace Snake
                     {
                         GameWorld.player4Score = snakeParts.Count - 3;
                     }
-                    GameWorld.SendTCPApple(apple.position); // send the eaten apple to the server
-                    Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
+
+                    // test
+                    Apple.oldApplePos = apple.position;
+                    Apple.ChangeApplePosition(GameWorld.Player);
+
+                    //GameWorld.SendTCPApple(apple.position); // send the eaten apple to the server
+                    //Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
                     Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
 
                     //Checks where the apple were located and request a new apple to be spawned in that quarter
-                    if (apple.position.X - Wall.xJumpLength > 0)
-                    {
-                        if (apple.position.Y - Wall.yJumpLength > 0)
-                        {
-                            Apple.AppleSpawnCounterPlayer4++;
-                        }
+                    //if (apple.position.X - Wall.xJumpLength > 0)
+                    //{
+                    //    if (apple.position.Y - Wall.yJumpLength > 0)
+                    //    {
+                    //        Apple.AppleSpawnCounterPlayer4++;
+                    //    }
 
-                        if (apple.position.Y - Wall.yJumpLength < 0)
-                        {
-                            Apple.AppleSpawnCounterPlayer2++;
-                        }
-                    }
-                    else if (apple.position.X - Wall.xJumpLength < 0)
-                    {
-                        if (apple.position.Y - Wall.yJumpLength > 0)
-                        {
-                            Apple.AppleSpawnCounterPlayer3++;
-                        }
+                    //    if (apple.position.Y - Wall.yJumpLength < 0)
+                    //    {
+                    //        Apple.AppleSpawnCounterPlayer2++;
+                    //    }
+                    //}
+                    //else if (apple.position.X - Wall.xJumpLength < 0)
+                    //{
+                    //    if (apple.position.Y - Wall.yJumpLength > 0)
+                    //    {
+                    //        Apple.AppleSpawnCounterPlayer3++;
+                    //    }
 
-                        if (apple.position.Y - Wall.yJumpLength < 0)
-                        {
-                            Apple.AppleSpawnCounterPlayer1++;
-                        }
-                    }
+                    //    if (apple.position.Y - Wall.yJumpLength < 0)
+                    //    {
+                    //        Apple.AppleSpawnCounterPlayer1++;
+                    //    }
+                    //}
                 }
             }
 
