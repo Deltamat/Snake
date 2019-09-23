@@ -101,7 +101,7 @@ namespace Snake
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
+        /// related content. Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize()
@@ -156,10 +156,10 @@ namespace Snake
             t.IsBackground = true;
             t.Start();
 
-            ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-            ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-            ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
-            ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+            ghostPlayer1.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
+            ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
+            ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
+            ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head_N", ContentManager));
 
             Apple.SpawnApple(player);
         }
@@ -366,11 +366,9 @@ namespace Snake
                 ResetGame();
                 delay = 0;
             }
-
-
-
 #endif
             #endregion
+
             if (SnakeHead.Alive == false && sentDead == false)
             {
                 SendTCPPlayerDead();
@@ -448,19 +446,19 @@ namespace Snake
 
             if (player1Dead)
             {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(470, 260), Color.Red);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
             }
             if (player2Dead)
             {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(1430, 260), Color.Red);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
             }
             if (player3Dead)
             {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(470, 800), Color.Red);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
             }
             if (player4Dead)
             {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(1430, 800), Color.Red);
+                spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
             }
 
             foreach (Apple item in Apple.AppleList)
@@ -576,7 +574,6 @@ namespace Snake
                         counter += 2;
                     }
                 }
-                
             }
             catch
             {
@@ -674,8 +671,7 @@ namespace Snake
                     wallList.Add(new Wall(new Vector2(30 * i, 30 * 17), "Wall_Tile", content));
                     wallList.Add(new Wall(new Vector2(30 * i, 30 * 18), "Wall_Tile", content));
                 }
-
-
+                
                 for (int i = 0; i < 36; i++)
                 {
                     wallList.Add(new Wall(new Vector2(0, 30 * i), "Wall_Tile", content));
@@ -713,8 +709,6 @@ namespace Snake
                 player4Dead = false;
                 #endregion
             }
-
-
         }
     }
 }
