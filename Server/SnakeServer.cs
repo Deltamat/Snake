@@ -113,13 +113,7 @@ namespace Server
 
                     if (deadPlayers.Count == Players.Count)
                     {
-                        foreach (var writer in streamWriters)
-                        {
-                            writer.WriteLine("2:RESET");
-                            writer.Flush();
-                            deadPlayers.Clear();
-                        }
-                        Console.WriteLine("All players dead. Reset the game");
+                        Reset();
                     }
                 }
                 catch (Exception)
@@ -130,8 +124,13 @@ namespace Server
                         streamWriters.Remove(sWriter);
                         Players.Remove(client);
                     }
-                    Console.WriteLine(endPoint.Address.ToString() + " " + endPoint.Port.ToString() + " disconnected");
+                    Console.WriteLine("Player " + playerNumber + " " + endPoint.Address.ToString() + ":" + endPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
+
+                    if (deadPlayers.Count == Players.Count)
+                    {
+                        Reset();
+                    }
 
                 }
             }
@@ -170,6 +169,17 @@ namespace Server
 
                 }
             }
+        }
+
+        private static void Reset()
+        {
+            foreach (var writer in streamWriters)
+            {
+                writer.WriteLine("2:RESET");
+                writer.Flush();
+                deadPlayers.Clear();
+            }
+            Console.WriteLine("All players dead. Reset the game");
         }
     }
 }
