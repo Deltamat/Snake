@@ -126,11 +126,11 @@ namespace Server
                 {
                     lock (playersLock)
                     {
-                        iPs.Remove(localPoint.Address);
+                        iPs.Remove(endPoint.Address);
                         streamWriters.Remove(sWriter);
                         Players.Remove(client);
                     }
-                    Console.WriteLine(endPoint.Port.ToString() + " " + localPoint.Port.ToString() + " disconnected");
+                    Console.WriteLine(endPoint.Address.ToString() + " " + endPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
 
                 }
@@ -147,27 +147,28 @@ namespace Server
 
             //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
 
-            IPAddress broadcast = IPAddress.Parse("10.131.69.125");
+            //IPAddress broadcast = IPAddress.Parse("10.131.69.125");
 
-            IPEndPoint ep = new IPEndPoint(broadcast, 43001);
+            //IPEndPoint ep = new IPEndPoint(broadcast, 43001);
 
             while (true)
             {
                 // recieve from klient
                 byte[] bytes = listener.Receive(ref groupEP);
 
-                socket.SendTo(bytes, ep);
+                //socket.SendTo(bytes, ep);
 
-                // send to all players unfinished
-                //lock (playersLock)
-                //{
-                //    foreach (var ip in iPs)
-                //    {
-                //        //PEndPoint ep = new IPEndPoint(ip, 43001);
-                        
-                //    }
-                    
-                //}
+                //send to all players unfinished
+                lock (playersLock)
+                {
+                    foreach (var ip in iPs)
+                    {
+                        IPEndPoint ep = new IPEndPoint(ip, 43001);
+                        socket.SendTo(bytes, ep);
+
+                    }
+
+                }
             }
         }
     }
