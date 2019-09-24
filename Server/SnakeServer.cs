@@ -34,6 +34,7 @@ namespace Server
             server = new TcpListener(IPAddress.Any, port);
             server.Start();
             isRunning = true;
+            Console.WriteLine("Server IP: " + Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
             LoopClients();
         }
 
@@ -166,9 +167,7 @@ namespace Server
                     {
                         IPEndPoint ep = new IPEndPoint(ip, 43001);
                         socket.SendTo(bytes, ep);
-
                     }
-
                 }
             }
         }

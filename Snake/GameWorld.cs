@@ -807,6 +807,11 @@ namespace Snake
             }
         }
 
+        /// <summary>
+        /// Handles user keystrokes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void TextInputHandler(object sender, TextInputEventArgs args)
         {
             if (gameState == "Startup")
