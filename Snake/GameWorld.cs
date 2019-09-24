@@ -26,7 +26,7 @@ namespace Snake
         private static Random rng = new Random();
         public static object ghostPartsLock = new object();
         public int serverPort = 42000;
-        private string gameState = "Running";
+        private string gameState = "Startup";
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
         public static SnakeHead head;
@@ -68,6 +68,9 @@ namespace Snake
         public static int player2Score;
         public static int player3Score;
         public static int player4Score;
+
+        private static string IPInput = "";
+        private static bool enter;
 
         public GameWorld()
         {
@@ -112,11 +115,7 @@ namespace Snake
         {
             base.Initialize();
 
-            Thread TCPThread = new Thread(TCPListener);
-            TCPThread.IsBackground = true;
-            TCPThread.Start();
-
-            Thread.Sleep(500);
+            
 
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
@@ -173,7 +172,7 @@ namespace Snake
             Apple.AppleList.Add(apple3);
             Apple.AppleList.Add(apple4);
 
-
+            Window.TextInput += TextInputHandler;
 
             //Apple.SpawnApple(player);
         }
@@ -211,7 +210,7 @@ namespace Snake
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             switch (GameState)
             {
                 case "Paused":
@@ -327,6 +326,19 @@ namespace Snake
                     SendUDP();
 
                     break;
+                case "Startup":
+                    if (enter)
+                    {
+                        IPInput = IPInput.Remove(IPInput.Length - 1, 1);
+                        Thread TCPThread = new Thread(TCPListener);
+                        TCPThread.IsBackground = true;
+                        TCPThread.Start();
+
+                        Thread.Sleep(500);
+                        
+                        enter = false;
+                    }
+                    break;
             }
             
             base.Update(gameTime);
@@ -419,82 +431,99 @@ namespace Snake
             GraphicsDevice.Clear(Color.Cyan);
             spriteBatch.Begin();
 
-            for (int i = 0; i < 64; i++)
+            switch (gameState)
             {
-                for (int k = 0; k < 36; k++)
-                {
-                    TileSet[i, k].Draw(spriteBatch);
-                }
-            }
+                case "Paused":
+                    break;
+                case "Running":
+                    for (int i = 0; i < 64; i++)
+                    {
+                        for (int k = 0; k < 36; k++)
+                        {
+                            TileSet[i, k].Draw(spriteBatch);
+                        }
+                    }
 
-            lock (ghostPartsLock)
-            {
-                foreach (Wall wall in wallList)
-                {
-                    wall.Draw(spriteBatch);
-                }
-            }
-           
-            lock (ghostPartsLock)
-            {
-                foreach (GameObject obj in ghostPlayer1)
-                {
-                    obj.Draw(spriteBatch);
-                }
-                foreach (GameObject obj in ghostPlayer2)
-                {
-                    obj.Draw(spriteBatch);
-                }
-                foreach (GameObject obj in ghostPlayer3)
-                {
-                    obj.Draw(spriteBatch);
-                }
-                foreach (GameObject obj in ghostPlayer4)
-                {
-                    obj.Draw(spriteBatch);
-                }
-            }
-            
-            foreach (GameObject obj in gameObjects)
-            {
-                obj.Draw(spriteBatch);
+                    lock (ghostPartsLock)
+                    {
+                        foreach (Wall wall in wallList)
+                        {
+                            wall.Draw(spriteBatch);
+                        }
+                    }
+
+                    lock (ghostPartsLock)
+                    {
+                        foreach (GameObject obj in ghostPlayer1)
+                        {
+                            obj.Draw(spriteBatch);
+                        }
+                        foreach (GameObject obj in ghostPlayer2)
+                        {
+                            obj.Draw(spriteBatch);
+                        }
+                        foreach (GameObject obj in ghostPlayer3)
+                        {
+                            obj.Draw(spriteBatch);
+                        }
+                        foreach (GameObject obj in ghostPlayer4)
+                        {
+                            obj.Draw(spriteBatch);
+                        }
+                    }
+
+                    foreach (GameObject obj in gameObjects)
+                    {
+                        obj.Draw(spriteBatch);
 #if DEBUG
-                DrawCollisionBox(obj);
+                        DrawCollisionBox(obj);
 #endif
-            }
+                    }
 
 #if DEBUG
-            //spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
+                    //spriteBatch.DrawString(font, $"{(int)Snake.snakeParts[0].position.X / 30} , {(int)Snake.snakeParts[0].position.Y / 30}", Vector2.Zero, Color.White);
 #endif
 
-            //Score
-            spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player2Score)).X * 0.5f, 0), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player3Score)).X * 0.5f, 540), Color.WhiteSmoke);
-            spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player4Score)).X * 0.5f, 540), Color.WhiteSmoke);
+                    //Score
+                    spriteBatch.DrawString(font, $"{player1Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player1Score)).X * 0.5f, 0), Color.WhiteSmoke);
+                    spriteBatch.DrawString(font, $"{player2Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player2Score)).X * 0.5f, 0), Color.WhiteSmoke);
+                    spriteBatch.DrawString(font, $"{player3Score}", new Vector2(480 - font.MeasureString(Convert.ToString(player3Score)).X * 0.5f, 540), Color.WhiteSmoke);
+                    spriteBatch.DrawString(font, $"{player4Score}", new Vector2(1440 - font.MeasureString(Convert.ToString(player4Score)).X * 0.5f, 540), Color.WhiteSmoke);
 
-            if (player1Dead)
-            {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
-            }
-            if (player2Dead)
-            {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
-            }
-            if (player3Dead)
-            {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
-            }
-            if (player4Dead)
-            {
-                spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
+                    if (player1Dead)
+                    {
+                        spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
+                    }
+                    if (player2Dead)
+                    {
+                        spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 270 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
+                    }
+                    if (player3Dead)
+                    {
+                        spriteBatch.DrawString(font, "DEAD", new Vector2(480 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
+                    }
+                    if (player4Dead)
+                    {
+                        spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
+                    }
+
+                    foreach (Apple item in Apple.AppleList)
+                    {
+                        item.Draw(spriteBatch);
+                    }
+                    break;
+                case "Startup":
+                    try
+                    {
+                        spriteBatch.DrawString(font, IPInput, new Vector2(960 - font.MeasureString(IPInput).X * 0.5f, 540 - font.MeasureString(IPInput).Y * 0.5f), Color.Wheat);
+                    }
+                    catch (Exception)
+                    {
+                        IPInput = "";
+                    }
+                    break;
             }
 
-            foreach (Apple item in Apple.AppleList)
-            {
-                item.Draw(spriteBatch);
-            }
-                
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -538,7 +567,7 @@ namespace Snake
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            IPAddress serverIPAddress = IPAddress.Parse("10.131.69.125");
+            IPAddress serverIPAddress = IPAddress.Parse(IPInput);
             string datastring = $"{Player}:";
             foreach (Snake obj in Snake.snakeParts)
             {
@@ -614,7 +643,7 @@ namespace Snake
         private void TCPListener()
         {
             TcpClient client = new TcpClient();
-            client.Connect(IPAddress.Parse("10.131.69.125"), serverPort);
+            client.Connect(IPAddress.Parse(IPInput), serverPort);
             // sets two streams
             sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
             StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
@@ -624,6 +653,8 @@ namespace Snake
 
             Player = Convert.ToInt32(sReader.ReadLine());
             string data;
+
+            gameState = "Running";
 
             while (true)
             {
@@ -758,6 +789,21 @@ namespace Snake
                 ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
                 ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
                 ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+            }
+        }
+
+        private void TextInputHandler(object sender, TextInputEventArgs args)
+        {
+            if (gameState == "Startup")
+            {
+                Keys pressedKey = args.Key;
+                char character = args.Character;
+
+                IPInput += character;
+                if (pressedKey == Keys.Enter)
+                {
+                    enter = true;
+                }
             }
         }
     }

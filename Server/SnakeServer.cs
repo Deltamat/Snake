@@ -15,7 +15,7 @@ namespace Server
         private static readonly int port = 42000;
         private static TcpListener server;
         private static bool isRunning;
-        private static TcpClient[] Players = new TcpClient[4];
+        private static TcpClient[] Players = new TcpClient[4] { null, null, null, null };
         private static List<int> deadPlayers = new List<int>();
         private static List<StreamWriter> streamWriters = new List<StreamWriter>();
         private static List<IPAddress> iPs = new List<IPAddress>();
@@ -49,7 +49,7 @@ namespace Server
                 TcpClient newClient = server.AcceptTcpClient();
                 for (int i = 0; i < Players.Count(); i++)
                 {
-                    if (Players[i] == null)
+                    if (Players[i] == null && !placed)
                     {
                         placed = true;
                         Players[i] = newClient;
