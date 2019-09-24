@@ -118,6 +118,7 @@ namespace Server
                             // ved reset Clear() listen.
                             break;
                     }
+
                     foreach (var writer in streamWriters)
                     {
                         writer.WriteLine(data);
@@ -138,6 +139,7 @@ namespace Server
                         streamWriters.Remove(sWriter);
                         Players[Array.IndexOf(Players, client)] = null;
                     }
+
                     if (deadPlayers.Count == connectedPlayers)
                     {
                         Reset();
