@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using RestSharp;
 
 namespace Server
 {
@@ -23,6 +24,9 @@ namespace Server
 
         public static object playersLock = new object();
 
+        // RESTful
+        private static RestClient client = new RestClient("http://localhost:62915/");
+
 
         static void Main(string[] args)
         {
@@ -34,6 +38,7 @@ namespace Server
             server = new TcpListener(IPAddress.Any, port);
             server.Start();
             isRunning = true;
+            Console.WriteLine("Server IP: " + Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
             LoopClients();
         }
 
@@ -104,6 +109,7 @@ namespace Server
                     {
                         case "0":
                             Console.WriteLine($"Player {array[1]} ate an apple. YUMMY");
+                            PostREST();
                             break;
                         case "1":
                             deadPlayers.Add(Convert.ToInt32(array[1]));
@@ -112,6 +118,7 @@ namespace Server
                             // ved reset Clear() listen.
                             break;
                     }
+
                     foreach (var writer in streamWriters)
                     {
                         writer.WriteLine(data);
@@ -131,6 +138,11 @@ namespace Server
                         iPs.Remove(endPoint.Address);
                         streamWriters.Remove(sWriter);
                         Players[Array.IndexOf(Players, client)] = null;
+                    }
+
+                    if (deadPlayers.Count == connectedPlayers)
+                    {
+                        Reset();
                     }
                     Console.WriteLine("Player " + playerNumber + " " + endPoint.Address.ToString() + ":" + endPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
@@ -166,9 +178,7 @@ namespace Server
                     {
                         IPEndPoint ep = new IPEndPoint(ip, 43001);
                         socket.SendTo(bytes, ep);
-
                     }
-
                 }
             }
         }
@@ -179,9 +189,17 @@ namespace Server
             {
                 writer.WriteLine("2:RESET");
                 writer.Flush();
-                deadPlayers.Clear();
             }
+            deadPlayers.Clear();
             Console.WriteLine("All players dead. Reset the game");
+        }
+
+        private static void PostREST()
+        {
+            var request = new RestRequest("api/highscore", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(new { Name = "IPTEST", value = "123" });
+            client.Execute(request);
         }
     }
 }
