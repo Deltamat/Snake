@@ -19,6 +19,7 @@ namespace Server
         private static List<int> deadPlayers = new List<int>();
         private static List<StreamWriter> streamWriters = new List<StreamWriter>();
         private static List<IPAddress> iPs = new List<IPAddress>();
+        private static int connectedPlayers = 0;
 
         public static object playersLock = new object();
 
@@ -51,6 +52,7 @@ namespace Server
                 {
                     if (Players[i] == null && !placed)
                     {
+                        connectedPlayers++;
                         placed = true;
                         Players[i] = newClient;
                         Thread t = new Thread(new ParameterizedThreadStart(HandleClient))
@@ -71,9 +73,9 @@ namespace Server
         static void HandleClient(object obj)
         {
             // retrieve client from parameter passed to thread
-            int playerNumber = Players.Count();
-            Console.WriteLine($"Player {playerNumber} connected");
             TcpClient client = (TcpClient)obj;
+            int playerNumber = Array.IndexOf(Players, client) + 1;
+            Console.WriteLine($"Player {playerNumber} connected");
             // sets two streams
             StreamWriter sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
             streamWriters.Add(sWriter);
@@ -115,15 +117,15 @@ namespace Server
                         writer.WriteLine(data);
                         writer.Flush();
                     }
-                    
 
-                    if (deadPlayers.Count == Players.Count())
+                    if (deadPlayers.Count == connectedPlayers)
                     {
                         Reset();
                     }
                 }
                 catch (Exception)
                 {
+                    connectedPlayers--;
                     lock (playersLock)
                     {
                         iPs.Remove(endPoint.Address);

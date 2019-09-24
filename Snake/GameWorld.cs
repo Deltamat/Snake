@@ -59,6 +59,7 @@ namespace Snake
         SpriteFont font;
         bool testBool = false;
         static StreamWriter sWriter;
+        public static bool isGhostPlayerReset = false;
 
         public static List<GameObject> wallList = new List<GameObject>();
         public static List<GameObject> wallsToBeAdded = new List<GameObject>();
@@ -207,7 +208,6 @@ namespace Snake
         protected override void Update(GameTime gameTime)
         {
             delay += gameTime.ElapsedGameTime.Milliseconds;
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -572,7 +572,7 @@ namespace Snake
             foreach (Snake obj in Snake.snakeParts)
             {
                 //obj.position += new Vector2(960, 0);
-                datastring += obj.position.X.ToString() + ":" + obj.position.Y.ToString() + ":";
+                datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
                 //obj.position -= new Vector2(960, 0);
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
@@ -622,10 +622,19 @@ namespace Snake
             {
                 lock (ghostPartsLock)
                 {
-                    while ((array.Length + 1) * 2 > list.Count)
+                    //if (isGhostPlayerReset)
+                    //{
+                    //    isGhostPlayerReset = false;
+                    //    return;
+                    //}
+                    // divided by 2 because there are 2 coordinates for each element in "list"
+                    while ((array.Length) / 2 > list.Count)
                     {
                         list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
-
+                    }
+                    if (array.Length * 0.5 < list.Count)
+                    {
+                        list.RemoveRange(array.Length / 2, list.Count - array.Length / 2);
                     }
                     foreach (GameObject obj in list)
                     {
@@ -728,6 +737,7 @@ namespace Snake
             {
                 SnakeHead.Alive = true;
                 sentDead = false;
+                SnakeHead.savedDirection = new Vector2(1, 0);
 
                 #region walls
                 wallList.Clear();
@@ -789,6 +799,8 @@ namespace Snake
                 ghostPlayer2.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
                 ghostPlayer3.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
                 ghostPlayer4.Add(new GameObject(new Vector2(-100), "Snake_Head", ContentManager));
+
+                isGhostPlayerReset = true;
             }
         }
 
