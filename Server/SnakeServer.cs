@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using RestSharp;
 
 namespace Server
 {
@@ -22,6 +23,9 @@ namespace Server
         private static int connectedPlayers = 0;
 
         public static object playersLock = new object();
+
+        // RESTful
+        private static RestClient client = new RestClient("http://localhost:62915/");
 
 
         static void Main(string[] args)
@@ -105,6 +109,7 @@ namespace Server
                     {
                         case "0":
                             Console.WriteLine($"Player {array[1]} ate an apple. YUMMY");
+                            PostREST();
                             break;
                         case "1":
                             deadPlayers.Add(Convert.ToInt32(array[1]));
@@ -132,6 +137,10 @@ namespace Server
                         iPs.Remove(endPoint.Address);
                         streamWriters.Remove(sWriter);
                         Players[Array.IndexOf(Players, client)] = null;
+                    }
+                    if (deadPlayers.Count == connectedPlayers)
+                    {
+                        Reset();
                     }
                     Console.WriteLine("Player " + playerNumber + " " + endPoint.Address.ToString() + ":" + endPoint.Port.ToString() + " disconnected");
                     Thread.CurrentThread.Abort();
@@ -178,9 +187,17 @@ namespace Server
             {
                 writer.WriteLine("2:RESET");
                 writer.Flush();
-                deadPlayers.Clear();
             }
+            deadPlayers.Clear();
             Console.WriteLine("All players dead. Reset the game");
+        }
+
+        private static void PostREST()
+        {
+            var request = new RestRequest("api/highscore", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(new { Name = "IPTEST", value = "123" });
+            client.Execute(request);
         }
     }
 }
