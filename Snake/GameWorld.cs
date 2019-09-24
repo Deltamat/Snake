@@ -360,52 +360,55 @@ namespace Snake
             }
 #if DEBUG
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
+            if (gameState != "Startup")
             {
-                player = 1;
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.D1) && delay > 100)
+                {
+                    player = 1;
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D2) && delay > 100)
-            {
-                player = 2;
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.D2) && delay > 100)
+                {
+                    player = 2;
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D3) && delay > 100)
-            {
-                player = 3;
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.D3) && delay > 100)
+                {
+                    player = 3;
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D4) && delay > 100)
-            {
-                player = 4;
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.D4) && delay > 100)
+                {
+                    player = 4;
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
-            {
-                new SnakeBody(Vector2.Zero, "Snake_Body1", content);
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
+                {
+                    new SnakeBody(Vector2.Zero, "Snake_Body1", content);
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q) && delay > 50)
-            {
-                Apple.SpawnApple(Player);
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.Q) && delay > 50)
+                {
+                    Apple.SpawnApple(Player);
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 50)
-            {
-                GameState = "Running";
-                delay = 0;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 50)
+                {
+                    GameState = "Running";
+                    delay = 0;
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R) && delay > 500)
-            {
-                ResetGame();
-                delay = 0;
+                if (Keyboard.GetState().IsKeyDown(Keys.R) && delay > 500)
+                {
+                    ResetGame();
+                    delay = 0;
+                }
             }
 #endif
             #endregion
@@ -428,7 +431,7 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Cyan);
+            GraphicsDevice.Clear(Color.DarkBlue);
             spriteBatch.Begin();
 
             switch (gameState)
@@ -515,7 +518,7 @@ namespace Snake
                 case "Startup":
                     try
                     {
-                        spriteBatch.DrawString(font, IPInput, new Vector2(960 - font.MeasureString(IPInput).X * 0.5f, 540 - font.MeasureString(IPInput).Y * 0.5f), Color.Wheat);
+                        spriteBatch.DrawString(font, IPInput, new Vector2(960 - font.MeasureString(IPInput).X * 0.5f, 540 - font.MeasureString(IPInput).Y * 0.5f), Color.White);
                     }
                     catch (Exception)
                     {
