@@ -203,7 +203,7 @@ namespace Snake
                 emptySpace = true;
 
                 int xCoordinate = GameWorld.Rng.Next(1, 31);
-                int yCoordinate = GameWorld.Rng.Next(1, 19);
+                int yCoordinate = GameWorld.Rng.Next(1, 17);
 
                 Apple ghostApple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
 
