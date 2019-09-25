@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.IO;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 using CryptoLibrary;
 using System.Security.Cryptography;
 
@@ -806,13 +807,14 @@ namespace Snake
         /// <param name="args"></param>
         private void TextInputHandler(object sender, TextInputEventArgs args)
         {
+           
             if (gameState == "Startup")
             {
                 Keys pressedKey = args.Key;
                 char character = args.Character;
-
+                
                 IPInput += character;
-                if (pressedKey == Keys.Enter)
+                if (pressedKey == Keys.Enter || character.ToString() == "\r")
                 {
                     enter = true;
                 }
