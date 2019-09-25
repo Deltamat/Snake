@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using CryptoLibrary;
 using System.Security.Cryptography;
 
 namespace Snake
