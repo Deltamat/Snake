@@ -536,10 +536,7 @@ namespace Snake
                 datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
             }
 
-            // encrypt the datastring
-            string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(datastring, "password1234", "salt");
-
-            byte[] sendbuf = Encoding.ASCII.GetBytes(encrypted);
+            byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
             IPEndPoint ep = new IPEndPoint(serverIPAddress, 43000);
 
@@ -555,8 +552,7 @@ namespace Snake
             {
                 byte[] bytes = listener.Receive(ref groupEP);
                 data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
-                string decrypted = CryptoHelper.Decrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
-                string[] stringArray = decrypted.Split(':');
+                string[] stringArray = data.Split(':');
                 string player = stringArray[0];
                 if (player == Player.ToString())
                 {
@@ -592,6 +588,8 @@ namespace Snake
                     {
                         list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
                     }
+                    // if the UDP package contains more parts because the package has been sent after a reset
+                    // reduce the size of the snake
                     if ((array.Length - 1) * 0.5 < list.Count)
                     {
                         list.RemoveRange(array.Length / 2, list.Count - array.Length / 2);
@@ -635,7 +633,8 @@ namespace Snake
                     while (true)
                     {
                         data = sReader.ReadLine();
-                        string[] stringArray = data.Split(':');
+                        string decrypted = CryptoHelper.Decrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
+                        string[] stringArray = decrypted.Split(':');
                         switch (stringArray[0])
                         {
                             case "EatApple":
@@ -697,7 +696,9 @@ namespace Snake
         public static void SendTCPApple(Vector2 oldApplePosition, Vector2 newApplePosition)
         {
             string data = "EatApple" + ":" + $"{Player}" + ":" + $"{oldApplePosition.X}" + ":" + $"{oldApplePosition.Y}" + ":" + $"{newApplePosition.X}" + ":" + $"{newApplePosition.Y}";
-            sWriter.WriteLine(data);
+            // encrypt the datastring
+            string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
+            sWriter.WriteLine(encrypted);
             sWriter.Flush();
         }
 
@@ -719,7 +720,11 @@ namespace Snake
                     data = "PlayerDead:" + $"{Player}:" + player4Score;
                     break;
             }
-            sWriter.WriteLine(data);
+
+            // encrypt the datastring
+            string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
+
+            sWriter.WriteLine(encrypted);
             sWriter.Flush();
             sentDead = true;
         }

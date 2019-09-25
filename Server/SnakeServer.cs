@@ -8,6 +8,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using RestSharp;
+using CryptoLibrary;
+using System.Security.Cryptography;
 
 namespace Server
 {
@@ -100,7 +102,8 @@ namespace Server
                 try
                 {
                     data = sReader.ReadLine();
-                    string[] array = data.Split(':');
+                    string decrypted = CryptoHelper.Decrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
+                    string[] array = decrypted.Split(':');
                     switch (array[0])
                     {
                         case "EatApple":
@@ -113,9 +116,11 @@ namespace Server
                             break;
                     }
 
+                    string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(decrypted, "password1234", "salt");
+
                     foreach (StreamWriter writer in streamWriters)
                     {
-                        writer.WriteLine(data);
+                        writer.WriteLine(encrypted);
                         writer.Flush();
                     }
 
@@ -178,7 +183,10 @@ namespace Server
         {
             foreach (StreamWriter writer in streamWriters)
             {
-                writer.WriteLine("Reset");
+                string resetString = "Reset";
+                string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(resetString, "password1234", "salt");
+
+                writer.WriteLine(encrypted);
                 writer.Flush();
             }
             deadPlayers.Clear();
