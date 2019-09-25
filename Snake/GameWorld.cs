@@ -391,9 +391,16 @@ namespace Snake
                     delay = 0;
                 }
 
-                if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 50)
+                if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 500)
                 {
-                    GameState = "Running";
+                    if (gameState == "Running")
+                    {
+                        gameState = "Paused";
+                    }
+                    else if (gameState == "Paused")
+                    {
+                        GameState = "Running";
+                    }
                     delay = 0;
                 }
 
@@ -424,7 +431,11 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);
+            if (gameState != "Paused")
+            {
+                GraphicsDevice.Clear(Color.DarkBlue);
+            }
+            
             spriteBatch.Begin();
 
             switch (gameState)
