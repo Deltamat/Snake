@@ -11,6 +11,7 @@ using System.Threading;
 using System.IO;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using System.Security.Cryptography;
+using CryptoLibrary;
 
 namespace Snake
 {
