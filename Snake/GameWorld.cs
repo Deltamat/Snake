@@ -623,11 +623,6 @@ namespace Snake
             {
                 lock (ghostPartsLock)
                 {
-                    //if (isGhostPlayerReset)
-                    //{
-                    //    isGhostPlayerReset = false;
-                    //    return;
-                    //}
                     // divided by 2 because there are 2 coordinates for each element in "list"
                     while ((array.Length) / 2 > list.Count)
                     {
@@ -666,7 +661,7 @@ namespace Snake
                 Player = Convert.ToInt32(sReader.ReadLine());
                 string data;
 
-                gameState = "Running";
+            GameState = "Running";
 
                 try
                 {
@@ -737,7 +732,22 @@ namespace Snake
 
         public static void SendTCPPlayerDead()
         {
-            string data = "1" + ":" + $"{Player}";
+            string data = string.Empty;
+            switch (Player)
+            {
+                case 1:
+                    data = "1:" + $"{Player}:" + player1Score;
+                    break;
+                case 2:
+                    data = "1:" + $"{Player}:" + player2Score;
+                    break;
+                case 3:
+                    data = "1:" + $"{Player}:" + player3Score;
+                    break;
+                case 4:
+                    data = "1:" + $"{Player}:" + player4Score;
+                    break;
+            }
             sWriter.WriteLine(data);
             sWriter.Flush();
             sentDead = true;

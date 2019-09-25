@@ -88,9 +88,7 @@ namespace Server
             IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
             IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
 
-            iPs.Add(endPoint.Address);
-            //IPEndPoint ep = new IPEndPoint(local, listenPort);
-
+            iPs.Add(endPoint.Address); // add ip to list so UDP can be sent to all connected players
 
             sWriter.WriteLine(playerNumber);
             sWriter.Flush();
@@ -108,13 +106,11 @@ namespace Server
                     {
                         case "0":
                             Console.WriteLine($"Player {array[1]} ate an apple. YUMMY");
-                            PostREST();
                             break;
                         case "1":
                             deadPlayers.Add(Convert.ToInt32(array[1]));
                             Console.WriteLine($"Player {array[1]} died. How SAD");
-                            // hvis kun en spiller tilbage send score til REST og send besked til klienter om reset
-                            // ved reset Clear() listen.
+                            PostREST(endPoint.Address.ToString(), Convert.ToInt32(array[2])); // sends highscore to REST
                             break;
                     }
 
@@ -157,20 +153,13 @@ namespace Server
 
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            //string returnAdresse = groupEP.ToString().Remove(groupEP.ToString().IndexOf(":"));
-
-            //IPAddress broadcast = IPAddress.Parse("10.131.69.125");
-
-            //IPEndPoint ep = new IPEndPoint(broadcast, 43001);
-
             while (true)
             {
                 // recieve from klient
                 byte[] bytes = listener.Receive(ref groupEP);
 
-                //socket.SendTo(bytes, ep);
-
-                //send to all players unfinished
+                // send to all players
+                // lock because an ip in the list could get removed if a player leaves
                 lock (playersLock)
                 {
                     foreach (IPAddress ip in iPs)
@@ -182,6 +171,9 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Sends a message to all connected clients telling them to reset
+        /// </summary>
         private static void Reset()
         {
             foreach (StreamWriter writer in streamWriters)
@@ -193,11 +185,16 @@ namespace Server
             Console.WriteLine("All players dead. Reset the game");
         }
 
-        private static void PostREST()
+        /// <summary>
+        /// Sends a post request to the RESTful web service
+        /// </summary>
+        /// <param name="ip">The ip address of the player</param>
+        /// <param name="score">The score of the player</param>
+        private static void PostREST(string ip, int score)
         {
             RestRequest request = new RestRequest("api/highscore", Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(new { Name = "IPTEST", value = "123" });
+            request.AddJsonBody(new { Ip = ip, Score = score });
             client.Execute(request);
         }
     }
