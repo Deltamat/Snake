@@ -76,7 +76,7 @@ namespace Snake
                 newPosition += direction * 30;
             }
 
-            if (readyToMove)
+            if (readyToMove && SnakeHead.Alive)
             {
                 position += direction * speed;
             }

@@ -212,7 +212,6 @@ namespace Snake
                 case "Paused":
                     break;
                 case "Running": //in the 90s!
-                    // temp
                     if (!testBool)
                     {
                         SnakeHead head = new SnakeHead(TileSet[8, 3].position, "Snake_Head_N", content);
@@ -239,11 +238,6 @@ namespace Snake
                     toBeRemoved.Clear();
 
                     #region 
-                    //foreach (Apple apple in Apple.ToBeRemovedApple)
-                    //{
-                    //    Apple.AppleList.Remove(apple);
-                    //}
-                    //Apple.ToBeRemovedApple.Clear();
 
                     lock (ghostPartsLock)
                     {
@@ -278,44 +272,6 @@ namespace Snake
                         }
                         toBeAddedGhostPlayer4.Clear();
                     }
-                    
-                    //Checks if there are any apples to create like a pseudo-list
-                    //if (Apple.AppleSpawnCounterPlayer1 != 0)
-                    //{
-                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
-                    //    {
-                    //        Apple.SpawnApple(1);
-                    //    }
-                    //    Apple.AppleSpawnCounterPlayer1 = 0;
-                    //}
-
-                    //if (Apple.AppleSpawnCounterPlayer2 != 0)
-                    //{
-                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
-                    //    {
-                    //        Apple.SpawnApple(2);
-                    //    }
-                    //    Apple.AppleSpawnCounterPlayer2 = 0;
-                    //}
-
-                    //if (Apple.AppleSpawnCounterPlayer3 != 0)
-                    //{
-                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
-                    //    {
-                    //        Apple.SpawnApple(3);
-                    //    }
-                    //    Apple.AppleSpawnCounterPlayer3 = 0;
-                    //}
-
-                    //if (Apple.AppleSpawnCounterPlayer4 != 0)
-                    //{
-                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
-                    //    {
-                    //        Apple.SpawnApple(4);
-                    //    }
-                    //    Apple.AppleSpawnCounterPlayer4 = 0;
-                    //}
-
                     #endregion
 
                     SendUDP();
