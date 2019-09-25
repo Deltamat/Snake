@@ -115,9 +115,7 @@ namespace Snake
         protected override void Initialize()
         {
             base.Initialize();
-
             
-
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
@@ -251,7 +249,7 @@ namespace Snake
 
                     lock (ghostPartsLock)
                     {
-                        foreach (var wall in wallsToBeAdded)
+                        foreach (Wall wall in wallsToBeAdded)
                         {
                             wallList.Add(wall);
                         }
@@ -514,9 +512,9 @@ namespace Snake
                         spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
                     }
 
-                    foreach (Apple item in Apple.AppleList)
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        item.Draw(spriteBatch);
+                        apple.Draw(spriteBatch);
                     }
                     break;
                 case "Startup":
@@ -578,9 +576,7 @@ namespace Snake
             string datastring = $"{Player}:";
             foreach (Snake obj in Snake.snakeParts)
             {
-                //obj.position += new Vector2(960, 0);
                 datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
-                //obj.position -= new Vector2(960, 0);
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 

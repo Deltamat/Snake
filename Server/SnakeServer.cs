@@ -16,7 +16,7 @@ namespace Server
         private static readonly int port = 42000;
         private static TcpListener server;
         private static bool isRunning;
-        private static TcpClient[] Players = new TcpClient[4] { null, null, null, null };
+        private static TcpClient[] Players = new TcpClient[4];
         private static List<int> deadPlayers = new List<int>();
         private static List<StreamWriter> streamWriters = new List<StreamWriter>();
         private static List<IPAddress> iPs = new List<IPAddress>();
@@ -44,7 +44,6 @@ namespace Server
 
         static void LoopClients()
         {
-
             Thread t2 = new Thread(RecieveAndTransmitUDPData);
             t2.IsBackground = true;
             t2.Start();
@@ -119,7 +118,7 @@ namespace Server
                             break;
                     }
 
-                    foreach (var writer in streamWriters)
+                    foreach (StreamWriter writer in streamWriters)
                     {
                         writer.WriteLine(data);
                         writer.Flush();
@@ -174,7 +173,7 @@ namespace Server
                 //send to all players unfinished
                 lock (playersLock)
                 {
-                    foreach (var ip in iPs)
+                    foreach (IPAddress ip in iPs)
                     {
                         IPEndPoint ep = new IPEndPoint(ip, 43001);
                         socket.SendTo(bytes, ep);
@@ -185,7 +184,7 @@ namespace Server
 
         private static void Reset()
         {
-            foreach (var writer in streamWriters)
+            foreach (StreamWriter writer in streamWriters)
             {
                 writer.WriteLine("2:RESET");
                 writer.Flush();
@@ -196,7 +195,7 @@ namespace Server
 
         private static void PostREST()
         {
-            var request = new RestRequest("api/highscore", Method.POST);
+            RestRequest request = new RestRequest("api/highscore", Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(new { Name = "IPTEST", value = "123" });
             client.Execute(request);

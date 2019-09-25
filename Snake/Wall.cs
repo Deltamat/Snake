@@ -149,8 +149,6 @@ namespace Snake
                     GameWorld.wallsToBeAdded.Add(player2Wall);
                     GameWorld.wallsToBeAdded.Add(player3Wall);
                     break;
-                default:
-                    break;
             }
         }
     }
