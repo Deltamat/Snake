@@ -172,8 +172,6 @@ namespace Snake
             Apple.AppleList.Add(apple4);
 
             Window.TextInput += TextInputHandler;
-
-            //Apple.SpawnApple(player);
         }
 
         /// <summary>
