@@ -76,7 +76,7 @@ namespace Snake
                     GameWorld.toBeRemoved.Add(snakePart.smallCollisionBox);
                 }
             }
-            
+
             #region head-movement
             if (position == newPosition)
             {

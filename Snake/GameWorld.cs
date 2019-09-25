@@ -663,6 +663,9 @@ namespace Snake
 
                 GameState = "Running";
 
+                SnakeHead.Alive = false;
+                SendTCPPlayerDead();
+
                 try
                 {
                     while (true)

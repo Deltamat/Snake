@@ -128,6 +128,7 @@ namespace Server
                 catch (Exception)
                 {
                     connectedPlayers--;
+                    deadPlayers.Remove(playerNumber);
                     lock (playersLock)
                     {
                         iPs.Remove(endPoint.Address);
