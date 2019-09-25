@@ -242,12 +242,12 @@ namespace Snake
                     }
                     toBeRemoved.Clear();
 
-                    #region apples
-                    foreach (Apple apple in Apple.ToBeRemovedApple)
-                    {
-                        Apple.AppleList.Remove(apple);
-                    }
-                    Apple.ToBeRemovedApple.Clear();
+                    #region 
+                    //foreach (Apple apple in Apple.ToBeRemovedApple)
+                    //{
+                    //    Apple.AppleList.Remove(apple);
+                    //}
+                    //Apple.ToBeRemovedApple.Clear();
 
                     lock (ghostPartsLock)
                     {
@@ -282,44 +282,43 @@ namespace Snake
                         }
                         toBeAddedGhostPlayer4.Clear();
                     }
-
-
+                    
                     //Checks if there are any apples to create like a pseudo-list
-                    if (Apple.AppleSpawnCounterPlayer1 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
-                        {
-                            Apple.SpawnApple(1);
-                        }
-                        Apple.AppleSpawnCounterPlayer1 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer1 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
+                    //    {
+                    //        Apple.SpawnApple(1);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer1 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer2 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
-                        {
-                            Apple.SpawnApple(2);
-                        }
-                        Apple.AppleSpawnCounterPlayer2 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer2 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
+                    //    {
+                    //        Apple.SpawnApple(2);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer2 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer3 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
-                        {
-                            Apple.SpawnApple(3);
-                        }
-                        Apple.AppleSpawnCounterPlayer3 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer3 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
+                    //    {
+                    //        Apple.SpawnApple(3);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer3 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer4 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
-                        {
-                            Apple.SpawnApple(4);
-                        }
-                        Apple.AppleSpawnCounterPlayer4 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer4 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
+                    //    {
+                    //        Apple.SpawnApple(4);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer4 = 0;
+                    //}
 
                     #endregion
 
@@ -389,12 +388,6 @@ namespace Snake
                 if (Keyboard.GetState().IsKeyDown(Keys.E) && delay > 500)
                 {
                     new SnakeBody(Vector2.Zero, "Snake_Body1", content);
-                    delay = 0;
-                }
-
-                if (Keyboard.GetState().IsKeyDown(Keys.Q) && delay > 50)
-                {
-                    Apple.SpawnApple(Player);
                     delay = 0;
                 }
 
