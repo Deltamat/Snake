@@ -658,65 +658,79 @@ namespace Snake
 
         private void TCPListener()
         {
-            TcpClient client = new TcpClient();
-            client.Connect(IPAddress.Parse(IPInput), serverPort);
-            // sets two streams
-            sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
-            StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
-
-            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
-            IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
-
-            Player = Convert.ToInt32(sReader.ReadLine());
-            string data;
-
-            gameState = "Running";
-
-            while (true)
+            try
             {
-                data = sReader.ReadLine();
-                string[] stringArray = data.Split(':');
-                switch (stringArray[0])
+                TcpClient client = new TcpClient();
+                client.Connect(IPAddress.Parse(IPInput), serverPort);
+                // sets two streams
+                sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+                StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
+
+                IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+                IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+
+                Player = Convert.ToInt32(sReader.ReadLine());
+                string data;
+
+                gameState = "Running";
+
+                try
                 {
-                    case "0":
-                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
-                        switch (Convert.ToInt32(stringArray[1]))
+                    while (true)
+                    {
+                        data = sReader.ReadLine();
+                        string[] stringArray = data.Split(':');
+                        switch (stringArray[0])
                         {
-                            case 1:
-                                apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "0":
+                                Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
+                                switch (Convert.ToInt32(stringArray[1]))
+                                {
+                                    case 1:
+                                        apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 2:
+                                        apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 3:
+                                        apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 4:
+                                        apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                }
                                 break;
-                            case 2:
-                                apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "1":
+                                switch (Convert.ToInt32(stringArray[1]))
+                                {
+                                    case 1:
+                                        player1Dead = true;
+                                        break;
+                                    case 2:
+                                        player2Dead = true;
+                                        break;
+                                    case 3:
+                                        player3Dead = true;
+                                        break;
+                                    case 4:
+                                        player4Dead = true;
+                                        break;
+                                }
                                 break;
-                            case 3:
-                                apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                break;
-                            case 4:
-                                apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "2":
+                                reset = true;
                                 break;
                         }
-                        break;
-                    case "1":
-                        switch (Convert.ToInt32(stringArray[1]))
-                        {
-                            case 1:
-                                player1Dead = true;
-                                break;
-                            case 2:
-                                player2Dead = true;
-                                break;
-                            case 3:
-                                player3Dead = true;
-                                break;
-                            case 4:
-                                player4Dead = true;
-                                    break;
-                        }
-                        break;
-                    case "2":
-                        reset = true;
-                        break;
+                    }
                 }
+                catch (Exception)
+                {
+                    Exit();
+                }
+            }
+            catch (Exception)
+            {
+                IPInput = "";
             }
         }
 
