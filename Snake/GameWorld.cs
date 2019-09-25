@@ -86,7 +86,7 @@ namespace Snake
             graphics.PreferredBackBufferHeight = 1020;
 
 #if !DEBUG
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 #endif
 
             graphics.ApplyChanges();
@@ -477,6 +477,7 @@ namespace Snake
                 case "Startup":
                     try
                     {
+                        spriteBatch.DrawString(font, "Input server's IP address:", new Vector2(960 - font.MeasureString("Input server's IP address:").X * 0.5f, 430 - font.MeasureString("Input server's IP address:").Y * 0.5f), Color.White);
                         spriteBatch.DrawString(font, IPInput, new Vector2(960 - font.MeasureString(IPInput).X * 0.5f, 540 - font.MeasureString(IPInput).Y * 0.5f), Color.White);
                     }
                     catch (Exception)
