@@ -66,17 +66,7 @@ namespace Snake
         }
 
         public override void Update(GameTime gameTime)
-        {
-            //If the snake has died, add all its snakeParts to toBeRemoved in GameWorld for removal
-            if (!Alive)
-            {
-                foreach (Snake snakePart in snakeParts)
-                {
-                    GameWorld.toBeRemoved.Add(snakePart);
-                    GameWorld.toBeRemoved.Add(snakePart.smallCollisionBox);
-                }
-            }
-            
+        {   
             #region head-movement
             if (position == newPosition)
             {
@@ -88,8 +78,11 @@ namespace Snake
                 oldPosition = newPosition;
                 newPosition += direction * 30;
             }
-
-            position += direction * speed;
+            if (Alive)
+            {
+                position += direction * speed;
+            }
+            
             #endregion
 
             #region input-handling
@@ -134,7 +127,6 @@ namespace Snake
                     if (smallCollisionBox.CollisionBox.Intersects(obj.CollisionBox) && obj != this && obj != smallCollisionBox && obj != snakeParts[1])
                     {
                         Alive = false;
-                        //GameWorld.SendTCPPlayerDead();
                     }
                 }
                 catch (Exception)
@@ -168,8 +160,7 @@ namespace Snake
                     {
                         GameWorld.player4Score = snakeParts.Count - 3;
                     }
-
-                    // test
+                    
                     Apple.oldApplePos = apple.position;
                     Apple.ChangeApplePosition(GameWorld.Player);
                     switch (GameWorld.Player)
@@ -187,38 +178,6 @@ namespace Snake
                             GameWorld.SendTCPApple(Apple.oldApplePos, GameWorld.apple4.position);
                             break;
                     }
-
-                    
-
-                    //GameWorld.SendTCPApple(apple.position); // send the eaten apple to the server
-                    //Apple.ToBeRemovedApple.Add(apple); //Removes the 'eaten' apple
-                    //Wall.SpawnEnemyWalls(GameWorld.Player, (int)(apple.position.X / 30), (int)(apple.position.Y / 30)); //Spawns walls for every opponent
-
-                    //Checks where the apple were located and request a new apple to be spawned in that quarter
-                    //if (apple.position.X - Wall.xJumpLength > 0)
-                    //{
-                    //    if (apple.position.Y - Wall.yJumpLength > 0)
-                    //    {
-                    //        Apple.AppleSpawnCounterPlayer4++;
-                    //    }
-
-                    //    if (apple.position.Y - Wall.yJumpLength < 0)
-                    //    {
-                    //        Apple.AppleSpawnCounterPlayer2++;
-                    //    }
-                    //}
-                    //else if (apple.position.X - Wall.xJumpLength < 0)
-                    //{
-                    //    if (apple.position.Y - Wall.yJumpLength > 0)
-                    //    {
-                    //        Apple.AppleSpawnCounterPlayer3++;
-                    //    }
-
-                    //    if (apple.position.Y - Wall.yJumpLength < 0)
-                    //    {
-                    //        Apple.AppleSpawnCounterPlayer1++;
-                    //    }
-                    //}
                 }
             }
 
@@ -230,7 +189,6 @@ namespace Snake
                     if (wall != null && smallCollisionBox.CollisionBox.Intersects(wall.CollisionBox))
                     {
                         Alive = false;
-                        //GameWorld.SendTCPPlayerDead();
                     }
                 }
             }
