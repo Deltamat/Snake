@@ -115,9 +115,7 @@ namespace Snake
         protected override void Initialize()
         {
             base.Initialize();
-
             
-
             // Generates the background tiles
             for (int i = 0; i < 64; i++)
             {
@@ -242,16 +240,16 @@ namespace Snake
                     }
                     toBeRemoved.Clear();
 
-                    #region apples
-                    foreach (Apple apple in Apple.ToBeRemovedApple)
-                    {
-                        Apple.AppleList.Remove(apple);
-                    }
-                    Apple.ToBeRemovedApple.Clear();
+                    #region 
+                    //foreach (Apple apple in Apple.ToBeRemovedApple)
+                    //{
+                    //    Apple.AppleList.Remove(apple);
+                    //}
+                    //Apple.ToBeRemovedApple.Clear();
 
                     lock (ghostPartsLock)
                     {
-                        foreach (var wall in wallsToBeAdded)
+                        foreach (Wall wall in wallsToBeAdded)
                         {
                             wallList.Add(wall);
                         }
@@ -282,44 +280,43 @@ namespace Snake
                         }
                         toBeAddedGhostPlayer4.Clear();
                     }
-
-
+                    
                     //Checks if there are any apples to create like a pseudo-list
-                    if (Apple.AppleSpawnCounterPlayer1 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
-                        {
-                            Apple.SpawnApple(1);
-                        }
-                        Apple.AppleSpawnCounterPlayer1 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer1 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer1; i++)
+                    //    {
+                    //        Apple.SpawnApple(1);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer1 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer2 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
-                        {
-                            Apple.SpawnApple(2);
-                        }
-                        Apple.AppleSpawnCounterPlayer2 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer2 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer2; i++)
+                    //    {
+                    //        Apple.SpawnApple(2);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer2 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer3 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
-                        {
-                            Apple.SpawnApple(3);
-                        }
-                        Apple.AppleSpawnCounterPlayer3 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer3 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer3; i++)
+                    //    {
+                    //        Apple.SpawnApple(3);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer3 = 0;
+                    //}
 
-                    if (Apple.AppleSpawnCounterPlayer4 != 0)
-                    {
-                        for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
-                        {
-                            Apple.SpawnApple(4);
-                        }
-                        Apple.AppleSpawnCounterPlayer4 = 0;
-                    }
+                    //if (Apple.AppleSpawnCounterPlayer4 != 0)
+                    //{
+                    //    for (int i = 0; i < Apple.AppleSpawnCounterPlayer4; i++)
+                    //    {
+                    //        Apple.SpawnApple(4);
+                    //    }
+                    //    Apple.AppleSpawnCounterPlayer4 = 0;
+                    //}
 
                     #endregion
 
@@ -392,15 +389,16 @@ namespace Snake
                     delay = 0;
                 }
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Q) && delay > 50)
+                if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 500)
                 {
-                    Apple.SpawnApple(Player);
-                    delay = 0;
-                }
-
-                if (Keyboard.GetState().IsKeyDown(Keys.P) && delay > 50)
-                {
-                    GameState = "Running";
+                    if (gameState == "Running")
+                    {
+                        gameState = "Paused";
+                    }
+                    else if (gameState == "Paused")
+                    {
+                        GameState = "Running";
+                    }
                     delay = 0;
                 }
 
@@ -431,7 +429,11 @@ namespace Snake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);
+            if (gameState != "Paused")
+            {
+                GraphicsDevice.Clear(Color.DarkBlue);
+            }
+            
             spriteBatch.Begin();
 
             switch (gameState)
@@ -510,9 +512,9 @@ namespace Snake
                         spriteBatch.DrawString(font, "DEAD", new Vector2(1440 - font.MeasureString("DEAD").X * 0.5f, 810 - font.MeasureString("DEAD").Y * 0.5f), Color.Red);
                     }
 
-                    foreach (Apple item in Apple.AppleList)
+                    foreach (Apple apple in Apple.AppleList)
                     {
-                        item.Draw(spriteBatch);
+                        apple.Draw(spriteBatch);
                     }
                     break;
                 case "Startup":
@@ -574,9 +576,7 @@ namespace Snake
             string datastring = $"{Player}:";
             foreach (Snake obj in Snake.snakeParts)
             {
-                //obj.position += new Vector2(960, 0);
                 datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
-                //obj.position -= new Vector2(960, 0);
             }
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
@@ -649,65 +649,79 @@ namespace Snake
 
         private void TCPListener()
         {
-            TcpClient client = new TcpClient();
-            client.Connect(IPAddress.Parse(IPInput), serverPort);
-            // sets two streams
-            sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
-            StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
+            try
+            {
+                TcpClient client = new TcpClient();
+                client.Connect(IPAddress.Parse(IPInput), serverPort);
+                // sets two streams
+                sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
+                StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
 
-            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
-            IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
+                IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+                IPEndPoint localPoint = (IPEndPoint)client.Client.LocalEndPoint;
 
-            Player = Convert.ToInt32(sReader.ReadLine());
-            string data;
+                Player = Convert.ToInt32(sReader.ReadLine());
+                string data;
 
             GameState = "Running";
 
-            while (true)
-            {
-                data = sReader.ReadLine();
-                string[] stringArray = data.Split(':');
-                switch (stringArray[0])
+                try
                 {
-                    case "0":
-                        Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
-                        switch (Convert.ToInt32(stringArray[1]))
+                    while (true)
+                    {
+                        data = sReader.ReadLine();
+                        string[] stringArray = data.Split(':');
+                        switch (stringArray[0])
                         {
-                            case 1:
-                                apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "0":
+                                Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
+                                switch (Convert.ToInt32(stringArray[1]))
+                                {
+                                    case 1:
+                                        apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 2:
+                                        apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 3:
+                                        apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                    case 4:
+                                        apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        break;
+                                }
                                 break;
-                            case 2:
-                                apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "1":
+                                switch (Convert.ToInt32(stringArray[1]))
+                                {
+                                    case 1:
+                                        player1Dead = true;
+                                        break;
+                                    case 2:
+                                        player2Dead = true;
+                                        break;
+                                    case 3:
+                                        player3Dead = true;
+                                        break;
+                                    case 4:
+                                        player4Dead = true;
+                                        break;
+                                }
                                 break;
-                            case 3:
-                                apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                break;
-                            case 4:
-                                apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                            case "2":
+                                reset = true;
                                 break;
                         }
-                        break;
-                    case "1":
-                        switch (Convert.ToInt32(stringArray[1]))
-                        {
-                            case 1:
-                                player1Dead = true;
-                                break;
-                            case 2:
-                                player2Dead = true;
-                                break;
-                            case 3:
-                                player3Dead = true;
-                                break;
-                            case 4:
-                                player4Dead = true;
-                                    break;
-                        }
-                        break;
-                    case "2":
-                        reset = true;
-                        break;
+                    }
                 }
+                catch (Exception)
+                {
+                    Exit();
+                }
+            }
+            catch (Exception)
+            {
+                IPInput = "";
             }
         }
 
@@ -817,6 +831,11 @@ namespace Snake
             }
         }
 
+        /// <summary>
+        /// Handles user keystrokes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void TextInputHandler(object sender, TextInputEventArgs args)
         {
             if (gameState == "Startup")
