@@ -226,6 +226,7 @@ namespace Snake
 
                 int surroundingWallTiles = 0;
 
+                // lock because the Main Thread runs through wallList and the TCPListener can add a wall 
                 lock (GameWorld.ghostPartsLock)
                 {
                     foreach (Wall wall in GameWorld.wallList)

@@ -11,21 +11,17 @@ namespace RESTful_Webservice.Controllers
 {
     public class HighScoreController : ApiController
     {
-       // Dictionary<string, string> highScore = new Dictionary<string, string>();
-        List<HighScore> highScores = new List<HighScore>();
+        static List<HighScore> highScores = new List<HighScore>();
 
         // GET: api/HighScore
         public IEnumerable<HighScore> Get()
         {
-            //return new string[] = {  }
             return highScores;
         }
 
         // GET: api/HighScore/5
         public int Get(string ip)
         {
-            //HighScore hs = new HighScore(ip, 0);
-            //return highScores.Find(hs).ToString();
             foreach (var score in highScores)
             {
                 if (score.Ip == ip)
@@ -37,11 +33,24 @@ namespace RESTful_Webservice.Controllers
         }
 
         // POST: api/HighScore
-        public void Post([FromBody]string value)
+        public void Post([FromBody]HighScore paremHighscore)
         {
-            string jsonString = JsonConvert.SerializeObject(value);
-            //highScores.Add(new HighScore(name, value));
+            //HighScore tmp = null;
+            //foreach (HighScore highScore in highScores)
+            //{
+            //    if (paremHighscore.Score > highScore.Score)
+            //    {
+            //        tmp = highScore;
+            //        break;
+            //    }
+            //}
+            //if (tmp != null)
+            //{
+            //    highScores.Add(paremHighscore);
+            //} 
+            highScores.Add(paremHighscore);
         }
+
 
         // PUT: api/HighScore/5
         public void Put(int id, [FromBody]string value)
