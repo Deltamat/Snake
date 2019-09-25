@@ -9,6 +9,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.IO;
+using CryptoLibrary;
+using System.Security.Cryptography;
 
 namespace Snake
 {
@@ -532,7 +534,11 @@ namespace Snake
             {
                 datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
             }
-            byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
+
+            // encrypt the datastring
+            string encrypted = CryptoHelper.Encrypt<TripleDESCryptoServiceProvider>(datastring, "password1234", "salt");
+
+            byte[] sendbuf = Encoding.ASCII.GetBytes(encrypted);
 
             IPEndPoint ep = new IPEndPoint(serverIPAddress, 43000);
 
@@ -548,7 +554,8 @@ namespace Snake
             {
                 byte[] bytes = listener.Receive(ref groupEP);
                 data = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
-                string[] stringArray = data.Split(':');
+                string decrypted = CryptoHelper.Decrypt<TripleDESCryptoServiceProvider>(data, "password1234", "salt");
+                string[] stringArray = decrypted.Split(':');
                 string player = stringArray[0];
                 if (player == Player.ToString())
                 {
@@ -630,25 +637,29 @@ namespace Snake
                         string[] stringArray = data.Split(':');
                         switch (stringArray[0])
                         {
-                            case "0":
+                            case "EatApple":
                                 Wall.SpawnEnemyWalls(Convert.ToInt32(stringArray[1]), Convert.ToInt32(stringArray[2]) / 30, Convert.ToInt32(stringArray[3]) / 30);
                                 switch (Convert.ToInt32(stringArray[1]))
                                 {
                                     case 1:
                                         apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        player1Score++;
                                         break;
                                     case 2:
                                         apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        player2Score++;
                                         break;
                                     case 3:
                                         apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        player3Score++;
                                         break;
                                     case 4:
                                         apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
+                                        player4Score++;
                                         break;
                                 }
                                 break;
-                            case "1":
+                            case "PlayerDead":
                                 switch (Convert.ToInt32(stringArray[1]))
                                 {
                                     case 1:
@@ -665,7 +676,7 @@ namespace Snake
                                         break;
                                 }
                                 break;
-                            case "2":
+                            case "Reset":
                                 reset = true;
                                 break;
                         }
@@ -684,7 +695,7 @@ namespace Snake
 
         public static void SendTCPApple(Vector2 oldApplePosition, Vector2 newApplePosition)
         {
-            string data = "0" + ":" + $"{Player}" + ":" + $"{oldApplePosition.X}" + ":" + $"{oldApplePosition.Y}" + ":" + $"{newApplePosition.X}" + ":" + $"{newApplePosition.Y}";
+            string data = "EatApple" + ":" + $"{Player}" + ":" + $"{oldApplePosition.X}" + ":" + $"{oldApplePosition.Y}" + ":" + $"{newApplePosition.X}" + ":" + $"{newApplePosition.Y}";
             sWriter.WriteLine(data);
             sWriter.Flush();
         }
@@ -695,16 +706,16 @@ namespace Snake
             switch (Player)
             {
                 case 1:
-                    data = "1:" + $"{Player}:" + player1Score;
+                    data = "PlayerDead:" + $"{Player}:" + player1Score;
                     break;
                 case 2:
-                    data = "1:" + $"{Player}:" + player2Score;
+                    data = "PlayerDead:" + $"{Player}:" + player2Score;
                     break;
                 case 3:
-                    data = "1:" + $"{Player}:" + player3Score;
+                    data = "PlayerDead:" + $"{Player}:" + player3Score;
                     break;
                 case 4:
-                    data = "1:" + $"{Player}:" + player4Score;
+                    data = "PlayerDead:" + $"{Player}:" + player4Score;
                     break;
             }
             sWriter.WriteLine(data);

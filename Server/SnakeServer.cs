@@ -27,7 +27,6 @@ namespace Server
         // RESTful
         private static RestClient client = new RestClient("http://localhost:62915/");
 
-
         static void Main(string[] args)
         {
             Server(port);
@@ -104,10 +103,10 @@ namespace Server
                     string[] array = data.Split(':');
                     switch (array[0])
                     {
-                        case "0":
+                        case "EatApple":
                             Console.WriteLine($"Player {array[1]} ate an apple. YUMMY");
                             break;
-                        case "1":
+                        case "PlayerDead":
                             deadPlayers.Add(Convert.ToInt32(array[1]));
                             Console.WriteLine($"Player {array[1]} died. How SAD");
                             PostREST(endPoint.Address.ToString(), Convert.ToInt32(array[2])); // sends highscore to REST
@@ -179,7 +178,7 @@ namespace Server
         {
             foreach (StreamWriter writer in streamWriters)
             {
-                writer.WriteLine("2:RESET");
+                writer.WriteLine("Reset");
                 writer.Flush();
             }
             deadPlayers.Clear();
