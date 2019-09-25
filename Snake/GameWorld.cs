@@ -573,7 +573,7 @@ namespace Snake
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             IPAddress serverIPAddress = IPAddress.Parse(IPInput);
-            string datastring = $"{Player}:";
+            string datastring = $"{Player}";
             foreach (Snake obj in Snake.snakeParts)
             {
                 datastring += ":" + obj.position.X.ToString() + ":" + obj.position.Y.ToString();
@@ -626,11 +626,11 @@ namespace Snake
                 lock (ghostPartsLock)
                 {
                     // divided by 2 because there are 2 coordinates for each element in "list"
-                    while ((array.Length) / 2 > list.Count)
+                    while ((array.Length - 1) / 2 > list.Count)
                     {
                         list.Add(new GameObject(Vector2.Zero, "Snake_Body1", Content));
                     }
-                    if (array.Length * 0.5 < list.Count)
+                    if ((array.Length - 1) * 0.5 < list.Count)
                     {
                         list.RemoveRange(array.Length / 2, list.Count - array.Length / 2);
                     }
@@ -663,7 +663,7 @@ namespace Snake
                 Player = Convert.ToInt32(sReader.ReadLine());
                 string data;
 
-            GameState = "Running";
+                GameState = "Running";
 
                 try
                 {
