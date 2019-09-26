@@ -88,6 +88,7 @@ namespace Snake
 
 #if !DEBUG
             graphics.IsFullScreen = true;
+            graphics.HardwareModeSwitch = false;
 #endif
 
             graphics.ApplyChanges();
