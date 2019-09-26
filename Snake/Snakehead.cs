@@ -142,24 +142,6 @@ namespace Snake
                 if (smallCollisionBox.CollisionBox.Intersects(apple.CollisionBox))
                 {
                     new SnakeBody(Vector2.Zero, "Snake_Body1", GameWorld.ContentManager); //Adds a new bodypart
-
-                    //Score
-                    //if (GameWorld.Player == 1)
-                    //{
-                    //    GameWorld.player1Score = snakeParts.Count - 3;
-                    //}
-                    //else if (GameWorld.Player == 2)
-                    //{
-                    //    GameWorld.player2Score = snakeParts.Count - 3;
-                    //}
-                    //else if (GameWorld.Player == 3)
-                    //{
-                    //    GameWorld.player3Score = snakeParts.Count - 3;
-                    //}
-                    //else if (GameWorld.Player == 4)
-                    //{
-                    //    GameWorld.player4Score = snakeParts.Count - 3;
-                    //}
                     
                     Apple.oldApplePos = apple.position;
                     Apple.ChangeApplePosition(GameWorld.Player);
