@@ -35,43 +35,47 @@ namespace RESTful_Webservice.Controllers
         // POST: api/HighScore
         public void Post([FromBody]HighScore paremHighscore)
         {
-            if (paremHighscore.Score > highScores[0].Score)
+            if (highScores.Count == 0)
+            {
+                highScores.Add(paremHighscore);
+            }
+            if (paremHighscore.Score > highScores[0].Score || highScores.Count == 1)
             {
                 highScores.Insert(0, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[1].Score)
+            else if (paremHighscore.Score > highScores[1].Score || highScores.Count == 2)
             {
                 highScores.Insert(1, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[2].Score)
+            else if (paremHighscore.Score > highScores[2].Score || highScores.Count == 3)
             {
                 highScores.Insert(2, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[3].Score)
+            else if (paremHighscore.Score > highScores[3].Score || highScores.Count == 4)
             {
                 highScores.Insert(3, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[4].Score)
+            else if (paremHighscore.Score > highScores[4].Score || highScores.Count == 5)
             {
                 highScores.Insert(4, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[5].Score)
+            else if (paremHighscore.Score > highScores[5].Score || highScores.Count == 6)
             {
                 highScores.Insert(5, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[6].Score)
+            else if (paremHighscore.Score > highScores[6].Score || highScores.Count == 7)
             {
                 highScores.Insert(6, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[7].Score)
+            else if (paremHighscore.Score > highScores[7].Score || highScores.Count == 8)
             {
                 highScores.Insert(7, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[8].Score)
+            else if (paremHighscore.Score > highScores[8].Score || highScores.Count == 9)
             {
                 highScores.Insert(8, paremHighscore);
             }
-            else if (paremHighscore.Score > highScores[9].Score)
+            else if (paremHighscore.Score > highScores[9].Score || highScores.Count == 10)
             {
                 highScores.Insert(9, paremHighscore);
             }
@@ -84,7 +88,6 @@ namespace RESTful_Webservice.Controllers
 
                 //yeet
             }
-            //highScores.Add(paremHighscore);
         }
 
 
