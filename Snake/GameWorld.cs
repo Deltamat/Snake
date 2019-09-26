@@ -806,7 +806,9 @@ namespace Snake
         }
 
         /// <summary>
-        /// Handles user keystrokes
+        /// Handles user keystrokes, and appends the characters to a string 
+        /// that is drawn on the screen at the beginning of the game, 
+        /// so that you can type the ip-address of the server you are trying to connect to.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -819,6 +821,9 @@ namespace Snake
                 char character = args.Character;
                 
                 IPInput += character;
+                //Normally you would just need the first part of the if 'or'-statement, 
+                //but some operating systems don't work well with the "Keys" of Monogame,
+                //which leads to the second statement 'character.ToString() == "\r"'
                 if (pressedKey == Keys.Enter || character.ToString() == "\r")
                 {
                     enter = true;
