@@ -91,10 +91,10 @@ namespace Server
 
             iPs.Add(endPoint.Address); // add ip to list so UDP can be sent to all connected players
 
+            // send a player number to the client
             sWriter.WriteLine(playerNumber);
             sWriter.Flush();
 
-            Byte[] bytes = new Byte[256];
             String data;
             while (true)
             {
@@ -150,7 +150,10 @@ namespace Server
             }
         }
 
-        static void RecieveAndTransmitUDPData(object obj)
+        /// <summary>
+        /// Method that handles recieving UDP from the clients and sending those packages to all players.
+        /// </summary>
+        static void RecieveAndTransmitUDPData()
         {
             int listenPort = 43000;
             UdpClient listener = new UdpClient(listenPort);
