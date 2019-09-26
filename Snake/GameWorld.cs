@@ -11,7 +11,6 @@ using System.Threading;
 using System.IO;
 using CryptoLibrary;
 using System.Security.Cryptography;
-using CryptoLibrary;
 
 namespace Snake
 {
@@ -28,7 +27,8 @@ namespace Snake
         private static int player = 0;
         private static Random rng = new Random();
         public static object ghostPartsLock = new object();
-        public int serverPort = 42000;
+        public int TCPServerPort = 42000;
+        public int UDPServerPort = 43000;
         private string gameState = "Startup";
 
         public static GameObject[,] TileSet = new GameObject[64, 36];
@@ -541,7 +541,7 @@ namespace Snake
 
             byte[] sendbuf = Encoding.ASCII.GetBytes(datastring);
 
-            IPEndPoint ep = new IPEndPoint(serverIPAddress, 43000);
+            IPEndPoint ep = new IPEndPoint(serverIPAddress, UDPServerPort);
 
             socket.SendTo(sendbuf, ep);
         }
@@ -615,7 +615,7 @@ namespace Snake
             try
             {
                 TcpClient client = new TcpClient();
-                client.Connect(IPAddress.Parse(IPInput), serverPort);
+                client.Connect(IPAddress.Parse(IPInput), TCPServerPort);
                 // sets two streams
                 sWriter = new StreamWriter(client.GetStream(), Encoding.ASCII);
                 StreamReader sReader = new StreamReader(client.GetStream(), Encoding.ASCII);
