@@ -646,18 +646,39 @@ namespace Snake
                                     case 1:
                                         apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
                                         player1Score = ghostPlayer1.Count - 3;
+                                        if (Player == 1)
+                                        {
+                                            player1Score = Snake.snakeParts.Count - 3;
+                                        }
                                         break;
                                     case 2:
                                         apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
                                         player2Score = ghostPlayer2.Count - 3;
+                                        if (Player == 2)
+                                        {
+                                            player2Score = Snake.snakeParts.Count - 3;
+                                        }
                                         break;
                                     case 3:
                                         apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
                                         player3Score = ghostPlayer3.Count - 3;
+                                        if (Player == 3)
+                                        {
+                                            player3Score = Snake.snakeParts.Count - 3;
+                                        }
                                         break;
                                     case 4:
                                         apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
                                         player4Score = ghostPlayer4.Count - 3;
+                                        if (Player == 4)
+                                        {
+                                            player4Score = Snake.snakeParts.Count - 3;
+                                        }
+                                        break;
+                                }
+                                switch (Player)
+                                {
+                                    default:
                                         break;
                                 }
                                 break;
