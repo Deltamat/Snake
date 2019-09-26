@@ -677,11 +677,6 @@ namespace Snake
                                         }
                                         break;
                                 }
-                                switch (Player)
-                                {
-                                    default:
-                                        break;
-                                }
                                 break;
                             case "PlayerDead":
                                 switch (Convert.ToInt32(stringArray[1]))
