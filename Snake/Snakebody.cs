@@ -58,7 +58,7 @@ namespace Snake
                         snakeParts[placeInList + 1].position = position - direction * 30;
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //yeet
                 }
