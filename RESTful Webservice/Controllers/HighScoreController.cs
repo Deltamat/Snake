@@ -35,20 +35,56 @@ namespace RESTful_Webservice.Controllers
         // POST: api/HighScore
         public void Post([FromBody]HighScore paremHighscore)
         {
-            //HighScore tmp = null;
-            //foreach (HighScore highScore in highScores)
-            //{
-            //    if (paremHighscore.Score > highScore.Score)
-            //    {
-            //        tmp = highScore;
-            //        break;
-            //    }
-            //}
-            //if (tmp != null)
-            //{
-            //    highScores.Add(paremHighscore);
-            //} 
-            highScores.Add(paremHighscore);
+            if (paremHighscore.Score > highScores[0].Score)
+            {
+                highScores.Insert(0, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[1].Score)
+            {
+                highScores.Insert(1, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[2].Score)
+            {
+                highScores.Insert(2, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[3].Score)
+            {
+                highScores.Insert(3, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[4].Score)
+            {
+                highScores.Insert(4, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[5].Score)
+            {
+                highScores.Insert(5, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[6].Score)
+            {
+                highScores.Insert(6, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[7].Score)
+            {
+                highScores.Insert(7, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[8].Score)
+            {
+                highScores.Insert(8, paremHighscore);
+            }
+            else if (paremHighscore.Score > highScores[9].Score)
+            {
+                highScores.Insert(9, paremHighscore);
+            }
+            try
+            {
+                highScores.RemoveAt(10);
+            }
+            catch (Exception)
+            {
+
+                //yeet
+            }
+            //highScores.Add(paremHighscore);
         }
 
 

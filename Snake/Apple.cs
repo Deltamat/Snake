@@ -34,7 +34,7 @@ namespace Snake
         }
 
         /// <summary>
-        /// Changes the position of the existing main player apple and the others ghost apples.
+        /// Changes the position of an apple based on the player
         /// </summary>
         /// <param name="player">Selects what player it is, 1 - 4</param>
         public static void ChangeApplePosition(int player)
