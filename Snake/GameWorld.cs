@@ -11,6 +11,7 @@ using System.Threading;
 using System.IO;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using System.Security.Cryptography;
+using CryptoLibrary;
 
 namespace Snake
 {
@@ -85,7 +86,7 @@ namespace Snake
             graphics.PreferredBackBufferHeight = 1020;
 
 #if !DEBUG
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 #endif
 
             graphics.ApplyChanges();
@@ -642,19 +643,19 @@ namespace Snake
                                 {
                                     case 1:
                                         apple1.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                        player1Score++;
+                                        player1Score = ghostPlayer1.Count - 3;
                                         break;
                                     case 2:
                                         apple2.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                        player2Score++;
+                                        player2Score = ghostPlayer2.Count - 3;
                                         break;
                                     case 3:
                                         apple3.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                        player3Score++;
+                                        player3Score = ghostPlayer3.Count - 3;
                                         break;
                                     case 4:
                                         apple4.position = new Vector2(Convert.ToInt32(stringArray[4]), Convert.ToInt32(stringArray[5]));
-                                        player4Score++;
+                                        player4Score = ghostPlayer4.Count - 3;
                                         break;
                                 }
                                 break;
