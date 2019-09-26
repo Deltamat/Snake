@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.IO;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
+using CryptoLibrary;
 using System.Security.Cryptography;
 using CryptoLibrary;
 
@@ -81,6 +81,7 @@ namespace Snake
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             content = Content;
+            Window.Title = "Snek-E Boi";
             //Sets the window size
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1020;
@@ -477,6 +478,7 @@ namespace Snake
                 case "Startup":
                     try
                     {
+                        spriteBatch.DrawString(font, "Input server's IP address:", new Vector2(960 - font.MeasureString("Input server's IP address:").X * 0.5f, 430 - font.MeasureString("Input server's IP address:").Y * 0.5f), Color.White);
                         spriteBatch.DrawString(font, IPInput, new Vector2(960 - font.MeasureString(IPInput).X * 0.5f, 540 - font.MeasureString(IPInput).Y * 0.5f), Color.White);
                     }
                     catch (Exception)
@@ -806,7 +808,9 @@ namespace Snake
         }
 
         /// <summary>
-        /// Handles user keystrokes
+        /// Handles user keystrokes, and appends the characters to a string 
+        /// that is drawn on the screen at the beginning of the game, 
+        /// so that you can type the ip-address of the server you are trying to connect to.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -819,6 +823,9 @@ namespace Snake
                 char character = args.Character;
                 
                 IPInput += character;
+                //Normally you would just need the first part of the if 'or'-statement, 
+                //but some operating systems don't work well with the "Keys" of Monogame,
+                //which leads to the second statement 'character.ToString() == "\r"'
                 if (pressedKey == Keys.Enter || character.ToString() == "\r")
                 {
                     enter = true;
