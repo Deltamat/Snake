@@ -11,6 +11,7 @@ namespace Snake
 {
     class Wall : GameObject
     {
+        //Pixel length between one tile and the appropiate first tile of the next area
         public const int xJumpLength = 960;
         public const int yJumpLength = 540;
 

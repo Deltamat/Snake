@@ -33,6 +33,10 @@ namespace Snake
             base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Changes the position of the existing main player apple and the others ghost apples.
+        /// </summary>
+        /// <param name="player">Selects what player it is, 1 - 4</param>
         public static void ChangeApplePosition(int player)
         {
             emptySpace = false;
@@ -41,11 +45,13 @@ namespace Snake
             {
                 emptySpace = true;
 
+                //Picks a random number to the length of the tile array X and Y
                 int xCoordinate = GameWorld.Rng.Next(1, 31);
                 int yCoordinate = GameWorld.Rng.Next(1, 17);
 
                 Apple ghostApple = new Apple(Vector2.Zero, "Apple", GameWorld.ContentManager);
 
+                //Creates an apple depending on the player position
                 if (player == 1)
                 {
                     ghostApple = new Apple(new Vector2(xCoordinate * 30, yCoordinate * 30), "Apple", GameWorld.ContentManager); //Spawns a ghost apple
@@ -109,6 +115,7 @@ namespace Snake
                     }
                 }
 
+                //Checks if the apple would hit a wall, if it does it will retry
                 if (player == 1)
                 {
                     foreach (Wall wall in GameWorld.wallList)
