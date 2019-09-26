@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.IO;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
+using CryptoLibrary;
 using System.Security.Cryptography;
 
 namespace Snake
@@ -85,7 +85,7 @@ namespace Snake
             graphics.PreferredBackBufferHeight = 1020;
 
 #if !DEBUG
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 #endif
 
             graphics.ApplyChanges();
