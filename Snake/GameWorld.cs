@@ -11,7 +11,6 @@ using System.Threading;
 using System.IO;
 using CryptoLibrary;
 using System.Security.Cryptography;
-using CryptoLibrary;
 
 namespace Snake
 {
