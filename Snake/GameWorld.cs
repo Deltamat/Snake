@@ -81,6 +81,7 @@ namespace Snake
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             content = Content;
+            Window.Title = "Snek-E Boi";
             //Sets the window size
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1020;
